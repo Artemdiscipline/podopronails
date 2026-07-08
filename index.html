@@ -218,7 +218,16 @@
   /* ---------- GALLERY (pinned) ---------- */
   .gallery-pin{position:relative;}
   .gallery-sticky{height:100vh; display:flex; flex-direction:column; justify-content:center; overflow:hidden; background:var(--ivory);}
-  .gallery-head{padding:0 clamp(20px,5vw,64px); margin-bottom:36px;}
+  .gallery-head{padding:0 clamp(20px,5vw,64px); margin-bottom:36px; display:flex; align-items:center; justify-content:space-between; gap:20px;}
+  .gallery-nav{display:none; gap:10px; flex-shrink:0;}
+  .gallery-arrow{
+    width:44px; height:44px; border-radius:50%; flex-shrink:0;
+    border:1px solid var(--line); background:var(--panel); color:var(--text);
+    font-size:1.3rem; line-height:1; display:flex; align-items:center; justify-content:center;
+    cursor:pointer; transition:background .3s ease, color .3s ease, transform .2s ease;
+  }
+  .gallery-arrow:hover{background:var(--gold); border-color:var(--gold); color:#20170a;}
+  .gallery-arrow:active{transform:scale(0.92);}
   .gallery-track{display:flex; gap:20px; padding-left:clamp(20px,5vw,64px); width:max-content;}
   .gallery-item{position:relative; width:min(60vw,520px); height:62vh; border-radius:var(--radius-m); overflow:hidden; flex-shrink:0;}
   .gallery-item img{width:100%;height:100%;object-fit:cover; filter:saturate(0.9);}
@@ -295,6 +304,7 @@
     .gallery-pin{height:auto !important;}
     .gallery-sticky{position:static; height:auto; overflow:visible; padding:0 0 8px;}
     .gallery-head{margin-bottom:22px;}
+    .gallery-nav{display:flex;}
     .gallery-track{
       width:auto; overflow-x:auto; -webkit-overflow-scrolling:touch;
       scroll-snap-type:x proximity; scroll-padding-left:20px;
@@ -510,7 +520,13 @@
   <!-- GALLERY -->
   <section id="gallery" class="gallery-pin">
     <div class="gallery-sticky">
-      <div class="gallery-head wrap" style="padding-left:0;padding-right:0;"><h2>Галерея работ студии</h2></div>
+      <div class="gallery-head wrap" style="padding-left:0;padding-right:0;">
+        <h2>Галерея работ студии</h2>
+        <div class="gallery-nav">
+          <button type="button" class="gallery-arrow" data-dir="-1" aria-label="Предыдущее фото">‹</button>
+          <button type="button" class="gallery-arrow" data-dir="1" aria-label="Следующее фото">›</button>
+        </div>
+      </div>
       <div class="gallery-track">
         <div class="gallery-item"><img src="https://images.unsplash.com/photo-1630843599725-32ead7671867?q=80&w=900&auto=format&fit=crop" alt="Аккуратный маникюр"><div class="cap">Аккуратный маникюр</div></div>
         <div class="gallery-item"><img src="https://images.unsplash.com/photo-1607779097040-26e80aa78e66?q=80&w=900&auto=format&fit=crop" alt="Покрытие гель-лак"><div class="cap">Покрытие гель-лак</div></div>
@@ -626,6 +642,16 @@ document.querySelector('.nav-burger').addEventListener('click', () => {
   navLinksEl.style.cssText = open ? 'display:none;' : 'display:flex; position:fixed; top:82px; left:20px; right:20px; background:rgba(21,18,15,0.97); flex-direction:column; padding:20px; border-radius:20px; box-shadow:0 20px 40px rgba(0,0,0,0.4); gap:16px; text-align:center; color:#f5ecd8;';
 });
 navLinksEl.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { navLinksEl.style.cssText = ''; }));
+
+document.querySelectorAll('.gallery-arrow').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const track = document.querySelector('.gallery-track');
+    const item = track.querySelector('.gallery-item');
+    const gap = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap || 20);
+    const step = (item.getBoundingClientRect().width + gap) * parseInt(btn.dataset.dir, 10);
+    track.scrollBy({ left: step, behavior: 'smooth' });
+  });
+});
 
 if (window.gsap && window.ScrollTrigger) {
 document.documentElement.classList.add('gsap-ready');
