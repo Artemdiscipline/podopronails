@@ -643,13 +643,12 @@ document.querySelector('.nav-burger').addEventListener('click', () => {
 });
 navLinksEl.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { navLinksEl.style.cssText = ''; }));
 
+const galleryItemEls = Array.from(document.querySelectorAll('.gallery-item'));
+let galleryIndex = 0;
 document.querySelectorAll('.gallery-arrow').forEach(btn => {
   btn.addEventListener('click', () => {
-    const track = document.querySelector('.gallery-track');
-    const item = track.querySelector('.gallery-item');
-    const gap = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap || 20);
-    const step = (item.getBoundingClientRect().width + gap) * parseInt(btn.dataset.dir, 10);
-    track.scrollBy({ left: step, behavior: 'smooth' });
+    galleryIndex = Math.max(0, Math.min(galleryItemEls.length - 1, galleryIndex + parseInt(btn.dataset.dir, 10)));
+    galleryItemEls[galleryIndex].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
   });
 });
 
