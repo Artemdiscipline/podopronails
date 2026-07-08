@@ -291,6 +291,19 @@
     .trust-item{border-bottom:1px solid var(--line);}
     .action{grid-template-columns:1fr;}
     .footer-top{grid-template-columns:1fr; gap:30px;}
+
+    .gallery-pin{height:auto !important;}
+    .gallery-sticky{position:static; height:auto; overflow:visible; padding:0 0 8px;}
+    .gallery-head{margin-bottom:22px;}
+    .gallery-track{
+      width:auto; overflow-x:auto; -webkit-overflow-scrolling:touch;
+      scroll-snap-type:x proximity; scroll-padding-left:20px;
+      padding:4px 20px 14px; margin:0 -1px;
+      scrollbar-width:none;
+    }
+    .gallery-track::-webkit-scrollbar{display:none;}
+    .gallery-item{scroll-snap-align:start;}
+    .gallery-item:nth-child(even){margin-top:0;}
   }
   @media (max-width:560px){
     .nav-shell{padding:0 14px;}
@@ -699,20 +712,24 @@ gsap.utils.toArray('.philo-media img').forEach((img)=>{
 });
 
 const galleryTrack = document.querySelector('.gallery-track');
-function getScrollAmount(){ return -(galleryTrack.scrollWidth - window.innerWidth + 40); }
-let galleryTween = gsap.to(galleryTrack, {
-  x: getScrollAmount, ease:'none',
-  scrollTrigger:{
-    trigger:'.gallery-pin', start:'top top',
-    end: () => '+=' + (galleryTrack.scrollWidth),
-    scrub:0.8, pin:true, invalidateOnRefresh:true
+ScrollTrigger.matchMedia({
+  "(min-width: 981px)": function(){
+    function getScrollAmount(){ return -(galleryTrack.scrollWidth - window.innerWidth + 40); }
+    let galleryTween = gsap.to(galleryTrack, {
+      x: getScrollAmount, ease:'none',
+      scrollTrigger:{
+        trigger:'.gallery-pin', start:'top top',
+        end: () => '+=' + (galleryTrack.scrollWidth),
+        scrub:0.8, pin:true, invalidateOnRefresh:true
+      }
+    });
+    gsap.utils.toArray('.gallery-item img').forEach((img)=>{
+      gsap.fromTo(img, {scale:1.15, opacity:0.5}, {
+        scale:1, opacity:1, ease:'none',
+        scrollTrigger:{ trigger: img, containerAnimation: galleryTween, start:'left 90%', end:'left 40%', scrub:true }
+      });
+    });
   }
-});
-gsap.utils.toArray('.gallery-item img').forEach((img)=>{
-  gsap.fromTo(img, {scale:1.15, opacity:0.5}, {
-    scale:1, opacity:1, ease:'none',
-    scrollTrigger:{ trigger: img, containerAnimation: galleryTween, start:'left 90%', end:'left 40%', scrub:true }
-  });
 });
 
 const testiRow = document.getElementById('testiRow');
