@@ -182,8 +182,8 @@
   }
   @keyframes preFailsafe{to{opacity:0;visibility:hidden;pointer-events:none;}}
   .preloader.done{opacity:0; visibility:hidden; pointer-events:none; transition:opacity .7s ease, visibility .7s ease;}
-  .pre-mark{width:86px;height:86px;border-radius:50%;overflow:hidden;position:relative;box-shadow:0 0 0 1px rgba(201,162,39,0.45);}
-  .pre-mark img{width:100%;height:100%;object-fit:cover;}
+  .pre-mark{width:64px;height:92px;}
+  .pre-mark img{width:100%;height:100%;object-fit:contain;}
   .pre-name{font-family:'Marcellus',serif;font-size:0.9rem;letter-spacing:0.34em;text-transform:uppercase;color:var(--gold-light);}
   .pre-bar{width:150px;height:1px;background:rgba(245,236,216,0.16);position:relative;overflow:hidden;}
   .pre-bar i{position:absolute;inset:0;transform-origin:left;transform:scaleX(0);background:linear-gradient(90deg,var(--gold-light),var(--gold));animation:preFill 1.5s var(--ease) forwards;}
@@ -255,9 +255,11 @@
     box-shadow:0 20px 50px -28px rgba(0,0,0,0.6);
     transition:padding .4s ease;
   }
-  .logo{display:flex; align-items:center; gap:11px; color:var(--on-dark);}
-  .logo-mark{position:relative; width:54px;height:54px;flex-shrink:0;}
-  .logo-mark img{position:absolute; inset:0; width:100%;height:100%; object-fit:cover; border-radius:50%;}
+  .logo{display:flex; align-items:center; gap:12px; color:var(--on-dark);}
+  /* the source logo is gold-on-white and carries its own wordmark, so the nav
+     uses a background-free crop of just the monogram — see assets/logo-mark.png */
+  .logo-mark{width:38px; height:52px; flex-shrink:0;}
+  .logo-mark img{width:100%; height:100%; object-fit:contain;}
   .logo-text{line-height:1.05;}
   .logo-text .l1{font-family:'Marcellus',serif; font-size:1.02rem; letter-spacing:0.03em; color:var(--gold-light); display:block;}
   .logo-text .l2{font-size:0.6rem; letter-spacing:0.16em; color:var(--on-dark-soft); text-transform:uppercase; margin-top:2px; display:block;}
@@ -628,7 +630,7 @@
   @media (max-width:560px){
     .nav-shell{padding:0 14px;}
     .nav-pill{gap:8px; padding:8px 8px 8px 12px;}
-    .logo-mark{width:42px;height:42px;}
+    .logo-mark{width:31px;height:42px;}
     .logo-text .l1{font-size:0.82rem;}
     .nav-cta{display:none;}
     .menu-cta{display:inline-flex; margin-bottom:8px;}
@@ -653,7 +655,7 @@
 <body>
 
 <div class="preloader" id="preloader">
-  <div class="pre-mark"><img src="assets/logo.jpg" alt="" width="86" height="86" decoding="async" onerror="this.remove()"></div>
+  <div class="pre-mark"><img src="assets/logo-mark.png" alt="" width="139" height="229" decoding="async" onerror="this.remove()"></div>
   <div class="pre-name">Podo Pro Nails</div>
   <div class="pre-bar"><i></i></div>
 </div>
@@ -669,13 +671,7 @@
   <nav class="nav-pill">
     <a href="#top" class="logo">
       <span class="logo-mark">
-        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="32" cy="32" r="31" stroke="url(#g1)" stroke-width="1.4"/>
-          <path d="M24 20c0 3 2 4 4 4s4-1 4-4M32 44v-8M32 36c-6 0-9-4-9-9 0-4 3-7 6-7M32 36c6 0 9-4 9-9 0-4-3-7-6-7" stroke="url(#g1)" stroke-width="1.1" fill="none" stroke-linecap="round"/>
-          <text x="32" y="30" font-family="Marcellus, serif" font-size="13" fill="url(#g1)" text-anchor="middle">ES</text>
-          <defs><linearGradient id="g1" x1="0" y1="0" x2="64" y2="64"><stop offset="0" stop-color="#f1dc9d"/><stop offset="0.6" stop-color="#c9a227"/><stop offset="1" stop-color="#8a6a1f"/></linearGradient></defs>
-        </svg>
-        <img src="assets/logo.jpg" alt="PodoProNails" width="54" height="54" decoding="async" onerror="this.remove()">
+        <img src="assets/logo-mark.png" alt="PodoProNails" width="139" height="229" decoding="async" onerror="this.remove()">
       </span>
       <span class="logo-text"><span class="l1">Podo Pro Nails</span><span class="l2">Elizaveta Solonina</span></span>
     </a>
@@ -1016,12 +1012,7 @@
       <div>
         <a href="#top" class="logo">
           <span class="logo-mark">
-            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="32" cy="32" r="31" stroke="url(#g2)" stroke-width="1.4"/>
-              <text x="32" y="30" font-family="Marcellus, serif" font-size="13" fill="url(#g2)" text-anchor="middle">ES</text>
-              <defs><linearGradient id="g2" x1="0" y1="0" x2="64" y2="64"><stop offset="0" stop-color="#f1dc9d"/><stop offset="0.6" stop-color="#c9a227"/><stop offset="1" stop-color="#8a6a1f"/></linearGradient></defs>
-            </svg>
-            <img src="assets/logo.jpg" alt="PodoProNails" width="54" height="54" decoding="async" onerror="this.remove()">
+            <img src="assets/logo-mark.png" alt="PodoProNails" width="139" height="229" loading="lazy" decoding="async" onerror="this.remove()">
           </span>
           <span class="logo-text"><span class="l1">Podo Pro Nails</span><span class="l2">Elizaveta Solonina</span></span>
         </a>
