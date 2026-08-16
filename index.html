@@ -6,7 +6,11 @@
 <title>PODO PRO NAILS — Elizaveta Solonina · студия подологии и nail-эстетики</title>
 <meta name="description" content="PODO PRO NAILS — студия подологии, маникюра и педикюра на Яблочкова, 2/1, Москва. Рейтинг 5.0 на Яндекс Картах. Александра, Марина, Елизавета — конкурсные мастера.">
 <meta name="theme-color" content="#15120f">
-<meta name="robots" content="index, follow, max-image-preview:large">
+<!-- Сайт на тестовом github.io-адресе — индексация закрыта.
+     ПЕРЕД ПЕРЕЕЗДОМ НА БОЕВОЙ ДОМЕН вернуть на:
+     <meta name="robots" content="index, follow, max-image-preview:large">
+     и заодно обновить canonical / og:url / twitter:image / @id в JSON-LD ниже. -->
+<meta name="robots" content="noindex, nofollow">
 <link rel="canonical" href="https://artemdiscipline.github.io/podopronails/">
 
 <meta property="og:type" content="website">
@@ -384,8 +388,24 @@
   .price-groups{display:grid; grid-template-columns:repeat(2,1fr); gap:clamp(30px,5vw,64px);}
   .price-group h3{font-size:1.1rem; color:var(--gold-deep); margin-bottom:6px;}
   .price-group .cat-note{font-size:0.82rem; color:var(--text-faint); margin-bottom:20px;}
+  /* the flagship group runs full width above the two-column pairs */
+  .price-group.featured{grid-column:1 / -1; padding-left:22px; border-left:2px solid var(--gold);}
+  /* rows live in .price-rows so the sub-headings below don't shift the zebra parity */
+  .price-sub{
+    display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
+    margin:26px 0 8px; font-size:0.74rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--gold-deep);
+  }
+  .cat-note + .price-sub{margin-top:18px;}
+  .price-sub em{font-style:normal; letter-spacing:0.02em; text-transform:none; font-size:0.82rem; color:var(--text-faint);}
+  .price-total{
+    margin-top:18px; padding:15px 18px; border-radius:12px;
+    display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap;
+    background:rgba(201,162,39,0.1); border:1px dashed rgba(138,106,31,0.4);
+    font-size:0.9rem; color:var(--text-soft);
+  }
+  .price-total b{font-family:'Marcellus',serif; font-size:1.05rem; color:var(--text); font-weight:400; white-space:nowrap;}
   .price-row{display:flex; align-items:center; gap:14px; padding:15px 16px; border-radius:12px; transition:background .35s ease, transform .35s var(--ease);}
-  .price-row:nth-child(odd){background:rgba(201,162,39,0.055);}
+  .price-rows .price-row:nth-child(odd){background:rgba(201,162,39,0.055);}
   .price-row:hover{background:rgba(201,162,39,0.14); transform:translateX(5px);}
   .price-row .name{font-size:0.96rem; flex:1;}
   .price-row .name small{display:block; color:var(--text-faint); font-size:0.75rem; margin-top:3px; font-weight:300;}
@@ -816,27 +836,68 @@
     <div class="wrap">
       <div class="section-head">
         <h2 class="reveal">Прайс студии</h2>
-        <p class="support reveal">Полный список услуг уточняйте у мастера — ниже основные позиции.</p>
+        <p class="support reveal">Базовая процедура и покрытие показаны отдельно, чтобы стоимость визита складывалась у вас на глазах. Редкие процедуры мастер считает после осмотра и называет цену до начала работы.</p>
       </div>
       <div class="price-groups reveal">
+
+        <!-- TODO: нужны реальные данные — вся группа «Подология»: названия позиций сверить
+             с прайсом студии, проставить длительность и цены. Названия ниже взяты из блоков
+             «Услуги» и «Философия» этой же страницы, ценами студия не делилась. -->
+        <div class="price-group featured">
+          <h3>Подология</h3>
+          <div class="cat-note">Елизавета</div>
+          <div class="price-sub">Работа с проблемой <em>основное направление студии</em></div>
+          <div class="price-rows">
+            <div class="price-row"><div class="name">Коррекция вросшего ногтя<small>[TODO: длительность]</small></div><div class="value">[TODO: цена]</div></div>
+            <div class="price-row"><div class="name">Корригирующая система<small>[TODO: длительность; уточнить, входит ли в цену коррекции или считается отдельно]</small></div><div class="value">[TODO: цена]</div></div>
+            <div class="price-row"><div class="name">Работа с грибковыми изменениями ногтя<small>[TODO: длительность]</small></div><div class="value">[TODO: цена]</div></div>
+            <div class="price-row"><div class="name">Натоптыши, мозоли и трещины<small>[TODO: длительность]</small></div><div class="value">[TODO: цена]</div></div>
+          </div>
+          <div class="price-total"><span>Первичная диагностика стопы — входит в визит или считается отдельно?</span><b>[TODO: цена или «входит»]</b></div>
+        </div>
+
         <div class="price-group">
           <h3>Маникюр</h3>
           <div class="cat-note">Александра · Елизавета</div>
-          <div class="price-row"><div class="name">Мужской маникюр без покрытия<small>55 мин</small></div><div class="value">1 800 ₽</div></div>
-          <div class="price-row"><div class="name">Комби / аппаратный / обрезной маникюр<small>50 мин</small></div><div class="value">1 800 ₽</div></div>
-          <div class="price-row"><div class="name">Гель-лак маникюр</div><div class="value">900 ₽</div></div>
-          <div class="price-row"><div class="name">LUXIO маникюр</div><div class="value">1 500 ₽</div></div>
-          <div class="price-row"><div class="name">Укрепление ногтей<small>гель / акригель / полигель</small></div><div class="value">1 000 ₽</div></div>
+          <div class="price-sub">Базовая процедура <em>выберите одну</em></div>
+          <div class="price-rows">
+            <div class="price-row"><div class="name">Комби / аппаратный / обрезной маникюр<small>50 мин</small></div><div class="value">1 800 ₽</div></div>
+            <div class="price-row"><div class="name">Мужской маникюр без покрытия<small>55 мин</small></div><div class="value">1 800 ₽</div></div>
+          </div>
+          <div class="price-sub">Покрытие и укрепление <em>добавляется к базовой</em></div>
+          <div class="price-rows">
+            <div class="price-row"><div class="name">Гель-лак маникюр</div><div class="value">900 ₽</div></div>
+            <div class="price-row"><div class="name">LUXIO маникюр</div><div class="value">1 500 ₽</div></div>
+            <div class="price-row"><div class="name">Укрепление ногтей<small>гель / акригель / полигель</small></div><div class="value">1 000 ₽</div></div>
+          </div>
+          <!-- TODO: нужны реальные данные — итог типового визита. Сложить 1 800 + 900 самостоятельно
+               я не могу: неизвестно, суммируются ли позиции или в комплекте другая цена. -->
+          <div class="price-total"><span>Комби-маникюр с гель-лаком — под ключ</span><b>[TODO: итоговая цена]</b></div>
         </div>
+
         <div class="price-group">
           <h3>Педикюр и перманент</h3>
           <div class="cat-note">Елизавета · Марина</div>
-          <div class="price-row"><div class="name">Гель-лак (ноги)</div><div class="value">700 ₽</div></div>
-          <div class="price-row"><div class="name">Покрытие LUXIO педикюр</div><div class="value">1 000 ₽</div></div>
-          <div class="price-row"><div class="name">Аппаратный уход за стопой<small>парафин / масло</small></div><div class="value">3 500 ₽</div></div>
-          <div class="price-row"><div class="name">Перманентный макияж губ</div><div class="value">10 000 ₽</div></div>
-          <div class="price-row"><div class="name">Перманент межресничного пространства</div><div class="value">8 000 ₽</div></div>
+          <div class="price-sub">Базовая процедура <em>выберите одну</em></div>
+          <div class="price-rows">
+            <div class="price-row"><div class="name">Аппаратный уход за стопой<small>парафин / масло</small></div><div class="value">3 500 ₽</div></div>
+            <!-- TODO: нужны реальные данные — в прайсе нет обычного педикюра без спа-ухода.
+                 Если такая позиция есть, добавить сюда; если 3 500 ₽ и есть базовый педикюр — убрать строку ниже. -->
+            <div class="price-row"><div class="name">Педикюр без спа-ухода<small>[TODO: длительность]</small></div><div class="value">[TODO: цена]</div></div>
+          </div>
+          <div class="price-sub">Покрытие <em>добавляется к базовой</em></div>
+          <div class="price-rows">
+            <div class="price-row"><div class="name">Гель-лак (ноги)</div><div class="value">700 ₽</div></div>
+            <div class="price-row"><div class="name">Покрытие LUXIO педикюр</div><div class="value">1 000 ₽</div></div>
+          </div>
+          <div class="price-sub">Отдельные процедуры <em>покрытие не требуется</em></div>
+          <div class="price-rows">
+            <div class="price-row"><div class="name">Перманентный макияж губ</div><div class="value">10 000 ₽</div></div>
+            <div class="price-row"><div class="name">Перманент межресничного пространства</div><div class="value">8 000 ₽</div></div>
+          </div>
+          <div class="price-total"><span>Педикюр с гель-лаком — под ключ</span><b>[TODO: итоговая цена]</b></div>
         </div>
+
       </div>
       <p class="price-note reveal">Точную стоимость по вашему случаю мастер называет после осмотра — записаться можно на Яндекс Картах.</p>
     </div>
@@ -927,11 +988,16 @@
     </div>
     <div class="testi-track-outer">
       <div class="testi-row" id="testiRow">
-        <div class="testi-card"><div class="testi-top"><div class="mini-avatar">М</div><div class="testi-name">Марина К.<small>Дмитровская</small></div></div><div class="stars">★★★★★</div><p>Пришла с вросшим ногтем, который откладывала полгода — сделали без единой неприятной секунды. В кабинете стерильно, всё вскрывается при тебе.</p></div>
-        <div class="testi-card"><div class="testi-top"><div class="mini-avatar">Е</div><div class="testi-name">Екатерина В.<small>Тимирязевская</small></div></div><div class="stars">★★★★★</div><p>Наконец нашла мастера, которая сначала смотрит стопу, а не сразу хватается за лак. Трещины на пятках прошли за три визита.</p></div>
-        <div class="testi-card"><div class="testi-top"><div class="mini-avatar">Д</div><div class="testi-name">Дарья С.<small>Бутырская</small></div></div><div class="stars">★★★★★</div><p>Записываюсь через Яндекс Карты — всё быстро подтверждается. Педикюр держится дольше, чем в других местах.</p></div>
-        <div class="testi-card"><div class="testi-top"><div class="mini-avatar">И</div><div class="testi-name">Ирина П.<small>Москва</small></div></div><div class="stars">★★★★★</div><p>Аппаратный уход за стопой с парафином — как отдельная процедура для здоровья, а не просто спа. Разница чувствуется уже после первого раза.</p></div>
-        <div class="testi-card"><div class="testi-top"><div class="mini-avatar">О</div><div class="testi-name">Ольга Т.<small>Дмитровская</small></div></div><div class="stars">★★★★★</div><p>Марина сделала ламинирование ресниц аккуратно и естественно. Александра — маникюр, который держится дольше обычного.</p></div>
+        <!-- TODO: нужны реальные данные — 5 отзывов с карточки студии на Яндекс.Картах.
+             Для КАЖДОЙ карточки заполнить: первая буква имени в .mini-avatar, имя автора,
+             дату отзыва в <small>, число звёзд в .stars и текст отзыва в <p>.
+             Прежние тексты были написаны при вёрстке и НЕ являются отзывами реальных клиентов —
+             публиковать их нельзя. Карточку можно копировать, если отзывов будет больше пяти. -->
+        <div class="testi-card"><div class="testi-top"><div class="mini-avatar">—</div><div class="testi-name">[имя автора]<small>[дата отзыва]</small></div></div><div class="stars">★★★★★</div><p>[текст отзыва с Яндекс.Карт — дословно]</p></div>
+        <div class="testi-card"><div class="testi-top"><div class="mini-avatar">—</div><div class="testi-name">[имя автора]<small>[дата отзыва]</small></div></div><div class="stars">★★★★★</div><p>[текст отзыва с Яндекс.Карт — дословно]</p></div>
+        <div class="testi-card"><div class="testi-top"><div class="mini-avatar">—</div><div class="testi-name">[имя автора]<small>[дата отзыва]</small></div></div><div class="stars">★★★★★</div><p>[текст отзыва с Яндекс.Карт — дословно]</p></div>
+        <div class="testi-card"><div class="testi-top"><div class="mini-avatar">—</div><div class="testi-name">[имя автора]<small>[дата отзыва]</small></div></div><div class="stars">★★★★★</div><p>[текст отзыва с Яндекс.Карт — дословно]</p></div>
+        <div class="testi-card"><div class="testi-top"><div class="mini-avatar">—</div><div class="testi-name">[имя автора]<small>[дата отзыва]</small></div></div><div class="stars">★★★★★</div><p>[текст отзыва с Яндекс.Карт — дословно]</p></div>
       </div>
     </div>
     <div class="wrap">
