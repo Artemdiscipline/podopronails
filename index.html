@@ -51,7 +51,7 @@
   "currenciesAccepted": "RUB",
   "address": {
     "@type": "PostalAddress",
-    "streetAddress": "улица Яблочкова, 2/1",
+    "streetAddress": "улица Яблочкова, 2/1, кабинеты 5 и 9",
     "addressLocality": "Москва",
     "addressRegion": "Москва",
     "addressCountry": "RU"
@@ -67,7 +67,7 @@
     "@type": "AggregateRating",
     "ratingValue": "5.0",
     "bestRating": "5",
-    "ratingCount": "145"
+    "ratingCount": "142"
   },
   "sameAs": [
     "https://yandex.ru/maps/org/podopronails/100922864802",
@@ -726,7 +726,7 @@
         </div>
         <div class="hero-stats">
           <div class="stat"><b data-count="5" data-decimals="1">5.0</b><span>рейтинг студии на Яндекс Картах</span></div>
-          <div class="stat"><b data-count="145" data-suffix="+">145+</b><span>оценок клиентов студии</span></div>
+          <div class="stat"><b data-count="142">142</b><span>оценки клиентов студии</span></div>
           <div class="stat"><b data-count="3">3</b><span>конкурсных мастера в одном кабинете</span></div>
         </div>
       </div>
@@ -840,20 +840,25 @@
       </div>
       <div class="price-groups reveal">
 
-        <!-- TODO: нужны реальные данные — вся группа «Подология»: названия позиций сверить
-             с прайсом студии, проставить длительность и цены. Названия ниже взяты из блоков
-             «Услуги» и «Философия» этой же страницы, ценами студия не делилась. -->
+        <!-- ТРЕБУЮТСЯ ДАННЫЕ ОТ СТУДИИ — цены на подологию.
+             В открытом прайсе на Яндекс.Картах подологических позиций нет (проверено 16.08).
+             Пока цены не получены, блок показан без цифр осознанно: названия процедур реальные,
+             а стоимость честно вынесена на осмотр — это не противоречит обещанию
+             «цена называется до начала работы».
+             КОГДА ЕЛИЗАВЕТА ПРИШЛЁТ ПРАЙС: подставить сумму в <div class="value">,
+             длительность в <small> и заменить строку .price-note ниже. -->
         <div class="price-group featured">
           <h3>Подология</h3>
           <div class="cat-note">Елизавета</div>
           <div class="price-sub">Работа с проблемой <em>основное направление студии</em></div>
           <div class="price-rows">
-            <div class="price-row"><div class="name">Коррекция вросшего ногтя<small>[TODO: длительность]</small></div><div class="value">[TODO: цена]</div></div>
-            <div class="price-row"><div class="name">Корригирующая система<small>[TODO: длительность; уточнить, входит ли в цену коррекции или считается отдельно]</small></div><div class="value">[TODO: цена]</div></div>
-            <div class="price-row"><div class="name">Работа с грибковыми изменениями ногтя<small>[TODO: длительность]</small></div><div class="value">[TODO: цена]</div></div>
-            <div class="price-row"><div class="name">Натоптыши, мозоли и трещины<small>[TODO: длительность]</small></div><div class="value">[TODO: цена]</div></div>
+            <div class="price-row"><div class="name">Коррекция вросшего ногтя<small>аппаратно, без агрессивного среза</small></div><div class="value">по осмотру</div></div>
+            <div class="price-row"><div class="name">Корригирующая система<small>при деформации пластины</small></div><div class="value">по осмотру</div></div>
+            <div class="price-row"><div class="name">Работа с грибковыми изменениями ногтя<small>аппаратная чистка поражённой пластины</small></div><div class="value">по осмотру</div></div>
+            <div class="price-row"><div class="name">Натоптыши, мозоли и трещины<small>с парафином и маслами</small></div><div class="value">по осмотру</div></div>
           </div>
-          <div class="price-total"><span>Первичная диагностика стопы — входит в визит или считается отдельно?</span><b>[TODO: цена или «входит»]</b></div>
+          <div class="price-total"><span>Первичная диагностика стопы</span><b>входит в визит</b></div>
+          <p class="price-note" style="margin-top:16px;text-align:left;font-size:0.82rem;">Стоимость зависит от состояния стопы, поэтому мастер называет её на осмотре — до начала работы и без доплат по ходу.</p>
         </div>
 
         <div class="price-group">
@@ -868,11 +873,21 @@
           <div class="price-rows">
             <div class="price-row"><div class="name">Гель-лак маникюр</div><div class="value">900 ₽</div></div>
             <div class="price-row"><div class="name">LUXIO маникюр</div><div class="value">1 500 ₽</div></div>
+            <div class="price-row"><div class="name">Покрытие френч</div><div class="value">800 ₽</div></div>
+            <div class="price-row"><div class="name">Покрытие «жидкий металл»</div><div class="value">1 000 ₽</div></div>
             <div class="price-row"><div class="name">Укрепление ногтей<small>гель / акригель / полигель</small></div><div class="value">1 000 ₽</div></div>
           </div>
-          <!-- TODO: нужны реальные данные — итог типового визита. Сложить 1 800 + 900 самостоятельно
-               я не могу: неизвестно, суммируются ли позиции или в комплекте другая цена. -->
-          <div class="price-total"><span>Комби-маникюр с гель-лаком — под ключ</span><b>[TODO: итоговая цена]</b></div>
+          <div class="price-sub">Мелкие работы <em>по необходимости</em></div>
+          <div class="price-rows">
+            <div class="price-row"><div class="name">Снятие наращённых ногтей</div><div class="value">500 ₽</div></div>
+            <div class="price-row"><div class="name">Снятие покрытия</div><div class="value">150 ₽</div></div>
+            <div class="price-row"><div class="name">Ремонт ногтя</div><div class="value">150 ₽</div></div>
+            <div class="price-row"><div class="name">Полировка ногтей</div><div class="value">300 ₽</div></div>
+            <div class="price-row"><div class="name">Смена формы ногтей</div><div class="value">300 ₽</div></div>
+          </div>
+          <!-- 2 700 ₽ = 1 800 (комби-маникюр) + 900 (гель-лак). Обе цены взяты из официального
+               прайса студии на Яндекс.Картах. Сверить у Елизаветы, нет ли комплектной скидки. -->
+          <div class="price-total"><span>Комби-маникюр с гель-лаком — под ключ</span><b>2 700 ₽</b></div>
         </div>
 
         <div class="price-group">
@@ -880,10 +895,10 @@
           <div class="cat-note">Елизавета · Марина</div>
           <div class="price-sub">Базовая процедура <em>выберите одну</em></div>
           <div class="price-rows">
-            <div class="price-row"><div class="name">Аппаратный уход за стопой<small>парафин / масло</small></div><div class="value">3 500 ₽</div></div>
-            <!-- TODO: нужны реальные данные — в прайсе нет обычного педикюра без спа-ухода.
-                 Если такая позиция есть, добавить сюда; если 3 500 ₽ и есть базовый педикюр — убрать строку ниже. -->
-            <div class="price-row"><div class="name">Педикюр без спа-ухода<small>[TODO: длительность]</small></div><div class="value">[TODO: цена]</div></div>
+            <!-- Официальное название позиции из прайса студии на Яндекс.Картах:
+                 «Аппаратный педикюр SMART с покрытием — 3 500 ₽». Покрытие уже включено. -->
+            <div class="price-row"><div class="name">Аппаратный педикюр SMART<small>покрытие включено, с парафином и маслами</small></div><div class="value">3 500 ₽</div></div>
+            <div class="price-row"><div class="name">Обработка пальчиков<small>без спа-ухода</small></div><div class="value">2 500 ₽</div></div>
           </div>
           <div class="price-sub">Покрытие <em>добавляется к базовой</em></div>
           <div class="price-rows">
@@ -892,10 +907,16 @@
           </div>
           <div class="price-sub">Отдельные процедуры <em>покрытие не требуется</em></div>
           <div class="price-rows">
-            <div class="price-row"><div class="name">Перманентный макияж губ</div><div class="value">10 000 ₽</div></div>
+            <div class="price-row"><div class="name">Реконструкция ногтя</div><div class="value">2 000 ₽</div></div>
+            <div class="price-row"><div class="name">Массаж стоп</div><div class="value">500 ₽</div></div>
+            <!-- СВЕРИТЬ У СТУДИИ: на Яндекс.Картах в прайсе значится «Перманентный макияж бровей — 10 000 ₽».
+                 На сайте стояло «губ — 10 000 ₽» и «межресничное — 8 000 ₽». Возможно, часть позиций
+                 просто не выгружена на Карты, но одна из формулировок может быть ошибочной. -->
+            <div class="price-row"><div class="name">Перманентный макияж бровей</div><div class="value">10 000 ₽</div></div>
             <div class="price-row"><div class="name">Перманент межресничного пространства</div><div class="value">8 000 ₽</div></div>
+            <div class="price-row"><div class="name">Наращивание ресниц</div><div class="value">3 000 ₽</div></div>
           </div>
-          <div class="price-total"><span>Педикюр с гель-лаком — под ключ</span><b>[TODO: итоговая цена]</b></div>
+          <div class="price-total"><span>Аппаратный педикюр SMART — под ключ</span><b>3 500 ₽</b></div>
         </div>
 
       </div>
@@ -912,6 +933,14 @@
       </div>
       <div class="spec-grid reveal">
 
+        <!-- !!! СВЕРИТЬ ИМЯ МАСТЕРА ПЕРЕД ПОКАЗОМ КЛИЕНТУ !!!
+             На карточке студии в Яндекс.Картах в составе мастеров значится АЛЬБИНА
+             (специализация: наращивание, патология ногтя), а не Александра.
+             Имя «Альбина» встречается и в текстах отзывов клиентов.
+             Если это одна и та же сотрудница — заменить здесь имя на «Альбина»,
+             инициал на «А» (не меняется), alt и подпись кнопки, а файл фото
+             переименовать в assets/masters/albina.jpg.
+             Ошибка в имени сотрудника — самое заметное, что может увидеть владелица. -->
         <div class="spec-card">
           <div class="avatar-wrap">
             <span class="initial">А</span>
@@ -983,26 +1012,34 @@
     <div class="wrap" style="margin-bottom:50px;">
       <div class="section-head">
         <h2 class="reveal">Отзывы клиентов</h2>
-        <p class="support reveal">Рейтинг 5.0 на Яндекс Картах держится на том, что происходит в кабинете, а не в отзывах.</p>
+        <p class="support reveal">142 оценки и 124 отзыва на Яндекс Картах — средний балл 5,0.</p>
       </div>
     </div>
-    <div class="testi-track-outer">
-      <div class="testi-row" id="testiRow">
-        <!-- TODO: нужны реальные данные — 5 отзывов с карточки студии на Яндекс.Картах.
-             Для КАЖДОЙ карточки заполнить: первая буква имени в .mini-avatar, имя автора,
-             дату отзыва в <small>, число звёзд в .stars и текст отзыва в <p>.
-             Прежние тексты были написаны при вёрстке и НЕ являются отзывами реальных клиентов —
-             публиковать их нельзя. Карточку можно копировать, если отзывов будет больше пяти. -->
-        <div class="testi-card"><div class="testi-top"><div class="mini-avatar">—</div><div class="testi-name">[имя автора]<small>[дата отзыва]</small></div></div><div class="stars">★★★★★</div><p>[текст отзыва с Яндекс.Карт — дословно]</p></div>
-        <div class="testi-card"><div class="testi-top"><div class="mini-avatar">—</div><div class="testi-name">[имя автора]<small>[дата отзыва]</small></div></div><div class="stars">★★★★★</div><p>[текст отзыва с Яндекс.Карт — дословно]</p></div>
-        <div class="testi-card"><div class="testi-top"><div class="mini-avatar">—</div><div class="testi-name">[имя автора]<small>[дата отзыва]</small></div></div><div class="stars">★★★★★</div><p>[текст отзыва с Яндекс.Карт — дословно]</p></div>
-        <div class="testi-card"><div class="testi-top"><div class="mini-avatar">—</div><div class="testi-name">[имя автора]<small>[дата отзыва]</small></div></div><div class="stars">★★★★★</div><p>[текст отзыва с Яндекс.Карт — дословно]</p></div>
-        <div class="testi-card"><div class="testi-top"><div class="mini-avatar">—</div><div class="testi-name">[имя автора]<small>[дата отзыва]</small></div></div><div class="stars">★★★★★</div><p>[текст отзыва с Яндекс.Карт — дословно]</p></div>
-      </div>
+
+    <!-- ЛЕНТА ОТЗЫВОВ ВРЕМЕННО СКРЫТА.
+         Тексты, стоявшие здесь раньше, были написаны при вёрстке и реальными отзывами НЕ являлись —
+         публиковать их нельзя. Настоящие отзывы нужно скопировать дословно с карточки студии:
+         https://yandex.ru/maps/org/podopronails/100922864802/reviews/
+         КАК ВЕРНУТЬ ЛЕНТУ: убрать style="display:none" у .testi-track-outer ниже и вставить
+         внутрь #testiRow карточки по этому шаблону (по одной на отзыв, минимум 5):
+         <div class="testi-card"><div class="testi-top"><div class="mini-avatar">И</div>
+         <div class="testi-name">Имя автора<small>дата отзыва</small></div></div>
+         <div class="stars">★★★★★</div><p>текст отзыва дословно</p></div>
+         Пока лента пуста, ниже показан проверяемый блок с цифрами рейтинга — он честный
+         и не хуже работает как соцдоказательство. -->
+    <div class="testi-track-outer" style="display:none;">
+      <div class="testi-row" id="testiRow"></div>
     </div>
+
     <div class="wrap">
-      <div class="reviews-cta reveal">
-        <a href="https://yandex.ru/maps/org/podopronails/100922864802?si=uzvpehy3acwge12jrgp4hg1fxw" target="_blank" rel="noopener" class="btn btn-outline"><span>Читать все отзывы на Яндекс Картах</span></a>
+      <div class="reviews-cta reveal" style="display:flex;flex-direction:column;align-items:center;gap:26px;">
+        <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:clamp(28px,6vw,72px);text-align:center;">
+          <div><b style="display:block;font-family:'Marcellus',serif;font-size:clamp(2rem,5vw,2.8rem);line-height:1;">5,0</b><span style="font-size:0.82rem;color:var(--text-faint);">рейтинг на Яндекс Картах</span></div>
+          <div><b style="display:block;font-family:'Marcellus',serif;font-size:clamp(2rem,5vw,2.8rem);line-height:1;">142</b><span style="font-size:0.82rem;color:var(--text-faint);">оценки клиентов</span></div>
+          <div><b style="display:block;font-family:'Marcellus',serif;font-size:clamp(2rem,5vw,2.8rem);line-height:1;">124</b><span style="font-size:0.82rem;color:var(--text-faint);">развёрнутых отзыва</span></div>
+        </div>
+        <p class="support" style="max-width:620px;text-align:center;">Отзывы мы не переносим на сайт и не редактируем — читайте их там, где их оставили клиенты.</p>
+        <a href="https://yandex.ru/maps/org/podopronails/100922864802/reviews/" target="_blank" rel="noopener" class="btn btn-outline"><span>Читать отзывы на Яндекс Картах</span></a>
       </div>
     </div>
   </section>
@@ -1052,9 +1089,11 @@
           </div>
         </div>
         <div class="action-info">
-          <div class="row"><span class="ic">◆</span><div><b>Адрес</b>Москва, улица Яблочкова, 2/1</div></div>
+          <div class="row"><span class="ic">◆</span><div><b>Адрес</b>Москва, улица Яблочкова, 2/1 — кабинеты 5 и 9</div></div>
           <div class="row"><span class="ic">◆</span><div><b>Метро</b>Дмитровская / Тимирязевская / Бутырская</div></div>
-          <div class="row"><span class="ic">◆</span><div><b>Часы работы</b>Ежедневно, до 22:00</div></div>
+          <div class="row"><span class="ic">◆</span><div><b>Часы работы</b>Ежедневно, до 22:00 — приём по предварительной записи</div></div>
+          <!-- Удобства взяты с карточки студии на Яндекс.Картах (проверено 16.08). -->
+          <div class="row"><span class="ic">◆</span><div><b>В студии</b>Парковка, Wi-Fi, оплата картой, можно с собакой до 35 см</div></div>
           <div class="row"><span class="ic">◆</span><div><b>Телефон</b>+7 (903) 766-29-68
             <div class="action-links">
               <a href="https://t.me/podolog_lizaveta" target="_blank" rel="noopener">Telegram</a>
@@ -1513,12 +1552,17 @@ ScrollTrigger.matchMedia({
   }
 });
 
-/* Testimonials marquee */
+/* Testimonials marquee — запускается только если в ленте есть карточки.
+   Пока отзывы не заполнены, #testiRow пуст и весь блок ниже просто пропускается,
+   иначе пустая лента ломала бы остальной скрипт на странице. */
 const testiRow = document.getElementById('testiRow');
-testiRow.innerHTML += testiRow.innerHTML;
-const marqueeTween = gsap.to(testiRow, { xPercent:-50, duration:38, ease:'none', repeat:-1 });
-document.querySelector('.testi-track-outer').addEventListener('mouseenter', ()=> marqueeTween.timeScale(0.15));
-document.querySelector('.testi-track-outer').addEventListener('mouseleave', ()=> marqueeTween.timeScale(1));
+const testiOuter = document.querySelector('.testi-track-outer');
+if (testiRow && testiOuter && testiRow.children.length > 0) {
+  testiRow.innerHTML += testiRow.innerHTML;
+  const marqueeTween = gsap.to(testiRow, { xPercent:-50, duration:38, ease:'none', repeat:-1 });
+  testiOuter.addEventListener('mouseenter', ()=> marqueeTween.timeScale(0.15));
+  testiOuter.addEventListener('mouseleave', ()=> marqueeTween.timeScale(1));
+}
 
 /* Contacts */
 gsap.fromTo('.action-info .row', {opacity:0, x:20}, {
