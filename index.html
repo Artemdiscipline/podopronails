@@ -71,7 +71,7 @@
   },
   "sameAs": [
     "https://yandex.ru/maps/org/podopronails/100922864802",
-    "https://t.me/podolog_lizaveta",
+    "https://t.me/PM_Lizaveta",
     "https://wa.me/79037662968"
   ],
   "hasMap": "https://yandex.ru/maps/org/podopronails/100922864802"
@@ -527,6 +527,9 @@
   .action-links{margin-top:6px; display:flex; gap:12px; flex-wrap:wrap;}
   .action-links a{font-size:0.82rem; color:var(--text-soft); border-bottom:1px solid var(--line); padding-bottom:2px; transition:color .3s ease, border-color .3s ease;}
   .action-links a:hover{color:var(--gold-text); border-color:var(--gold-text);}
+  /* MAX не даёт ссылки на профиль — строка не кликабельна, поэтому без border-bottom ссылки */
+  .action-links .no-link{font-size:0.82rem; color:var(--text-soft); padding-bottom:2px;}
+  .footer-col .no-link{font-size:0.92rem; color:var(--text-soft);}
 
   .map-wrap{margin-top:56px; border-radius:var(--radius-l); overflow:hidden; border:1px solid var(--line); height:420px; filter:saturate(0.85) sepia(0.05);}
   .map-wrap iframe{width:100%;height:100%;border:0;}
@@ -856,7 +859,7 @@
         <h2 class="reveal">Обучение мастеров</h2>
         <p class="reveal">Студия не только принимает клиентов, но и обучает мастеров. Занятия ведёт практикующий конкурсный мастер — призёр российских и международных чемпионатов.</p>
         <p class="reveal">Направления — подология и ногтевой сервис. Программу, формат и ближайшие даты присылаем лично: напишите в Telegram, ответим до записи.</p>
-        <a href="https://t.me/podolog_lizaveta" target="_blank" rel="noopener" class="btn btn-gold magnetic reveal"><span>Узнать программу и даты</span></a>
+        <a href="https://t.me/PM_Lizaveta" target="_blank" rel="noopener" class="btn btn-gold magnetic reveal"><span>Узнать программу и даты</span></a>
       </div>
       <div class="edu-side reveal">
         <ul>
@@ -1028,10 +1031,13 @@
           <div class="row"><span class="ic">◆</span><div><b>В студии</b>Парковка, Wi-Fi, оплата картой, можно с собакой до 35 см</div></div>
           <div class="row"><span class="ic">◆</span><div><b>Телефон</b>+7 (903) 766-29-68
             <div class="action-links">
-              <a href="https://t.me/podolog_lizaveta" target="_blank" rel="noopener">Telegram</a>
+              <a href="https://t.me/PM_Lizaveta" target="_blank" rel="noopener">Telegram</a>
               <a href="https://wa.me/79037662968" target="_blank" rel="noopener">WhatsApp</a>
-              <!-- ЗАМЕНИТЬ на персональную ссылку студии в MAX — запрошена у клиента, пока ведёт на главную -->
-              <a href="https://max.ru/" target="_blank" rel="noopener">MAX</a>
+              <!-- В MAX у студии нет ссылки на профиль: добавляют по номеру телефона,
+                   он указан строкой выше. Поэтому здесь не ссылка, а подпись — битая
+                   ссылка на max.ru была бы хуже. Если ссылка появится, заменить span на
+                   <a href="..." target="_blank" rel="noopener">MAX</a>. -->
+              <span class="no-link">MAX — по номеру</span>
             </div>
           </div></div>
         </div>
@@ -1072,10 +1078,11 @@
         <h4>Связь</h4>
         <ul>
           <li><a href="https://yandex.ru/maps/org/podopronails/100922864802?si=uzvpehy3acwge12jrgp4hg1fxw" target="_blank" rel="noopener">Яндекс Карты — запись</a></li>
-          <li><a href="https://t.me/podolog_lizaveta" target="_blank" rel="noopener">Telegram</a></li>
+          <li><a href="https://t.me/PM_Lizaveta" target="_blank" rel="noopener">Telegram</a></li>
           <li><a href="https://wa.me/79037662968" target="_blank" rel="noopener">WhatsApp</a></li>
-          <!-- ЗАМЕНИТЬ на персональную ссылку студии в MAX — запрошена у клиента, пока ведёт на главную -->
-          <li><a href="https://max.ru/" target="_blank" rel="noopener">MAX</a></li>
+          <!-- В MAX ссылки на профиль нет — добавляют по номеру, он строкой ниже.
+               Если ссылка появится, вернуть сюда обычный <a>. -->
+          <li><span class="no-link">MAX — по номеру телефона</span></li>
           <li><a href="tel:+79037662968">+7 (903) 766-29-68</a></li>
         </ul>
       </div>
