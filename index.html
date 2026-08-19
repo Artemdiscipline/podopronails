@@ -869,12 +869,13 @@
   </section>
 
   <!-- GALLERY -->
-  <!-- 4 слота из 16 — настоящие работы студии (assets/gallery/), остальные пока
-       сток с Unsplash. Разметка слота одинаковая во всех категориях: чтобы
-       поставить своё фото, достаточно поменять src, width, height и alt.
-       ВОДЯНЫЕ ЗНАКИ: три присланных снимка вытащены из карточки 2GIS и несут его
-       знак в углу. Нужны оригиналы без чужой маркировки — запрошены у клиента.
-       Подология: реальных фото пока нет ни одного, все 4 слота стоковые. -->
+  <!-- 10 слотов из 16 — настоящие работы студии (assets/gallery/), 6 пока сток
+       с Unsplash: по 2 в маникюре, педикюре и в бровях с ресницами.
+       Разметка слота одинаковая во всех категориях: чтобы поставить своё фото,
+       достаточно поменять src, width, height и alt.
+       ВОДЯНЫЕ ЗНАКИ: manikyur-french.jpg, pedikyur-pokrytie.jpg и
+       resnicy-laminirovanie.jpg вытащены из карточки 2GIS и несут его знак в углу —
+       нужны оригиналы без чужой маркировки. На остальных знаков нет. -->
   <section id="gallery" class="band">
     <div class="wrap">
       <div class="section-head">
@@ -882,38 +883,43 @@
         <p class="support reveal">Работы по направлениям — маникюр, педикюр, подология, брови и ресницы.</p>
       </div>
 
-      <!-- КАТЕГОРИЯ: Маникюр. 1 из 4 — реальная работа (manikyur-french.jpg, водяной знак 2GIS).
-           Нужно ещё 3 фото; слоты 2-4 пока сток. Класть в assets/gallery/ и менять src + alt. -->
+      <!-- КАТЕГОРИЯ: Маникюр. 2 из 4 — настоящие: manikyur-french.jpg (знак 2GIS!)
+           и manikyur-uhod.webp (чистая). Слоты 2-3 пока сток, нужно ещё 2 фото. -->
       <div class="gal-cat reveal">
         <div class="gal-cat-head"><h3>Маникюр</h3><span>4 фото</span></div>
         <div class="gal-grid">
         <div class="gallery-item"><img loading="lazy" decoding="async" width="960" height="1280" src="assets/gallery/manikyur-french.jpg" alt="Френч на короткой длине — работа студии"><div class="cap">Френч</div></div>
         <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1607779097040-26e80aa78e66?q=80&w=1400&auto=format&fit=crop" alt="Покрытие гель-лак"><div class="cap">Покрытие гель-лак</div></div>
         <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1571290274554-6a2eaa771e5f?q=80&w=1400&auto=format&fit=crop" alt="Форма и длина ногтей"><div class="cap">Форма и длина</div></div>
-        <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1633955726992-2b7c0d2d2a69?q=80&w=1400&auto=format&fit=crop" alt="Натуральное покрытие"><div class="cap">Натуральный уход</div></div>
+        <div class="gallery-item"><img loading="lazy" decoding="async" width="1125" height="836" src="assets/gallery/manikyur-uhod.webp" alt="Натуральные ногти после ухода без покрытия — работа студии"><div class="cap">Натуральный уход</div></div>
         </div>
       </div>
 
-      <!-- КАТЕГОРИЯ: Педикюр. 1 из 4 — реальная работа (pedikyur-pokrytie.jpg, водяной знак 2GIS).
-           Нужно ещё 3 фото; слоты 2-4 пока сток, причём 4-й дублирует 3-й. -->
+      <!-- КАТЕГОРИЯ: Педикюр. 2 из 4 — настоящие: pedikyur-pokrytie.jpg (знак 2GIS!)
+           и pedikyur-naturalnyy.webp (чистая). Слоты 2-3 пока сток, нужно ещё 2 фото.
+           Дубль, который тут был, ушёл вместе с заменой. -->
       <div class="gal-cat reveal">
         <div class="gal-cat-head"><h3>Педикюр</h3><span>4 фото</span></div>
         <div class="gal-grid">
         <div class="gallery-item"><img loading="lazy" decoding="async" width="686" height="813" src="assets/gallery/pedikyur-pokrytie.jpg" alt="Педикюр с цветным покрытием — работа студии"><div class="cap">Покрытие</div></div>
         <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1610992015732-2449b76344bc?q=80&w=1400&auto=format&fit=crop" alt="Результат педикюра"><div class="cap">Финальный результат</div></div>
         <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1610992015762-45dca7fa3a85?q=80&w=1400&auto=format&fit=crop" alt="Уход за стопой"><div class="cap">Уход за стопой</div></div>
-        <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1664643411326-6c589531be3c?q=80&w=1400&auto=format&fit=crop" alt="Аппаратная обработка стопы"><div class="cap">Аппаратная обработка</div></div>
+        <div class="gallery-item"><img loading="lazy" decoding="async" width="960" height="1280" src="assets/gallery/pedikyur-naturalnyy.webp" alt="Педикюр без покрытия — работа студии"><div class="cap">Без покрытия</div></div>
         </div>
       </div>
 
-      <!-- КАТЕГОРИЯ: Подология. Нужно 4 фото по подологии — до/после ценнее всего: вросший ноготь, грибковые изменения, натоптыши, трещины. Класть в assets/gallery/podologiya/. Сейчас слоты 3 и 4 — повторы. -->
+      <!-- КАТЕГОРИЯ: Подология. ВСЕ 4 — настоящие работы студии, без водяных знаков.
+           Порядок от самого «витринного» кадра к самому клиническому: последний слот
+           (podologiya-izmeneniya) показывает изменённые пластины — если владелица
+           не захочет такое в открытой галерее, убрать нужно именно его.
+           Пар «до/после» пока нет — они сработали бы сильнее всего. -->
       <div class="gal-cat reveal">
         <div class="gal-cat-head"><h3>Подология</h3><span>4 фото</span></div>
         <div class="gal-grid">
-        <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1519419451778-14599a49ec41?q=80&w=1400&auto=format&fit=crop" alt="Комплексный подологический уход"><div class="cap">Подологический уход</div></div>
-        <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1610992015762-45dca7fa3a85?q=80&w=1400&auto=format&fit=crop" alt="Осмотр и обработка стопы"><div class="cap">Диагностика стопы</div></div>
-        <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1664643411326-6c589531be3c?q=80&w=1400&auto=format&fit=crop" alt="Аппаратная работа с ногтевой пластиной"><div class="cap">Работа с пластиной</div></div>
-        <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1519419451778-14599a49ec41?q=80&w=1400&auto=format&fit=crop" alt="Профилактический уход за стопой"><div class="cap">Профилактика</div></div>
+        <div class="gallery-item"><img loading="lazy" decoding="async" width="775" height="715" src="assets/gallery/podologiya-apparat.webp" alt="Аппаратная обработка стопы — работа студии"><div class="cap">Аппаратная обработка</div></div>
+        <div class="gallery-item"><img loading="lazy" decoding="async" width="960" height="1280" src="assets/gallery/podologiya-korrekciya.webp" alt="Аппаратная работа с ногтем на стопе — работа студии"><div class="cap">Коррекция ногтя</div></div>
+        <div class="gallery-item"><img loading="lazy" decoding="async" width="720" height="1280" src="assets/gallery/podologiya-plastina.webp" alt="Работа с ногтевой пластиной большого пальца — работа студии"><div class="cap">Работа с пластиной</div></div>
+        <div class="gallery-item"><img loading="lazy" decoding="async" width="960" height="1280" src="assets/gallery/podologiya-izmeneniya.webp" alt="Обработка стопы с изменёнными ногтевыми пластинами — работа студии"><div class="cap">Изменения ногтей</div></div>
         </div>
       </div>
 
