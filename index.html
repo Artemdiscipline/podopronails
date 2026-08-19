@@ -869,9 +869,12 @@
   </section>
 
   <!-- GALLERY -->
-  <!-- Все снимки ниже — сток с Unsplash, реальных работ студии пока нет.
-       Разметка слота одинаковая во всех категориях: чтобы поставить своё фото,
-       достаточно поменять src и alt, ничего больше трогать не нужно. -->
+  <!-- 4 слота из 16 — настоящие работы студии (assets/gallery/), остальные пока
+       сток с Unsplash. Разметка слота одинаковая во всех категориях: чтобы
+       поставить своё фото, достаточно поменять src, width, height и alt.
+       ВОДЯНЫЕ ЗНАКИ: три присланных снимка вытащены из карточки 2GIS и несут его
+       знак в углу. Нужны оригиналы без чужой маркировки — запрошены у клиента.
+       Подология: реальных фото пока нет ни одного, все 4 слота стоковые. -->
   <section id="gallery" class="band">
     <div class="wrap">
       <div class="section-head">
@@ -879,22 +882,24 @@
         <p class="support reveal">Работы по направлениям — маникюр, педикюр, подология, брови и ресницы.</p>
       </div>
 
-      <!-- КАТЕГОРИЯ: Маникюр. Нужно 4 фото работ по маникюру. Класть в assets/gallery/manikyur/ и менять src у каждого слота. -->
+      <!-- КАТЕГОРИЯ: Маникюр. 1 из 4 — реальная работа (manikyur-french.jpg, водяной знак 2GIS).
+           Нужно ещё 3 фото; слоты 2-4 пока сток. Класть в assets/gallery/ и менять src + alt. -->
       <div class="gal-cat reveal">
         <div class="gal-cat-head"><h3>Маникюр</h3><span>4 фото</span></div>
         <div class="gal-grid">
-        <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1630843599725-32ead7671867?q=80&w=1400&auto=format&fit=crop" alt="Аккуратный маникюр"><div class="cap">Аккуратный маникюр</div></div>
+        <div class="gallery-item"><img loading="lazy" decoding="async" width="960" height="1280" src="assets/gallery/manikyur-french.jpg" alt="Френч на короткой длине — работа студии"><div class="cap">Френч</div></div>
         <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1607779097040-26e80aa78e66?q=80&w=1400&auto=format&fit=crop" alt="Покрытие гель-лак"><div class="cap">Покрытие гель-лак</div></div>
         <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1571290274554-6a2eaa771e5f?q=80&w=1400&auto=format&fit=crop" alt="Форма и длина ногтей"><div class="cap">Форма и длина</div></div>
         <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1633955726992-2b7c0d2d2a69?q=80&w=1400&auto=format&fit=crop" alt="Натуральное покрытие"><div class="cap">Натуральный уход</div></div>
         </div>
       </div>
 
-      <!-- КАТЕГОРИЯ: Педикюр. Нужно 4 фото работ по педикюру. Класть в assets/gallery/pedikyur/. Сейчас 4-й слот — повтор 1-го. -->
+      <!-- КАТЕГОРИЯ: Педикюр. 1 из 4 — реальная работа (pedikyur-pokrytie.jpg, водяной знак 2GIS).
+           Нужно ещё 3 фото; слоты 2-4 пока сток, причём 4-й дублирует 3-й. -->
       <div class="gal-cat reveal">
         <div class="gal-cat-head"><h3>Педикюр</h3><span>4 фото</span></div>
         <div class="gal-grid">
-        <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1664643411326-6c589531be3c?q=80&w=1400&auto=format&fit=crop" alt="Аппаратный педикюр"><div class="cap">Аппаратный педикюр</div></div>
+        <div class="gallery-item"><img loading="lazy" decoding="async" width="686" height="813" src="assets/gallery/pedikyur-pokrytie.jpg" alt="Педикюр с цветным покрытием — работа студии"><div class="cap">Покрытие</div></div>
         <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1610992015732-2449b76344bc?q=80&w=1400&auto=format&fit=crop" alt="Результат педикюра"><div class="cap">Финальный результат</div></div>
         <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1610992015762-45dca7fa3a85?q=80&w=1400&auto=format&fit=crop" alt="Уход за стопой"><div class="cap">Уход за стопой</div></div>
         <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1664643411326-6c589531be3c?q=80&w=1400&auto=format&fit=crop" alt="Аппаратная обработка стопы"><div class="cap">Аппаратная обработка</div></div>
@@ -912,12 +917,14 @@
         </div>
       </div>
 
-      <!-- КАТЕГОРИЯ: Брови и ресницы. ВНИМАНИЕ: все 4 слота — заглушки. Среди имеющихся стоковых снимков нет ни одного по бровям и ресницам, здесь стоят фото ногтевых работ. Заменить нужно ВСЕ ЧЕТЫРЕ. Класть в assets/gallery/brovi-resnicy/. -->
+      <!-- КАТЕГОРИЯ: Брови и ресницы. 2 из 4 — реальные работы:
+           brovi-permanent.webp (знак самой студии) и resnicy-laminirovanie.jpg (знак 2GIS).
+           Слоты 3-4 всё ещё заглушки из ногтевого стока — заменить обязательно. -->
       <div class="gal-cat reveal">
         <div class="gal-cat-head"><h3>Брови и ресницы</h3><span>4 фото</span></div>
         <div class="gal-grid">
-        <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1633955726992-2b7c0d2d2a69?q=80&w=1400&auto=format&fit=crop" alt="Временная иллюстрация — будет заменена на фото работы по бровям"><div class="cap">Брови</div></div>
-        <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1630843599725-32ead7671867?q=80&w=1400&auto=format&fit=crop" alt="Временная иллюстрация — будет заменена на фото работы по ресницам"><div class="cap">Ресницы</div></div>
+        <div class="gallery-item"><img loading="lazy" decoding="async" width="1280" height="720" src="assets/gallery/brovi-permanent.webp" alt="Перманентный макияж бровей и межресничного пространства — работа студии"><div class="cap">Брови и межресничный</div></div>
+        <div class="gallery-item"><img loading="lazy" decoding="async" width="736" height="736" src="assets/gallery/resnicy-laminirovanie.jpg" alt="Ламинирование ресниц, до и после — работа студии"><div class="cap">Ламинирование ресниц</div></div>
         <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1607779097040-26e80aa78e66?q=80&w=1400&auto=format&fit=crop" alt="Временная иллюстрация — будет заменена на фото ламинирования"><div class="cap">Ламинирование</div></div>
         <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1571290274554-6a2eaa771e5f?q=80&w=1400&auto=format&fit=crop" alt="Временная иллюстрация — будет заменена на фото оформления бровей"><div class="cap">Оформление</div></div>
         </div>
