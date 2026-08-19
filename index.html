@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PODO PRO NAILS — Elizaveta Solonina · студия подологии и nail-эстетики</title>
-<meta name="description" content="PODO PRO NAILS — студия подологии, маникюра и педикюра на Яблочкова, 2/1, Москва. Рейтинг 5.0 на Яндекс Картах. Александра, Марина, Елизавета — конкурсные мастера.">
+<meta name="description" content="PODO PRO NAILS — студия подологии, маникюра и педикюра на Яблочкова, 2/1, Москва. Рейтинг 5.0 на Яндекс Картах. Конкурсные мастера, диагностика стопы, обучение мастеров.">
 <meta name="theme-color" content="#15120f">
 <!-- Сайт на тестовом github.io-адресе — индексация закрыта.
      ПЕРЕД ПЕРЕЕЗДОМ НА БОЕВОЙ ДОМЕН вернуть на:
@@ -74,13 +74,7 @@
     "https://t.me/podolog_lizaveta",
     "https://wa.me/79037662968"
   ],
-  "hasMap": "https://yandex.ru/maps/org/podopronails/100922864802",
-  "makesOffer": [
-    { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Комби / аппаратный / обрезной маникюр" }, "price": "1800", "priceCurrency": "RUB" },
-    { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Аппаратный уход за стопой" }, "price": "3500", "priceCurrency": "RUB" },
-    { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Гель-лак маникюр" }, "price": "900", "priceCurrency": "RUB" },
-    { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Перманентный макияж губ" }, "price": "10000", "priceCurrency": "RUB" }
-  ]
+  "hasMap": "https://yandex.ru/maps/org/podopronails/100922864802"
 }
 </script>
 
@@ -128,10 +122,11 @@
     --card:#f1e9d6;
     --text:#241f19;
     --text-soft:#6b6052;
-    --text-faint:#a89a84;
+    --text-faint:#776b58;   /* darkened: #a89a84 sat at ~2.6:1 on the new light base */
     --gold-light:#f1dc9d;
     --gold:#c9a227;
     --gold-deep:#8a6a1f;
+    --gold-text:#6f5417;  /* small gold TEXT only: --gold-deep is 4.17:1 on --card */
     --on-dark:#f5ecd8;
     --on-dark-soft:rgba(245,236,216,0.66);
     --line:rgba(36,31,25,0.13);
@@ -145,7 +140,7 @@
   html{scroll-behavior:smooth;}
   body{
     font-family:'Outfit',sans-serif;
-    background:var(--ivory);
+    background:var(--panel);
     color:var(--text);
     overflow-x:hidden;
     width:100%;max-width:100%;
@@ -169,18 +164,18 @@
   .wrap{width:100%; max-width:1280px; margin:0 auto; padding:0 clamp(20px,5vw,64px);}
   section{position:relative; padding:clamp(64px,10vw,140px) 0;}
   section[id]{scroll-margin-top:110px;}
+  /* page rhythm: near-white base with cream bands, in place of the old dark blocks */
+  .band{background:var(--ivory);}
   .eyebrow{
     font-size:0.72rem; letter-spacing:0.24em; text-transform:uppercase;
-    color:var(--gold-deep); font-weight:500; display:flex; align-items:center; gap:10px;
+    color:var(--gold-text); font-weight:500; display:flex; align-items:center; gap:10px;
   }
   .eyebrow::before{content:'';width:24px;height:1px;background:var(--gold-deep);display:inline-block;}
-  .hero .eyebrow{color:var(--gold-light);}
-  .hero .eyebrow::before{background:var(--gold-light);}
 
   /* ---------- PRELOADER ---------- */
   .preloader{
     position:fixed; inset:0; z-index:10000;
-    background:var(--ink);
+    background:var(--panel);
     display:flex; flex-direction:column; align-items:center; justify-content:center; gap:26px;
     animation:preFailsafe 0s linear 3.4s forwards;
   }
@@ -188,9 +183,9 @@
   .preloader.done{opacity:0; visibility:hidden; pointer-events:none; transition:opacity .7s ease, visibility .7s ease;}
   .pre-mark{width:64px;height:92px;}
   .pre-mark img{width:100%;height:100%;object-fit:contain;}
-  .pre-name{font-family:'Marcellus',serif;font-size:0.9rem;letter-spacing:0.34em;text-transform:uppercase;color:var(--gold-light);}
-  .pre-bar{width:150px;height:1px;background:rgba(245,236,216,0.16);position:relative;overflow:hidden;}
-  .pre-bar i{position:absolute;inset:0;transform-origin:left;transform:scaleX(0);background:linear-gradient(90deg,var(--gold-light),var(--gold));animation:preFill 1.5s var(--ease) forwards;}
+  .pre-name{font-family:'Marcellus',serif;font-size:0.9rem;letter-spacing:0.34em;text-transform:uppercase;color:var(--gold-deep);}
+  .pre-bar{width:150px;height:1px;background:var(--line);position:relative;overflow:hidden;}
+  .pre-bar i{position:absolute;inset:0;transform-origin:left;transform:scaleX(0);background:linear-gradient(90deg,var(--gold),var(--gold-deep));animation:preFill 1.5s var(--ease) forwards;}
   @keyframes preFill{to{transform:scaleX(1);}}
   @media (prefers-reduced-motion:reduce){.preloader{display:none;}}
 
@@ -240,12 +235,9 @@
   }
   .btn-gold:hover::after{left:130%;}
   .btn-gold:hover{box-shadow:0 20px 34px -14px rgba(138,106,31,0.6);}
-  .btn-dark{background:var(--ink); color:var(--on-dark); border-color:rgba(245,236,216,0.14);}
-  .btn-dark:hover{box-shadow:0 18px 30px -12px rgba(0,0,0,0.4);}
-  .btn-outline{border-color:var(--line); color:var(--text);}
-  .btn-outline:hover{border-color:var(--text);}
-  .btn-outline-dark{border-color:rgba(245,236,216,0.32); color:var(--on-dark);}
-  .btn-outline-dark:hover{border-color:var(--on-dark); background:rgba(245,236,216,0.06);}
+  /* .btn-dark and .btn-outline-dark are gone: both were built for a dark ground */
+  .btn-outline{border-color:rgba(138,106,31,0.38); color:var(--text); background:rgba(255,255,255,0.55);}
+  .btn-outline:hover{border-color:var(--gold-deep); background:rgba(201,162,39,0.12);}
 
   /* ---------- NAV ---------- */
   .nav-shell{position:fixed; top:18px; left:0; right:0; z-index:200; display:flex; justify-content:center; padding:0 20px; pointer-events:none;}
@@ -254,23 +246,23 @@
     pointer-events:auto; width:100%; max-width:1180px;
     display:flex; align-items:center; justify-content:space-between; gap:24px;
     padding:10px 12px 10px 18px; border-radius:999px;
-    background:rgba(21,18,15,0.82); backdrop-filter:blur(18px) saturate(140%); -webkit-backdrop-filter:blur(18px) saturate(140%);
-    border:1px solid rgba(245,236,216,0.12);
-    box-shadow:0 20px 50px -28px rgba(0,0,0,0.6);
+    background:rgba(255,252,244,0.88); backdrop-filter:blur(18px) saturate(140%); -webkit-backdrop-filter:blur(18px) saturate(140%);
+    border:1px solid var(--line);
+    box-shadow:0 18px 44px -26px rgba(36,31,25,0.38);
     transition:padding .4s ease;
   }
-  .logo{display:flex; align-items:center; gap:12px; color:var(--on-dark);}
+  .logo{display:flex; align-items:center; gap:12px; color:var(--text);}
   /* the source logo is gold-on-white and carries its own wordmark, so the nav
      uses a background-free crop of just the monogram — see assets/logo-mark.png */
   .logo-mark{width:38px; height:52px; flex-shrink:0;}
   .logo-mark img{width:100%; height:100%; object-fit:contain;}
   .logo-text{line-height:1.05;}
-  .logo-text .l1{font-family:'Marcellus',serif; font-size:1.02rem; letter-spacing:0.03em; color:var(--gold-light); display:block;}
-  .logo-text .l2{font-size:0.6rem; letter-spacing:0.16em; color:var(--on-dark-soft); text-transform:uppercase; margin-top:2px; display:block;}
-  .nav-links{display:flex; align-items:center; gap:28px; font-size:0.86rem; color:var(--on-dark-soft);}
+  .logo-text .l1{font-family:'Marcellus',serif; font-size:1.02rem; letter-spacing:0.03em; color:var(--gold-deep); display:block;}
+  .logo-text .l2{font-size:0.6rem; letter-spacing:0.16em; color:var(--text-soft); text-transform:uppercase; margin-top:2px; display:block;}
+  .nav-links{display:flex; align-items:center; gap:28px; font-size:0.86rem; color:var(--text-soft);}
   .nav-links a{position:relative; padding:6px 0; transition:color .3s ease;}
-  .nav-links a::after{content:'';position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--gold-light);transition:width .35s var(--ease);}
-  .nav-links a:hover{color:var(--on-dark);}
+  .nav-links a::after{content:'';position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--gold-deep);transition:width .35s var(--ease);}
+  .nav-links a:hover{color:var(--text);}
   .nav-links a:hover::after{width:100%;}
   .nav-cta{padding:11px 22px; font-size:0.84rem;}
   .nav-burger{display:none; border:none; padding:0;}
@@ -284,17 +276,17 @@
   body.nav-open .burger-lines i:nth-child(3){transform:translateY(-5.2px) rotate(-45deg);}
   .menu-cta{display:none;}
   .nav-backdrop{
-    position:fixed; inset:0; z-index:180; background:rgba(10,8,6,0.55);
+    position:fixed; inset:0; z-index:180; background:rgba(36,31,25,0.3);
     opacity:0; visibility:hidden; transition:opacity .35s ease, visibility .35s ease;
   }
   body.nav-open .nav-backdrop{opacity:1; visibility:visible;}
 
   /* ---------- HERO ---------- */
   .hero{
-    background:radial-gradient(90% 70% at 82% -6%, rgba(201,162,39,0.16), transparent 60%),
-               radial-gradient(70% 55% at 8% 8%, rgba(201,162,39,0.08), transparent 60%),
-               var(--ink);
-    color:var(--on-dark);
+    background:radial-gradient(90% 70% at 82% -6%, rgba(201,162,39,0.26), transparent 62%),
+               radial-gradient(70% 55% at 8% 8%, rgba(201,162,39,0.13), transparent 60%),
+               var(--ivory);
+    color:var(--text);
     padding-top:clamp(150px,18vw,200px);
     padding-bottom:0;
   }
@@ -306,31 +298,32 @@
   }
   .hero h1 .gold-run,
   .hero h1 .gold-run .word-mask > span{
-    background:linear-gradient(100deg,var(--gold-light),var(--gold) 60%,var(--gold-deep));
+    /* stops pushed into the darker half of the gold: --gold-light vanishes on cream */
+    background:linear-gradient(100deg,var(--gold),var(--gold-deep) 55%,#6d5318);
     -webkit-background-clip:text; background-clip:text; color:transparent;
   }
   .word-mask{display:inline-block; overflow:hidden; vertical-align:top;}
   .word-mask > span{display:inline-block;}
-  .hero p.lead{margin-top:24px; max-width:50ch; font-size:1.05rem; line-height:1.7; color:var(--on-dark-soft);}
+  .hero p.lead{margin-top:24px; max-width:50ch; font-size:1.05rem; line-height:1.7; color:var(--text-soft);}
   .hero-ctas{margin-top:36px; display:flex; flex-wrap:wrap; gap:16px;}
   .hero-stats{
     margin-top:54px; display:flex; gap:clamp(20px,4vw,52px); flex-wrap:wrap;
-    padding-top:30px; border-top:1px solid var(--line-dark);
+    padding-top:30px; border-top:1px solid var(--line);
   }
-  .stat b{font-family:'Marcellus',serif; font-size:2rem; color:var(--gold-light); display:block; line-height:1;}
-  .stat span{display:block; margin-top:8px; font-size:0.8rem; color:var(--on-dark-soft); max-width:17ch; line-height:1.4;}
+  .stat b{font-family:'Marcellus',serif; font-size:2rem; color:var(--gold-deep); display:block; line-height:1;}
+  .stat span{display:block; margin-top:8px; font-size:0.8rem; color:var(--text-soft); max-width:17ch; line-height:1.4;}
 
   .hero-media{position:relative; width:100%; aspect-ratio:21/9; border-radius:var(--radius-l) var(--radius-l) 0 0; overflow:hidden; margin-top:60px;}
-  .hero-media img{width:100%;height:100%;object-fit:cover; filter:saturate(0.85) contrast(1.05) brightness(0.95);}
-  .hero-media::after{content:'';position:absolute;inset:0;background:linear-gradient(0deg, var(--ink) 0%, rgba(21,18,15,0) 55%), linear-gradient(180deg, rgba(21,18,15,0.55) 0%, rgba(21,18,15,0) 30%);}
+  .hero-media img{width:100%;height:100%;object-fit:cover; filter:saturate(0.9) contrast(1.02);}
+  .hero-media::after{content:'';position:absolute;inset:0;background:linear-gradient(0deg, var(--ivory) 0%, rgba(248,244,234,0) 52%), linear-gradient(180deg, rgba(248,244,234,0.5) 0%, rgba(248,244,234,0) 28%);}
 
   /* ---------- MARQUEE ---------- */
-  .marquee-band{background:var(--ink); padding:0 0 clamp(50px,7vw,80px); overflow:hidden;}
-  .marquee-line{border-top:1px solid var(--line-dark); border-bottom:1px solid var(--line-dark); padding:20px 0; overflow:hidden;}
+  .marquee-band{background:var(--ivory); padding:0 0 clamp(50px,7vw,80px); overflow:hidden;}
+  .marquee-line{border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:20px 0; overflow:hidden;}
   .marquee-row{display:flex; width:max-content; gap:0;}
   .marquee-row span{
     font-family:'Marcellus',serif; font-size:clamp(1rem,1.6vw,1.35rem);
-    color:var(--gold-light); opacity:0.85; padding:0 26px; white-space:nowrap;
+    color:var(--gold-text); opacity:0.95; padding:0 26px; white-space:nowrap;
     display:flex; align-items:center; gap:26px;
   }
   .marquee-row span::after{content:'◆'; font-size:0.5em; color:var(--gold); opacity:0.7;}
@@ -347,7 +340,7 @@
   }
   .trust-item:hover{background:rgba(201,162,39,0.05);}
   .trust-item:last-child{border-right:none;}
-  .trust-item .n{font-family:'Marcellus',serif; color:var(--gold-deep); font-size:0.85rem;}
+  .trust-item .n{font-family:'Marcellus',serif; color:var(--gold-text); font-size:0.85rem;}
   .trust-item p{font-size:0.9rem; color:var(--text-soft); line-height:1.5;}
 
   /* ---------- SECTION HEADS ---------- */
@@ -367,7 +360,7 @@
   .philo-list{margin-top:38px; display:flex; flex-direction:column;}
   .philo-list li{display:flex; gap:16px; align-items:flex-start; font-size:0.95rem; color:var(--text-soft); padding:20px 0; border-bottom:1px solid var(--line-soft);}
   .philo-list li:last-child{border-bottom:none;}
-  .philo-list b{font-family:'Marcellus',serif; color:var(--gold-deep); font-size:1.05rem; min-width:28px;}
+  .philo-list b{font-family:'Marcellus',serif; color:var(--gold-text); font-size:1.05rem; min-width:28px;}
 
   /* ---------- BENTO ---------- */
   .bento{display:grid; grid-template-columns:repeat(4,1fr); grid-auto-rows:190px; grid-auto-flow:dense; gap:14px;}
@@ -377,72 +370,49 @@
   .bento-card.wide{grid-column:span 2; grid-row:span 1;}
   .bento-card h3{font-size:1.15rem; margin-bottom:8px;}
   .bento-card p{font-size:0.85rem; color:var(--text-soft); line-height:1.5;}
-  .bento-card .num{position:absolute; top:20px; right:24px; font-family:'Marcellus',serif; font-size:0.82rem; color:var(--gold-deep);}
+  .bento-card .num{position:absolute; top:20px; right:24px; font-family:'Marcellus',serif; font-size:0.82rem; color:var(--gold-text);}
   .bento-card.big img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:saturate(0.85) brightness(0.9); transform:scale(1.1);}
   .bento-card.big::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg, rgba(21,18,15,0.05) 15%, rgba(21,18,15,0.82) 100%); z-index:1;}
   .bento-card.big .content{position:relative;z-index:2;padding:30px;color:var(--on-dark);}
   .bento-card.big h3{color:var(--gold-light);}
   .bento-card.big p{color:var(--on-dark-soft);}
 
-  /* ---------- PRICING ---------- */
-  .price-groups{display:grid; grid-template-columns:repeat(2,1fr); gap:clamp(30px,5vw,64px);}
-  .price-group h3{font-size:1.1rem; color:var(--gold-deep); margin-bottom:6px;}
-  .price-group .cat-note{font-size:0.82rem; color:var(--text-faint); margin-bottom:20px;}
-  /* the flagship group runs full width above the two-column pairs */
-  .price-group.featured{grid-column:1 / -1; padding-left:22px; border-left:2px solid var(--gold);}
-  /* rows live in .price-rows so the sub-headings below don't shift the zebra parity */
-  .price-sub{
-    display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
-    margin:26px 0 8px; font-size:0.74rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--gold-deep);
+  /* ---------- BOOKING CTA (stands where the price list used to) ---------- */
+  .cta-card{
+    position:relative; overflow:hidden; text-align:center;
+    border-radius:var(--radius-l); background:var(--ivory);
+    border:1px solid rgba(138,106,31,0.28);
+    padding:clamp(46px,7vw,78px) clamp(26px,5vw,64px);
   }
-  .cat-note + .price-sub{margin-top:18px;}
-  .price-sub em{font-style:normal; letter-spacing:0.02em; text-transform:none; font-size:0.82rem; color:var(--text-faint);}
-  .price-total{
-    margin-top:18px; padding:15px 18px; border-radius:12px;
-    display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap;
-    background:rgba(201,162,39,0.1); border:1px dashed rgba(138,106,31,0.4);
-    font-size:0.9rem; color:var(--text-soft);
-  }
-  .price-total b{font-family:'Marcellus',serif; font-size:1.05rem; color:var(--text); font-weight:400; white-space:nowrap;}
-  .price-row{display:flex; align-items:center; gap:14px; padding:15px 16px; border-radius:12px; transition:background .35s ease, transform .35s var(--ease);}
-  .price-rows .price-row:nth-child(odd){background:rgba(201,162,39,0.055);}
-  .price-row:hover{background:rgba(201,162,39,0.14); transform:translateX(5px);}
-  .price-row .name{font-size:0.96rem; flex:1;}
-  .price-row .name small{display:block; color:var(--text-faint); font-size:0.75rem; margin-top:3px; font-weight:300;}
-  .price-row .value{font-family:'Marcellus',serif; font-size:1.05rem; color:var(--text); white-space:nowrap;}
-  .price-note{margin-top:34px; font-size:0.85rem; color:var(--text-faint); text-align:center;}
+  .cta-card::before{content:'';position:absolute;inset:0;background:radial-gradient(60% 90% at 50% -10%, rgba(201,162,39,0.22), transparent 65%);}
+  .cta-card > *{position:relative; z-index:2;}
+  .cta-card h2{font-size:clamp(1.8rem,3.2vw,2.6rem); line-height:1.2; max-width:20ch; margin:0 auto;}
+  .cta-card p{margin:18px auto 0; max-width:54ch; color:var(--text-soft); line-height:1.7;}
+  .cta-card .btn{margin-top:30px;}
 
-  /* ---------- SPECIALISTS ---------- */
-  .specialists{background:var(--ink); color:var(--on-dark);}
-  .specialists .section-head h2{color:var(--on-dark);}
-  .specialists .section-head .support{color:var(--on-dark-soft);}
-  .spec-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:22px;}
-  .spec-card{
-    position:relative; background:var(--ink-2); border:1px solid var(--line-dark); border-radius:var(--radius-l);
-    padding:34px 28px; display:flex; flex-direction:column; align-items:center; text-align:center;
-    transition:transform .6s var(--ease), border-color .4s ease, background .4s ease;
+  /* ---------- TEAM (no names: the line-up changes) ---------- */
+  .team-lead{max-width:56ch; font-size:1.05rem; line-height:1.75; color:var(--text-soft);}
+  .team-grid{margin-top:clamp(34px,5vw,52px); display:grid; grid-template-columns:repeat(2,1fr); gap:16px;}
+  .team-card{
+    padding:30px 28px; border-radius:var(--radius-m);
+    background:var(--panel); border:1px solid var(--line-soft);
+    transition:transform .5s var(--ease), border-color .4s ease, box-shadow .5s ease;
   }
-  .spec-card:hover{transform:translateY(-8px); border-color:rgba(201,162,39,0.45); background:var(--ink-3);}
-  .avatar-wrap{
-    position:relative; width:104px; height:104px; border-radius:50%; margin-bottom:22px;
-    background:linear-gradient(135deg,var(--gold-light),var(--gold) 55%,var(--gold-deep));
-    display:flex; align-items:center; justify-content:center;
-    box-shadow:0 0 0 4px rgba(201,162,39,0.14);
-  }
-  .avatar-wrap .initial{font-family:'Marcellus',serif; font-size:2.4rem; color:#20170a;}
-  .avatar-wrap img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border-radius:50%;}
-  .spec-card h3{font-size:1.3rem; color:var(--on-dark);}
-  .spec-role{font-size:0.86rem; color:var(--on-dark-soft); margin-top:10px; line-height:1.55; min-height:66px;}
-  .spec-rating{margin-top:16px; display:flex; align-items:center; gap:8px; font-size:0.85rem; color:var(--gold-light);}
-  .spec-rating .stars{letter-spacing:2px;}
-  .spec-rating small{color:var(--on-dark-soft); font-weight:300;}
-  .spec-card .btn{margin-top:22px; width:100%; padding:13px 20px; font-size:0.85rem;}
-  .spec-card .spec-foot{margin-top:auto; width:100%;}
-  .spec-tags{display:flex; flex-wrap:wrap; gap:7px; justify-content:center; margin-top:16px;}
-  .spec-tags span{
-    font-size:0.72rem; letter-spacing:0.04em; padding:5px 11px; border-radius:999px;
-    color:var(--on-dark-soft); border:1px solid var(--line-dark);
-  }
+  .team-card:hover{transform:translateY(-5px); border-color:rgba(201,162,39,0.4); box-shadow:0 22px 38px -28px rgba(36,31,25,0.45);}
+  .team-card .ic{display:block; margin-bottom:12px; font-size:0.72rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold-text);}
+  .team-card h3{font-size:1.05rem; margin-bottom:8px;}
+  .team-card p{font-size:0.9rem; line-height:1.6; color:var(--text-soft);}
+
+  /* ---------- TRAINING ---------- */
+  .edu{display:grid; grid-template-columns:1.05fr 0.95fr; gap:clamp(34px,6vw,72px); align-items:center;}
+  .edu-copy p{margin-top:18px; max-width:50ch; color:var(--text-soft); line-height:1.75;}
+  .edu-copy .btn{margin-top:30px;}
+  .edu-side{padding:clamp(28px,4vw,40px); border-radius:var(--radius-l); background:var(--ivory); border:1px solid rgba(138,106,31,0.25);}
+  .edu-side ul{display:flex; flex-direction:column;}
+  .edu-side li{padding:16px 0; border-bottom:1px solid var(--line-soft); font-size:0.92rem; color:var(--text-soft); line-height:1.55;}
+  .edu-side li:first-child{padding-top:0;}
+  .edu-side li:last-child{border-bottom:none; padding-bottom:0;}
+  .edu-side b{display:block; margin-bottom:6px; font-family:'Marcellus',serif; font-weight:400; font-size:0.76rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--gold-text);}
 
   /* ---------- STEPS ---------- */
   .steps{display:grid; grid-template-columns:repeat(4,1fr); gap:18px; counter-reset:step;}
@@ -459,31 +429,27 @@
   }
   .step h3{font-size:1.05rem; margin-bottom:9px;}
   .step p{font-size:0.87rem; line-height:1.55; color:var(--text-soft);}
-  .step .step-time{display:block; margin-top:14px; font-size:0.74rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--gold-deep);}
+  .step .step-time{display:block; margin-top:14px; font-size:0.74rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--gold-text);}
 
   /* ---------- REVIEWS CTA ---------- */
   .reviews-cta{margin-top:44px; display:flex; justify-content:center;}
 
   /* ---------- GALLERY ---------- */
-  .gallery-pin{position:relative;}
-  .gallery-sticky{height:100vh; display:flex; flex-direction:column; justify-content:center; overflow:hidden; background:var(--ivory);}
-  .gallery-head{padding:0 clamp(20px,5vw,64px); margin-bottom:36px; display:flex; align-items:center; justify-content:space-between; gap:20px;}
-  .gallery-nav{display:none; gap:10px; flex-shrink:0;}
-  .gallery-arrow{
-    width:44px; height:44px; border-radius:50%; flex-shrink:0;
-    border:1px solid var(--line); background:var(--panel); color:var(--text);
-    font-size:1.3rem; line-height:1; display:flex; align-items:center; justify-content:center;
-    cursor:pointer; transition:background .3s ease, color .3s ease, transform .2s ease;
-  }
-  .gallery-arrow:hover{background:var(--gold); border-color:var(--gold); color:#20170a;}
-  .gallery-arrow:active{transform:scale(0.92);}
-  .gallery-arrow[disabled]{opacity:0.35; pointer-events:none;}
-  .gallery-track{display:flex; gap:20px; padding-left:clamp(20px,5vw,64px); width:max-content;}
-  .gallery-item{position:relative; width:min(60vw,520px); height:62vh; border-radius:var(--radius-m); overflow:hidden; flex-shrink:0; cursor:pointer;}
-  .gallery-item img{width:100%;height:100%;object-fit:cover; filter:saturate(0.9); transition:transform .9s var(--ease);}
+  .gal-cat{margin-top:clamp(44px,6vw,68px);}
+  .gal-cat:first-of-type{margin-top:0;}
+  .gal-cat-head{display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; margin-bottom:18px; padding-bottom:12px; border-bottom:1px solid var(--line);}
+  .gal-cat-head h3{font-size:1.2rem;}
+  .gal-cat-head span{font-size:0.74rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--gold-text);}
+  .gal-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:14px;}
+  .gallery-item{position:relative; aspect-ratio:4/5; border-radius:var(--radius-m); overflow:hidden; cursor:pointer; background:var(--card);}
+  .gallery-item img{width:100%; height:100%; object-fit:cover; filter:saturate(0.92); transition:transform .8s var(--ease);}
   .gallery-item:hover img{transform:scale(1.06);}
-  .gallery-item .cap{position:absolute; left:16px; bottom:16px; color:var(--on-dark); font-size:0.8rem; background:rgba(21,18,15,0.45); backdrop-filter:blur(6px); padding:8px 14px; border-radius:999px;}
-  .gallery-item:nth-child(even){margin-top:6vh;}
+  .gallery-item .cap{
+    position:absolute; left:10px; right:10px; bottom:10px; text-align:center;
+    color:#fff; font-size:0.75rem; background:rgba(21,18,15,0.52); backdrop-filter:blur(6px);
+    padding:7px 10px; border-radius:999px;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
 
   /* ---------- LIGHTBOX ---------- */
   .lightbox{
@@ -521,7 +487,7 @@
   .testi-name{font-size:0.9rem;}
   .testi-name small{display:block; color:var(--text-faint); font-size:0.75rem; font-weight:300;}
   .testi-card p{font-size:0.9rem; line-height:1.6; color:var(--text-soft);}
-  .stars{color:var(--gold); font-size:0.78rem; margin-bottom:10px; letter-spacing:2px;}
+  .stars{color:var(--gold-text); font-size:0.78rem; margin-bottom:10px; letter-spacing:2px;}
 
   /* ---------- FAQ ---------- */
   .faq-list{max-width:900px; margin:0 auto; border-top:1px solid var(--line);}
@@ -532,10 +498,10 @@
     font-family:'Marcellus',serif; font-size:clamp(1.02rem,1.7vw,1.25rem); color:var(--text);
     transition:color .3s ease;
   }
-  .faq-q:hover{color:var(--gold-deep);}
+  .faq-q:hover{color:var(--gold-text);}
   .faq-q::after{
     content:'+'; position:absolute; right:6px; top:50%; transform:translateY(-50%);
-    font-size:1.4rem; color:var(--gold-deep); transition:transform .4s var(--ease);
+    font-size:1.4rem; color:var(--gold-text); transition:transform .4s var(--ease);
   }
   .faq-item.open .faq-q::after{transform:translateY(-50%) rotate(45deg);}
   .faq-a{max-height:0; overflow:hidden; transition:max-height .5s var(--ease);}
@@ -543,43 +509,44 @@
 
   /* ---------- ACTION / CONTACTS ---------- */
   .action{
-    border-radius:var(--radius-l); background:var(--ink); color:var(--on-dark);
+    border-radius:var(--radius-l); background:var(--ivory); color:var(--text);
+    border:1px solid rgba(138,106,31,0.24);
     padding:clamp(50px,8vw,90px) clamp(30px,6vw,80px);
     display:grid; grid-template-columns:1.1fr 0.9fr; gap:50px; align-items:center;
     position:relative; overflow:hidden;
   }
-  .action::before{content:'';position:absolute;inset:0;background:radial-gradient(60% 80% at 88% 8%, rgba(201,162,39,0.2), transparent 60%);}
+  .action::before{content:'';position:absolute;inset:0;background:radial-gradient(60% 80% at 88% 8%, rgba(201,162,39,0.18), transparent 62%);}
   .action-copy{position:relative;z-index:2;}
-  .action h2{color:var(--on-dark); font-size:clamp(2rem,3.6vw,3rem); max-width:15ch;}
-  .action p{color:var(--on-dark-soft); margin-top:18px; max-width:44ch; line-height:1.6;}
+  .action h2{color:var(--text); font-size:clamp(2rem,3.6vw,3rem); max-width:15ch;}
+  .action p{color:var(--text-soft); margin-top:18px; max-width:44ch; line-height:1.6;}
   .action-ctas{margin-top:32px; display:flex; gap:14px; flex-wrap:wrap;}
   .action-info{position:relative;z-index:2; display:flex; flex-direction:column; gap:20px;}
-  .action-info .row{display:flex; gap:14px; align-items:flex-start; font-size:0.92rem; color:var(--on-dark-soft);}
-  .action-info .row b{display:block; font-family:'Marcellus',serif; font-size:1.03rem; color:var(--gold-light); margin-bottom:3px; font-weight:400;}
-  .action-info .row .ic{color:var(--gold); flex-shrink:0; margin-top:2px;}
+  .action-info .row{display:flex; gap:14px; align-items:flex-start; font-size:0.92rem; color:var(--text-soft);}
+  .action-info .row b{display:block; font-family:'Marcellus',serif; font-size:1.03rem; color:var(--gold-text); margin-bottom:3px; font-weight:400;}
+  .action-info .row .ic{color:var(--gold-text); flex-shrink:0; margin-top:2px;}
   .action-links{margin-top:6px; display:flex; gap:12px; flex-wrap:wrap;}
-  .action-links a{font-size:0.82rem; color:var(--on-dark-soft); border-bottom:1px solid var(--line-dark); padding-bottom:2px; transition:color .3s ease, border-color .3s ease;}
-  .action-links a:hover{color:var(--gold-light); border-color:var(--gold-light);}
+  .action-links a{font-size:0.82rem; color:var(--text-soft); border-bottom:1px solid var(--line); padding-bottom:2px; transition:color .3s ease, border-color .3s ease;}
+  .action-links a:hover{color:var(--gold-text); border-color:var(--gold-text);}
 
   .map-wrap{margin-top:56px; border-radius:var(--radius-l); overflow:hidden; border:1px solid var(--line); height:420px; filter:saturate(0.85) sepia(0.05);}
   .map-wrap iframe{width:100%;height:100%;border:0;}
 
   /* ---------- FOOTER ---------- */
-  footer{padding:70px 0 40px; background:var(--ink); color:var(--on-dark); overflow:hidden;}
-  .footer-top{display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:40px; padding-bottom:50px; border-bottom:1px solid var(--line-dark);}
-  .footer-top p{color:var(--on-dark-soft); font-size:0.9rem; margin-top:16px; max-width:32ch; line-height:1.6;}
-  .footer-col h4{font-size:0.78rem; letter-spacing:0.09em; text-transform:uppercase; color:var(--text-faint); margin-bottom:18px; font-weight:500;}
+  footer{padding:70px 0 40px; background:var(--card); color:var(--text); overflow:hidden;}
+  .footer-top{display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:40px; padding-bottom:50px; border-bottom:1px solid var(--line);}
+  .footer-top p{color:var(--text-soft); font-size:0.9rem; margin-top:16px; max-width:32ch; line-height:1.6;}
+  .footer-col h4{font-size:0.78rem; letter-spacing:0.09em; text-transform:uppercase; color:var(--gold-text); margin-bottom:18px; font-weight:500;}
   .footer-col ul{display:flex; flex-direction:column; gap:12px;}
-  .footer-col a{font-size:0.92rem; color:var(--on-dark-soft); transition:color .3s ease;}
-  .footer-col a:hover{color:var(--gold-light);}
+  .footer-col a{font-size:0.92rem; color:var(--text-soft); transition:color .3s ease;}
+  .footer-col a:hover{color:var(--gold-text);}
   .footer-word{
     font-family:'Marcellus',serif; text-align:center; line-height:1;
     font-size:clamp(2.2rem,10vw,8rem); letter-spacing:0.02em;
-    background:linear-gradient(180deg,rgba(241,220,157,0.28),rgba(138,106,31,0.06));
+    background:linear-gradient(180deg,rgba(201,162,39,0.45),rgba(138,106,31,0.10));
     -webkit-background-clip:text; background-clip:text; color:transparent;
     padding:44px 0 10px; user-select:none;
   }
-  .footer-bottom{display:flex; justify-content:space-between; align-items:center; padding-top:26px; font-size:0.78rem; color:var(--text-faint); flex-wrap:wrap; gap:10px;}
+  .footer-bottom{display:flex; justify-content:space-between; align-items:center; padding-top:26px; font-size:0.78rem; color:var(--text-soft); flex-wrap:wrap; gap:10px;}
 
   /* ---------- STICKY MOBILE CTA ---------- */
   .sticky-cta{
@@ -589,11 +556,19 @@
   }
   .sticky-cta.show{transform:translateY(0);}
   .sticky-cta .btn{flex:1; padding:15px 18px; font-size:0.88rem; box-shadow:0 16px 30px -12px rgba(0,0,0,0.55);}
-  .sticky-cta .btn-icon{flex:0 0 54px; background:rgba(21,18,15,0.94); color:var(--gold-light); border:1px solid var(--line-dark); padding:15px 0;}
+  .sticky-cta .btn-icon{flex:0 0 54px; background:var(--panel); color:var(--gold-deep); border:1px solid rgba(138,106,31,0.35); padding:15px 0;}
   .sticky-cta .btn-icon svg{width:20px; height:20px;}
 
   .reveal{opacity:1;}
   html.gsap-ready .reveal{opacity:0;}
+
+  /* ---------- PODOLOGY: the lead section, so it gets more air and a bigger head ---------- */
+  #podologiya{padding:clamp(76px,11vw,165px) 0;}
+  #podologiya .section-head{margin-bottom:clamp(34px,5vw,58px);}
+  #podologiya .section-head h2{font-size:clamp(2.3rem,4.4vw,3.5rem); max-width:15ch;}
+  #podologiya .section-head .support{font-size:1.06rem;}
+  #podologiya .bento-card{border-color:rgba(138,106,31,0.18);}
+  .edu-copy h2{font-size:clamp(2rem,3.4vw,2.8rem); line-height:1.2; max-width:17ch;}
 
   /* ---------- RESPONSIVE ---------- */
   @media (max-width:980px){
@@ -601,10 +576,10 @@
       position:absolute; top:calc(100% + 12px); left:0; right:0;
       flex-direction:column; align-items:stretch; gap:2px; text-align:center;
       padding:14px 16px; border-radius:22px; font-size:0.98rem;
-      background:rgba(21,18,15,0.97);
+      background:rgba(255,252,244,0.98);
       backdrop-filter:blur(18px) saturate(140%); -webkit-backdrop-filter:blur(18px) saturate(140%);
-      border:1px solid rgba(245,236,216,0.12);
-      box-shadow:0 30px 60px -24px rgba(0,0,0,0.7);
+      border:1px solid var(--line);
+      box-shadow:0 30px 60px -24px rgba(36,31,25,0.32);
       opacity:0; visibility:hidden; transform:translateY(-14px) scale(0.98);
       transition:opacity .32s var(--ease), transform .32s var(--ease), visibility .32s;
     }
@@ -617,8 +592,8 @@
     .logo-text .l2{display:none;}
     .logo-text .l1{font-size:0.9rem; white-space:nowrap;}
     .philo{grid-template-columns:1fr;}
-    .price-groups{grid-template-columns:1fr;}
-    .spec-grid{grid-template-columns:1fr; max-width:420px; margin:0 auto;}
+    .edu{grid-template-columns:1fr;}
+    .gal-grid{grid-template-columns:repeat(3,1fr);}
     .section-head{grid-template-columns:1fr;}
     .section-head .support{justify-self:start;}
     .bento{grid-template-columns:repeat(2,1fr); grid-auto-rows:170px;}
@@ -632,20 +607,6 @@
     .footer-top{grid-template-columns:1fr; gap:30px;}
     body{padding-bottom:76px;}
     .sticky-cta{display:flex;}
-
-    .gallery-pin{height:auto !important;}
-    .gallery-sticky{position:static; height:auto; overflow:visible; padding:0 0 8px;}
-    .gallery-head{margin-bottom:22px;}
-    .gallery-nav{display:flex;}
-    .gallery-track{
-      width:auto; overflow-x:auto; -webkit-overflow-scrolling:touch;
-      scroll-snap-type:x proximity; scroll-padding-left:20px;
-      padding:4px 20px 14px; margin:0 -1px;
-      scrollbar-width:none;
-    }
-    .gallery-track::-webkit-scrollbar{display:none;}
-    .gallery-item{scroll-snap-align:start;}
-    .gallery-item:nth-child(even){margin-top:0;}
   }
   @media (max-width:560px){
     .nav-shell{padding:0 14px;}
@@ -659,7 +620,8 @@
     .bento{grid-template-columns:1fr; grid-auto-rows:auto;}
     .bento-card.big, .bento-card.wide{grid-column:span 1;}
     .bento-card.big{aspect-ratio:4/5; grid-row:auto;}
-    .gallery-item{width:82vw; height:52vh;}
+    .gal-grid{grid-template-columns:repeat(2,1fr);}
+    .team-grid{grid-template-columns:1fr;}
     .steps{grid-template-columns:1fr;}
     .lightbox .lb-nav{width:40px; height:40px; margin-top:-20px; font-size:1.25rem;}
     .trust-grid{grid-template-columns:1fr;}
@@ -697,9 +659,9 @@
     </a>
     <div class="nav-links" id="navLinks">
       <a href="https://yandex.ru/maps/org/podopronails/100922864802?si=uzvpehy3acwge12jrgp4hg1fxw" target="_blank" rel="noopener" class="btn btn-gold menu-cta"><span>Записаться</span></a>
+      <a href="#podologiya">Подология</a>
       <a href="#philosophy">О студии</a>
-      <a href="#services">Услуги</a>
-      <a href="#specialists">Мастера</a>
+      <a href="#obuchenie">Обучение</a>
       <a href="#gallery">Галерея</a>
       <a href="#faq">Вопросы</a>
       <a href="#contacts">Контакты</a>
@@ -722,7 +684,7 @@
         <p class="lead">PODO PRO NAILS Елизаветы Солониной — команда конкурсных мастеров маникюра, педикюра и подологии. Диагностика стопы, решение проблем ногтей и аккуратная эстетика в одном кабинете на Яблочкова, 2/1.</p>
         <div class="hero-ctas">
           <a href="https://yandex.ru/maps/org/podopronails/100922864802?si=uzvpehy3acwge12jrgp4hg1fxw" target="_blank" rel="noopener" class="btn btn-gold magnetic"><span>Записаться на Яндекс Картах</span></a>
-          <a href="tel:+79037662968" class="btn btn-outline-dark"><span>+7 (903) 766-29-68</span></a>
+          <a href="tel:+79037662968" class="btn btn-outline"><span>+7 (903) 766-29-68</span></a>
         </div>
         <div class="hero-stats">
           <div class="stat"><b data-count="5" data-decimals="1">5.0</b><span>рейтинг студии на Яндекс Картах</span></div>
@@ -745,8 +707,28 @@
     </div>
   </div>
 
+  <!-- PODOLOGY (было #services: та же секция, поднята наверх и усилена) -->
+  <section id="podologiya">
+    <div class="wrap">
+      <div class="eyebrow reveal" style="margin-bottom:22px;">Подология</div>
+      <div class="section-head">
+        <h2 class="reveal">С какими проблемами <br>мы работаем каждый день</h2>
+        <p class="support reveal">Подологический подход шире классического кабинета красоты — решаем то, из-за чего визит обычно откладывают.</p>
+      </div>
+      <div class="bento reveal">
+        <div class="bento-card big">
+          <img src="https://images.unsplash.com/photo-1519419451778-14599a49ec41?q=80&w=1200&auto=format&fit=crop" alt="Комплексный подологический уход" width="1200" height="800" loading="lazy" decoding="async">
+          <div class="content"><h3>Комплексный подологический уход</h3><p>Диагностика, аппаратная обработка и профилактика — базовый протокол для здоровья стопы на каждый визит.</p></div>
+        </div>
+        <div class="bento-card"><span class="num">01</span><h3>Вросший ноготь</h3><p>Коррекция без боли и рецидивов, при необходимости — корригирующая система.</p></div>
+        <div class="bento-card"><span class="num">02</span><h3>Грибок ногтей</h3><p>Аппаратная чистка поражённой пластины и поддерживающий уход между визитами.</p></div>
+        <div class="bento-card wide"><span class="num">03 / 04</span><h3>Натоптыши, мозоли и трещины</h3><p>Аппаратный педикюр с парафином и маслами убирает загрубевшую кожу без агрессивного среза.</p></div>
+      </div>
+    </div>
+  </section>
+
   <!-- TRUST BAND -->
-  <section class="trust-band">
+  <section class="trust-band band">
     <div class="wrap">
       <div class="trust-grid reveal">
         <div class="trust-item"><span class="n">01</span><p>Стерилизация инструмента после каждого клиента — вскрываем крафт-пакет при вас</p></div>
@@ -776,27 +758,8 @@
     </div>
   </section>
 
-  <!-- SERVICES -->
-  <section id="services">
-    <div class="wrap">
-      <div class="section-head">
-        <h2 class="reveal">С какими проблемами <br>мы работаем каждый день</h2>
-        <p class="support reveal">Подологический подход шире классического кабинета красоты — решаем то, из-за чего визит обычно откладывают.</p>
-      </div>
-      <div class="bento reveal">
-        <div class="bento-card big">
-          <img src="https://images.unsplash.com/photo-1519419451778-14599a49ec41?q=80&w=1200&auto=format&fit=crop" alt="Комплексный подологический уход" width="1200" height="800" loading="lazy" decoding="async">
-          <div class="content"><h3>Комплексный подологический уход</h3><p>Диагностика, аппаратная обработка и профилактика — базовый протокол для здоровья стопы на каждый визит.</p></div>
-        </div>
-        <div class="bento-card"><span class="num">01</span><h3>Вросший ноготь</h3><p>Коррекция без боли и рецидивов, при необходимости — корригирующая система.</p></div>
-        <div class="bento-card"><span class="num">02</span><h3>Грибок ногтей</h3><p>Аппаратная чистка поражённой пластины и поддерживающий уход между визитами.</p></div>
-        <div class="bento-card wide"><span class="num">03 / 04</span><h3>Натоптыши, мозоли и трещины</h3><p>Аппаратный педикюр с парафином и маслами убирает загрубевшую кожу без агрессивного среза.</p></div>
-      </div>
-    </div>
-  </section>
-
   <!-- HOW IT GOES -->
-  <section id="process">
+  <section id="process" class="band">
     <div class="wrap">
       <div class="section-head">
         <h2 class="reveal">Как проходит визит</h2>
@@ -831,183 +794,138 @@
     </div>
   </section>
 
-  <!-- PRICING -->
-  <section id="pricing">
+    <!-- BOOKING (на месте удалённой секции прайса) -->
+  <section>
     <div class="wrap">
-      <div class="section-head">
-        <h2 class="reveal">Прайс студии</h2>
-        <p class="support reveal">Базовая процедура и покрытие показаны отдельно, чтобы стоимость визита складывалась у вас на глазах. Редкие процедуры мастер считает после осмотра и называет цену до начала работы.</p>
+      <div class="cta-card reveal">
+        <h2>Запись на визит</h2>
+        <p>Стоимость мастер называет после осмотра — до начала работы и без доплат по ходу. Свободные слоты, отзывы и запись — на карточке студии в Яндекс Картах.</p>
+        <a href="https://yandex.ru/maps/org/podopronails/100922864802?si=uzvpehy3acwge12jrgp4hg1fxw" target="_blank" rel="noopener" class="btn btn-gold magnetic"><span>Записаться на Яндекс Картах</span></a>
       </div>
-      <div class="price-groups reveal">
-
-        <!-- ТРЕБУЮТСЯ ДАННЫЕ ОТ СТУДИИ — цены на подологию.
-             В открытом прайсе на Яндекс.Картах подологических позиций нет (проверено 16.08).
-             Пока цены не получены, блок показан без цифр осознанно: названия процедур реальные,
-             а стоимость честно вынесена на осмотр — это не противоречит обещанию
-             «цена называется до начала работы».
-             КОГДА ЕЛИЗАВЕТА ПРИШЛЁТ ПРАЙС: подставить сумму в <div class="value">,
-             длительность в <small> и заменить строку .price-note ниже. -->
-        <div class="price-group featured">
-          <h3>Подология</h3>
-          <div class="cat-note">Елизавета</div>
-          <div class="price-sub">Работа с проблемой <em>основное направление студии</em></div>
-          <div class="price-rows">
-            <div class="price-row"><div class="name">Коррекция вросшего ногтя<small>аппаратно, без агрессивного среза</small></div><div class="value">по осмотру</div></div>
-            <div class="price-row"><div class="name">Корригирующая система<small>при деформации пластины</small></div><div class="value">по осмотру</div></div>
-            <div class="price-row"><div class="name">Работа с грибковыми изменениями ногтя<small>аппаратная чистка поражённой пластины</small></div><div class="value">по осмотру</div></div>
-            <div class="price-row"><div class="name">Натоптыши, мозоли и трещины<small>с парафином и маслами</small></div><div class="value">по осмотру</div></div>
-          </div>
-          <div class="price-total"><span>Первичная диагностика стопы</span><b>входит в визит</b></div>
-          <p class="price-note" style="margin-top:16px;text-align:left;font-size:0.82rem;">Стоимость зависит от состояния стопы, поэтому мастер называет её на осмотре — до начала работы и без доплат по ходу.</p>
-        </div>
-
-        <div class="price-group">
-          <h3>Маникюр</h3>
-          <div class="cat-note">Александра · Елизавета</div>
-          <div class="price-sub">Базовая процедура <em>выберите одну</em></div>
-          <div class="price-rows">
-            <div class="price-row"><div class="name">Комби / аппаратный / обрезной маникюр<small>50 мин</small></div><div class="value">1 800 ₽</div></div>
-            <div class="price-row"><div class="name">Мужской маникюр без покрытия<small>55 мин</small></div><div class="value">1 800 ₽</div></div>
-          </div>
-          <div class="price-sub">Покрытие и укрепление <em>добавляется к базовой</em></div>
-          <div class="price-rows">
-            <div class="price-row"><div class="name">Гель-лак маникюр</div><div class="value">900 ₽</div></div>
-            <div class="price-row"><div class="name">LUXIO маникюр</div><div class="value">1 500 ₽</div></div>
-            <div class="price-row"><div class="name">Покрытие френч</div><div class="value">800 ₽</div></div>
-            <div class="price-row"><div class="name">Покрытие «жидкий металл»</div><div class="value">1 000 ₽</div></div>
-            <div class="price-row"><div class="name">Укрепление ногтей<small>гель / акригель / полигель</small></div><div class="value">1 000 ₽</div></div>
-          </div>
-          <div class="price-sub">Мелкие работы <em>по необходимости</em></div>
-          <div class="price-rows">
-            <div class="price-row"><div class="name">Снятие наращённых ногтей</div><div class="value">500 ₽</div></div>
-            <div class="price-row"><div class="name">Снятие покрытия</div><div class="value">150 ₽</div></div>
-            <div class="price-row"><div class="name">Ремонт ногтя</div><div class="value">150 ₽</div></div>
-            <div class="price-row"><div class="name">Полировка ногтей</div><div class="value">300 ₽</div></div>
-            <div class="price-row"><div class="name">Смена формы ногтей</div><div class="value">300 ₽</div></div>
-          </div>
-          <!-- 2 700 ₽ = 1 800 (комби-маникюр) + 900 (гель-лак). Обе цены взяты из официального
-               прайса студии на Яндекс.Картах. Сверить у Елизаветы, нет ли комплектной скидки. -->
-          <div class="price-total"><span>Комби-маникюр с гель-лаком — под ключ</span><b>2 700 ₽</b></div>
-        </div>
-
-        <div class="price-group">
-          <h3>Педикюр и перманент</h3>
-          <div class="cat-note">Елизавета · Марина</div>
-          <div class="price-sub">Базовая процедура <em>выберите одну</em></div>
-          <div class="price-rows">
-            <!-- Официальное название позиции из прайса студии на Яндекс.Картах:
-                 «Аппаратный педикюр SMART с покрытием — 3 500 ₽». Покрытие уже включено. -->
-            <div class="price-row"><div class="name">Аппаратный педикюр SMART<small>покрытие включено, с парафином и маслами</small></div><div class="value">3 500 ₽</div></div>
-            <div class="price-row"><div class="name">Обработка пальчиков<small>без спа-ухода</small></div><div class="value">2 500 ₽</div></div>
-          </div>
-          <div class="price-sub">Покрытие <em>добавляется к базовой</em></div>
-          <div class="price-rows">
-            <div class="price-row"><div class="name">Гель-лак (ноги)</div><div class="value">700 ₽</div></div>
-            <div class="price-row"><div class="name">Покрытие LUXIO педикюр</div><div class="value">1 000 ₽</div></div>
-          </div>
-          <div class="price-sub">Отдельные процедуры <em>покрытие не требуется</em></div>
-          <div class="price-rows">
-            <div class="price-row"><div class="name">Реконструкция ногтя</div><div class="value">2 000 ₽</div></div>
-            <div class="price-row"><div class="name">Массаж стоп</div><div class="value">500 ₽</div></div>
-            <!-- СВЕРИТЬ У СТУДИИ: на Яндекс.Картах в прайсе значится «Перманентный макияж бровей — 10 000 ₽».
-                 На сайте стояло «губ — 10 000 ₽» и «межресничное — 8 000 ₽». Возможно, часть позиций
-                 просто не выгружена на Карты, но одна из формулировок может быть ошибочной. -->
-            <div class="price-row"><div class="name">Перманентный макияж бровей</div><div class="value">10 000 ₽</div></div>
-            <div class="price-row"><div class="name">Перманент межресничного пространства</div><div class="value">8 000 ₽</div></div>
-            <div class="price-row"><div class="name">Наращивание ресниц</div><div class="value">3 000 ₽</div></div>
-          </div>
-          <div class="price-total"><span>Аппаратный педикюр SMART — под ключ</span><b>3 500 ₽</b></div>
-        </div>
-
-      </div>
-      <p class="price-note reveal">Точную стоимость по вашему случаю мастер называет после осмотра — записаться можно на Яндекс Картах.</p>
     </div>
   </section>
 
-  <!-- SPECIALISTS -->
-  <section id="specialists" class="specialists">
+  <!-- TEAM (на месте удалённой секции с именами мастеров) -->
+  <section id="team" class="band">
     <div class="wrap">
       <div class="section-head">
-        <h2 class="reveal">Мастера студии</h2>
-        <p class="support reveal">Три специалиста — три направления: ногтевой сервис, ресницы и брови, подологический маникюр/педикюр.</p>
+        <h2 class="reveal">Команда студии</h2>
+        <p class="support reveal">Что в студии неизменно — независимо от того, кто из мастеров вас принимает.</p>
       </div>
-      <div class="spec-grid reveal">
-
-        <!-- !!! СВЕРИТЬ ИМЯ МАСТЕРА ПЕРЕД ПОКАЗОМ КЛИЕНТУ !!!
-             На карточке студии в Яндекс.Картах в составе мастеров значится АЛЬБИНА
-             (специализация: наращивание, патология ногтя), а не Александра.
-             Имя «Альбина» встречается и в текстах отзывов клиентов.
-             Если это одна и та же сотрудница — заменить здесь имя на «Альбина»,
-             инициал на «А» (не меняется), alt и подпись кнопки, а файл фото
-             переименовать в assets/masters/albina.jpg.
-             Ошибка в имени сотрудника — самое заметное, что может увидеть владелица. -->
-        <div class="spec-card">
-          <div class="avatar-wrap">
-            <span class="initial">А</span>
-            <img loading="lazy" decoding="async" width="104" height="104" src="assets/masters/alexandra.jpg" alt="Александра" onerror="this.remove()">
-          </div>
-          <h3>Александра</h3>
-          <p class="spec-role">Мастер ногтевого сервиса: маникюр, педикюр, наращивание ногтей.</p>
-          <div class="spec-tags"><span>Маникюр</span><span>Педикюр</span><span>Наращивание</span></div>
-          <div class="spec-foot">
-            <a href="https://yandex.ru/maps/org/podopronails/100922864802?si=uzvpehy3acwge12jrgp4hg1fxw" target="_blank" rel="noopener" class="btn btn-gold"><span>Записаться к Александре</span></a>
-          </div>
+      <p class="team-lead reveal">Приём ведут конкурсные мастера — призёры российских и международных чемпионатов по маникюру, педикюру и подологии. В одном кабинете собраны три направления: подологический маникюр и педикюр, ногтевой сервис, ресницы и брови.</p>
+      <div class="team-grid reveal">
+        <div class="team-card">
+          <span class="ic">01</span>
+          <h3>Конкурсные мастера</h3>
+          <p>Призёры международных и российских чемпионатов по маникюру, педикюру и подологии.</p>
         </div>
-
-        <div class="spec-card">
-          <div class="avatar-wrap">
-            <span class="initial">М</span>
-            <img loading="lazy" decoding="async" width="104" height="104" src="assets/masters/marina.jpg" alt="Марина" onerror="this.remove()">
-          </div>
-          <h3>Марина</h3>
-          <p class="spec-role">Тренер / практикующий мастер-специалист по наращиванию ресниц, брови, ламинирование.</p>
-          <div class="spec-tags"><span>Ресницы</span><span>Брови</span><span>Ламинирование</span></div>
-          <div class="spec-foot">
-            <div class="spec-rating"><span class="stars" aria-hidden="true">★★★★★</span> 5.0 <small>· 40 оценок</small></div>
-            <a href="https://yandex.ru/maps/org/podopronails/100922864802?si=uzvpehy3acwge12jrgp4hg1fxw" target="_blank" rel="noopener" class="btn btn-gold"><span>Записаться к Марине</span></a>
-          </div>
+        <div class="team-card">
+          <span class="ic">02</span>
+          <h3>Стерильность при вас</h3>
+          <p>Инструмент стерилизуется после каждого клиента — крафт-пакет вскрывают у вас на глазах.</p>
         </div>
-
-        <div class="spec-card">
-          <div class="avatar-wrap">
-            <span class="initial">Е</span>
-            <img loading="lazy" decoding="async" width="104" height="104" src="assets/masters/elizaveta.jpg" alt="Елизавета" onerror="this.remove()">
-          </div>
-          <h3>Елизавета</h3>
-          <p class="spec-role">Конкурсный мастер, призёр международных и российских чемпионатов по маникюру, педикюру, подологии.</p>
-          <div class="spec-tags"><span>Подология</span><span>Вросший ноготь</span><span>Мед. педикюр</span></div>
-          <div class="spec-foot">
-            <div class="spec-rating"><span class="stars" aria-hidden="true">★★★★★</span> 5.0 <small>· 35 оценок</small></div>
-            <a href="https://yandex.ru/maps/org/podopronails/100922864802?si=uzvpehy3acwge12jrgp4hg1fxw" target="_blank" rel="noopener" class="btn btn-gold"><span>Записаться к Елизавете</span></a>
-          </div>
+        <div class="team-card">
+          <span class="ic">03</span>
+          <h3>Диагностика до процедуры</h3>
+          <p>Осмотр стопы и ногтевой пластины перед любой процедурой — так находится то, что скрывает обычный педикюр.</p>
         </div>
+        <div class="team-card">
+          <span class="ic">04</span>
+          <h3>Три направления сразу</h3>
+          <p>Подология, ногтевой сервис, ресницы и брови — не придётся ездить по разным салонам.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
+  <!-- TRAINING -->
+  <!-- ТРЕБУЮТСЯ ДАННЫЕ ОТ КЛИЕНТА по обучению — без них секция говорит только о том,
+       что подтверждено рубрикой карточки на Яндекс.Картах («Обучение мастеров для
+       салонов красоты»), а за деталями отправляет в Telegram:
+         1) направления и названия курсов
+         2) формат — очно / онлайн / смешанный
+         3) длительность каждой программы
+         4) для кого — с нуля или для практикующих мастеров
+         5) стоимость и порядок оплаты
+         6) расписание ближайших дат и размер группы
+       Когда данные придут — раскрыть список в .edu-side и добавить строку с датами. -->
+  <section id="obuchenie">
+    <div class="wrap edu">
+      <div class="edu-copy">
+        <div class="eyebrow reveal" style="margin-bottom:22px;">Обучение</div>
+        <h2 class="reveal">Обучение мастеров</h2>
+        <p class="reveal">Студия не только принимает клиентов, но и обучает мастеров. Занятия ведёт практикующий конкурсный мастер — призёр российских и международных чемпионатов.</p>
+        <p class="reveal">Направления — подология и ногтевой сервис. Программу, формат и ближайшие даты присылаем лично: напишите в Telegram, ответим до записи.</p>
+        <a href="https://t.me/podolog_lizaveta" target="_blank" rel="noopener" class="btn btn-gold magnetic reveal"><span>Узнать программу и даты</span></a>
+      </div>
+      <div class="edu-side reveal">
+        <ul>
+          <li><b>Направления</b>Подология и ногтевой сервис</li>
+          <li><b>Кто ведёт</b>Практикующий конкурсный мастер студии</li>
+          <li><b>Программа и даты</b>По запросу в Telegram</li>
+        </ul>
       </div>
     </div>
   </section>
 
   <!-- GALLERY -->
-  <section id="gallery" class="gallery-pin">
-    <div class="gallery-sticky">
-      <div class="gallery-head wrap">
-        <h2>Галерея работ студии</h2>
-        <div class="gallery-nav">
-          <button type="button" class="gallery-arrow" data-dir="-1" aria-label="Предыдущее фото">‹</button>
-          <button type="button" class="gallery-arrow" data-dir="1" aria-label="Следующее фото">›</button>
-        </div>
+  <!-- Все снимки ниже — сток с Unsplash, реальных работ студии пока нет.
+       Разметка слота одинаковая во всех категориях: чтобы поставить своё фото,
+       достаточно поменять src и alt, ничего больше трогать не нужно. -->
+  <section id="gallery" class="band">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 class="reveal">Галерея работ студии</h2>
+        <p class="support reveal">Работы по направлениям — маникюр, педикюр, подология, брови и ресницы.</p>
       </div>
-      <div class="gallery-track">
+
+      <!-- КАТЕГОРИЯ: Маникюр. Нужно 4 фото работ по маникюру. Класть в assets/gallery/manikyur/ и менять src у каждого слота. -->
+      <div class="gal-cat reveal">
+        <div class="gal-cat-head"><h3>Маникюр</h3><span>4 фото</span></div>
+        <div class="gal-grid">
         <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1630843599725-32ead7671867?q=80&w=1400&auto=format&fit=crop" alt="Аккуратный маникюр"><div class="cap">Аккуратный маникюр</div></div>
         <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1607779097040-26e80aa78e66?q=80&w=1400&auto=format&fit=crop" alt="Покрытие гель-лак"><div class="cap">Покрытие гель-лак</div></div>
-        <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1664643411326-6c589531be3c?q=80&w=1400&auto=format&fit=crop" alt="Аппаратный педикюр"><div class="cap">Аппаратный педикюр</div></div>
         <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1571290274554-6a2eaa771e5f?q=80&w=1400&auto=format&fit=crop" alt="Форма и длина ногтей"><div class="cap">Форма и длина</div></div>
-        <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1633955726992-2b7c0d2d2a69?q=80&w=1400&auto=format&fit=crop" alt="Натуральный уход"><div class="cap">Натуральный уход</div></div>
-        <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1610992015732-2449b76344bc?q=80&w=1400&auto=format&fit=crop" alt="Финальный результат"><div class="cap">Финальный результат</div></div>
+        <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1633955726992-2b7c0d2d2a69?q=80&w=1400&auto=format&fit=crop" alt="Натуральное покрытие"><div class="cap">Натуральный уход</div></div>
+        </div>
+      </div>
+
+      <!-- КАТЕГОРИЯ: Педикюр. Нужно 4 фото работ по педикюру. Класть в assets/gallery/pedikyur/. Сейчас 4-й слот — повтор 1-го. -->
+      <div class="gal-cat reveal">
+        <div class="gal-cat-head"><h3>Педикюр</h3><span>4 фото</span></div>
+        <div class="gal-grid">
+        <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1664643411326-6c589531be3c?q=80&w=1400&auto=format&fit=crop" alt="Аппаратный педикюр"><div class="cap">Аппаратный педикюр</div></div>
+        <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1610992015732-2449b76344bc?q=80&w=1400&auto=format&fit=crop" alt="Результат педикюра"><div class="cap">Финальный результат</div></div>
+        <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1610992015762-45dca7fa3a85?q=80&w=1400&auto=format&fit=crop" alt="Уход за стопой"><div class="cap">Уход за стопой</div></div>
+        <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1664643411326-6c589531be3c?q=80&w=1400&auto=format&fit=crop" alt="Аппаратная обработка стопы"><div class="cap">Аппаратная обработка</div></div>
+        </div>
+      </div>
+
+      <!-- КАТЕГОРИЯ: Подология. Нужно 4 фото по подологии — до/после ценнее всего: вросший ноготь, грибковые изменения, натоптыши, трещины. Класть в assets/gallery/podologiya/. Сейчас слоты 3 и 4 — повторы. -->
+      <div class="gal-cat reveal">
+        <div class="gal-cat-head"><h3>Подология</h3><span>4 фото</span></div>
+        <div class="gal-grid">
+        <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1519419451778-14599a49ec41?q=80&w=1400&auto=format&fit=crop" alt="Комплексный подологический уход"><div class="cap">Подологический уход</div></div>
+        <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1610992015762-45dca7fa3a85?q=80&w=1400&auto=format&fit=crop" alt="Осмотр и обработка стопы"><div class="cap">Диагностика стопы</div></div>
+        <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1664643411326-6c589531be3c?q=80&w=1400&auto=format&fit=crop" alt="Аппаратная работа с ногтевой пластиной"><div class="cap">Работа с пластиной</div></div>
+        <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1519419451778-14599a49ec41?q=80&w=1400&auto=format&fit=crop" alt="Профилактический уход за стопой"><div class="cap">Профилактика</div></div>
+        </div>
+      </div>
+
+      <!-- КАТЕГОРИЯ: Брови и ресницы. ВНИМАНИЕ: все 4 слота — заглушки. Среди имеющихся стоковых снимков нет ни одного по бровям и ресницам, здесь стоят фото ногтевых работ. Заменить нужно ВСЕ ЧЕТЫРЕ. Класть в assets/gallery/brovi-resnicy/. -->
+      <div class="gal-cat reveal">
+        <div class="gal-cat-head"><h3>Брови и ресницы</h3><span>4 фото</span></div>
+        <div class="gal-grid">
+        <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1633955726992-2b7c0d2d2a69?q=80&w=1400&auto=format&fit=crop" alt="Временная иллюстрация — будет заменена на фото работы по бровям"><div class="cap">Брови</div></div>
+        <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1630843599725-32ead7671867?q=80&w=1400&auto=format&fit=crop" alt="Временная иллюстрация — будет заменена на фото работы по ресницам"><div class="cap">Ресницы</div></div>
+        <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1607779097040-26e80aa78e66?q=80&w=1400&auto=format&fit=crop" alt="Временная иллюстрация — будет заменена на фото ламинирования"><div class="cap">Ламинирование</div></div>
+        <div class="gallery-item"><img loading="lazy" decoding="async" width="1400" height="1000" src="https://images.unsplash.com/photo-1571290274554-6a2eaa771e5f?q=80&w=1400&auto=format&fit=crop" alt="Временная иллюстрация — будет заменена на фото оформления бровей"><div class="cap">Оформление</div></div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- REVIEWS -->
+<!-- REVIEWS -->
   <section id="reviews" style="overflow:hidden;">
     <div class="wrap" style="margin-bottom:50px;">
       <div class="section-head">
@@ -1045,7 +963,7 @@
   </section>
 
   <!-- FAQ -->
-  <section id="faq">
+  <section id="faq" class="band">
     <div class="wrap">
       <div class="section-head">
         <h2 class="reveal">Частые вопросы</h2>
@@ -1085,7 +1003,7 @@
           <p>Запись, актуальные слоты и отзывы — на карточке студии в Яндекс Картах. Быстрее всего записаться прямо оттуда.</p>
           <div class="action-ctas">
             <a href="https://yandex.ru/maps/org/podopronails/100922864802?si=uzvpehy3acwge12jrgp4hg1fxw" target="_blank" rel="noopener" class="btn btn-gold magnetic"><span>Записаться на Яндекс Картах</span></a>
-            <a href="tel:+79037662968" class="btn btn-outline-dark"><span>Позвонить</span></a>
+            <a href="tel:+79037662968" class="btn btn-outline"><span>Позвонить</span></a>
           </div>
         </div>
         <div class="action-info">
@@ -1098,6 +1016,8 @@
             <div class="action-links">
               <a href="https://t.me/podolog_lizaveta" target="_blank" rel="noopener">Telegram</a>
               <a href="https://wa.me/79037662968" target="_blank" rel="noopener">WhatsApp</a>
+              <!-- ЗАМЕНИТЬ на персональную ссылку студии в MAX — запрошена у клиента, пока ведёт на главную -->
+              <a href="https://max.ru/" target="_blank" rel="noopener">MAX</a>
             </div>
           </div></div>
         </div>
@@ -1126,10 +1046,10 @@
       <div class="footer-col">
         <h4>Разделы</h4>
         <ul>
+          <li><a href="#podologiya">Подология</a></li>
           <li><a href="#philosophy">О студии</a></li>
-          <li><a href="#services">Услуги и прайс</a></li>
           <li><a href="#process">Как проходит визит</a></li>
-          <li><a href="#specialists">Мастера</a></li>
+          <li><a href="#obuchenie">Обучение</a></li>
           <li><a href="#gallery">Галерея</a></li>
           <li><a href="#faq">Частые вопросы</a></li>
         </ul>
@@ -1140,6 +1060,8 @@
           <li><a href="https://yandex.ru/maps/org/podopronails/100922864802?si=uzvpehy3acwge12jrgp4hg1fxw" target="_blank" rel="noopener">Яндекс Карты — запись</a></li>
           <li><a href="https://t.me/podolog_lizaveta" target="_blank" rel="noopener">Telegram</a></li>
           <li><a href="https://wa.me/79037662968" target="_blank" rel="noopener">WhatsApp</a></li>
+          <!-- ЗАМЕНИТЬ на персональную ссылку студии в MAX — запрошена у клиента, пока ведёт на главную -->
+          <li><a href="https://max.ru/" target="_blank" rel="noopener">MAX</a></li>
           <li><a href="tel:+79037662968">+7 (903) 766-29-68</a></li>
         </ul>
       </div>
@@ -1208,28 +1130,11 @@
   window.addEventListener('resize', () => { if (window.innerWidth > 980) setOpen(false); });
 })();
 
-/* ---------- GALLERY ARROWS ---------- */
+/* ---------- GALLERY ---------- */
+/* The pinned horizontal rail and its arrows are gone: four labelled categories
+   don't fit one rail. The lightbox still walks this flat list across all
+   categories, in DOM order. */
 const galleryItemEls = Array.from(document.querySelectorAll('.gallery-item'));
-(function(){
-  const track  = document.querySelector('.gallery-track');
-  const arrows = Array.from(document.querySelectorAll('.gallery-arrow'));
-  if (!track || !galleryItemEls.length) return;
-
-  const step = () => galleryItemEls[0].getBoundingClientRect().width + 20;
-  const update = () => {
-    const max = track.scrollWidth - track.clientWidth - 2;
-    arrows.forEach(b => {
-      b.disabled = parseInt(b.dataset.dir, 10) < 0 ? track.scrollLeft <= 2 : track.scrollLeft >= max;
-    });
-  };
-  /* scroll the track itself — scrollIntoView used to drag the whole page along */
-  arrows.forEach(b => b.addEventListener('click', () => {
-    track.scrollBy({ left: parseInt(b.dataset.dir, 10) * step(), behavior: 'smooth' });
-  }));
-  track.addEventListener('scroll', update, {passive:true});
-  window.addEventListener('resize', update);
-  update();
-})();
 
 /* ---------- LIGHTBOX ---------- */
 (function(){
@@ -1482,19 +1387,13 @@ gsap.fromTo('.step', {opacity:0, y:34}, {
   scrollTrigger:{ trigger:'.steps', start:'top 85%' }
 });
 
-/* Specialists */
-gsap.fromTo('.spec-card', {opacity:0, y:50}, {
-  opacity:1, y:0, duration:0.9, stagger:0.15, ease:'power3.out',
-  scrollTrigger:{ trigger:'.spec-grid', start:'top 85%' }
-});
-
-/* Price rows */
-gsap.utils.toArray('.price-group').forEach((group)=>{
-  gsap.fromTo(group.querySelectorAll('.price-row'), {opacity:0, x:-16}, {
-    opacity:1, x:0, duration:0.6, stagger:0.08, ease:'power2.out',
-    scrollTrigger:{ trigger: group, start:'top 85%' }
+/* Team */
+if (document.querySelector('.team-grid')){
+  gsap.fromTo('.team-card', {opacity:0, y:40}, {
+    opacity:1, y:0, duration:0.85, stagger:0.12, ease:'power3.out',
+    scrollTrigger:{ trigger:'.team-grid', start:'top 85%' }
   });
-});
+}
 
 /* FAQ rows */
 gsap.fromTo('.faq-item', {opacity:0, y:24}, {
@@ -1530,26 +1429,14 @@ gsap.utils.toArray('.philo-media img').forEach((img)=>{
   });
 });
 
-/* Gallery: pinned horizontal scroll on desktop only */
-const galleryTrack = document.querySelector('.gallery-track');
-ScrollTrigger.matchMedia({
-  "(min-width: 981px)": function(){
-    function getScrollAmount(){ return -(galleryTrack.scrollWidth - window.innerWidth + 40); }
-    let galleryTween = gsap.to(galleryTrack, {
-      x: getScrollAmount, ease:'none',
-      scrollTrigger:{
-        trigger:'.gallery-pin', start:'top top',
-        end: () => '+=' + (galleryTrack.scrollWidth),
-        scrub:0.8, pin:true, invalidateOnRefresh:true
-      }
-    });
-    gsap.utils.toArray('.gallery-item img').forEach((img)=>{
-      gsap.fromTo(img, {scale:1.15, opacity:0.5}, {
-        scale:1, opacity:1, ease:'none',
-        scrollTrigger:{ trigger: img, containerAnimation: galleryTween, start:'left 90%', end:'left 40%', scrub:true }
-      });
-    });
-  }
+/* Gallery: each category fades its own tiles in */
+gsap.utils.toArray('.gal-cat').forEach((cat)=>{
+  const tiles = cat.querySelectorAll('.gallery-item');
+  if (!tiles.length) return;
+  gsap.fromTo(tiles, {opacity:0, y:30, scale:0.96}, {
+    opacity:1, y:0, scale:1, duration:0.7, stagger:0.07, ease:'power3.out',
+    scrollTrigger:{ trigger: cat, start:'top 88%' }
+  });
 });
 
 /* Testimonials marquee — запускается только если в ленте есть карточки.
