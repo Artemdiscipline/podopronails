@@ -4,6 +4,12 @@
 /*
 !/.gitignore
 !/index.html
+!/admin.html
+!/admin.js
+!/cms-defaults.js
+!/site-content.js
+!/firebase-config.js
+!/firestore.rules
 !/assets
 !/.claude
 !/firebase.json
