@@ -192,6 +192,8 @@ function setupTips() {
 function switchPanel(name) {
   document.querySelectorAll(".tab").forEach((tab) => tab.classList.toggle("active", tab.dataset.panel === name));
   document.querySelectorAll(".panel").forEach((panel) => panel.classList.toggle("active", panel.id === `panel-${name}`));
+  const activeTab = document.querySelector(`.tab[data-panel="${name}"]`);
+  if (window.innerWidth <= 980) activeTab?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
   const [eyebrow, title, lead] = panelMeta[name];
   document.getElementById("panelEyebrow").textContent = eyebrow;
   document.getElementById("panelTitle").textContent = title;
