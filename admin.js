@@ -25,6 +25,7 @@ const previewOverlay = document.getElementById("previewOverlay");
 const previewFrame = document.getElementById("sitePreviewFrame");
 const closePreviewButton = document.getElementById("closePreviewButton");
 const refreshPreviewButton = document.getElementById("refreshPreviewButton");
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 let content = cloneDefaults();
 let publishedContent = cloneDefaults();
@@ -35,6 +36,7 @@ let publishedAt = null;
 let overviewMotionContext = null;
 let galleryMotionContext = null;
 let activeUploads = 0;
+let previewReturnFocus = null;
 
 const MEDIA_PREFIX = "firestore-media://";
 const MAX_MEDIA_BYTES = 780000;
@@ -106,12 +108,13 @@ async function preloadMediaPreviews() {
 
 function photoPicker({ path, source, fallback, mediaKey, className = "" }) {
   const preview = displayMediaSource(source, fallback);
-  return `<label class="photo-picker ${esc(className)}" data-picker-for="${esc(path)}">
-    <img src="${esc(preview)}" alt="" data-preview-for="${esc(path)}">
-    <input type="file" accept="image/*" hidden data-photo-path="${esc(path)}" data-media-key="${esc(mediaKey)}">
+  const safeId = path.replace(/[^a-zA-Z0-9_-]/g, "-");
+  return `<label class="photo-picker ${esc(className)}" for="photo-${esc(safeId)}" role="button" tabindex="0" aria-label="Заменить фотографию" aria-describedby="status-${esc(safeId)}" data-picker-for="${esc(path)}">
+    <img src="${esc(preview)}" alt="" width="1200" height="800" loading="lazy" decoding="async" data-preview-for="${esc(path)}">
+    <input id="photo-${esc(safeId)}" name="photo-${esc(safeId)}" type="file" accept="image/jpeg,image/png,image/webp,image/*" hidden data-photo-path="${esc(path)}" data-media-key="${esc(mediaKey)}">
     <span class="photo-prompt"><b>Заменить фото</b><span>Нажмите и выберите из галереи</span></span>
   </label>
-  <div class="upload-status" data-upload-status="${esc(path)}" aria-live="polite">JPG, PNG, WEBP или фото с телефона — до 20 МБ.</div>`;
+  <div class="upload-status" id="status-${esc(safeId)}" data-upload-status="${esc(path)}" aria-live="polite">JPG, PNG, WEBP или фото с телефона — до 20 МБ.</div>`;
 }
 
 function deepMerge(base, incoming) {
@@ -128,10 +131,13 @@ function deepMerge(base, incoming) {
 
 function field(path, label, { type = "text", rows = 3, hint = "", placeholder = "" } = {}) {
   const value = getPath(content, path) ?? "";
+  const id = `field-${path.replace(/[^a-zA-Z0-9_-]/g, "-")}`;
+  const inputMode = type === "url" ? "url" : type === "email" ? "email" : type === "tel" ? "tel" : "text";
+  const shared = `id="${esc(id)}" name="${esc(path)}" data-path="${esc(path)}" autocomplete="off"`;
   const control = type === "textarea"
-    ? `<textarea data-path="${esc(path)}" rows="${rows}" placeholder="${esc(placeholder)}">${esc(value)}</textarea>`
-    : `<input data-path="${esc(path)}" type="${esc(type)}" value="${esc(value)}" placeholder="${esc(placeholder)}">`;
-  return `<div class="field"><label>${esc(label)}</label>${control}${hint ? `<small style="color:var(--muted);line-height:1.4">${esc(hint)}</small>` : ""}</div>`;
+    ? `<textarea ${shared} rows="${rows}" placeholder="${esc(placeholder)}">${esc(value)}</textarea>`
+    : `<input ${shared} type="${esc(type)}" inputmode="${inputMode}" ${type === "url" || type === "email" ? 'spellcheck="false"' : ""} value="${esc(value)}" placeholder="${esc(placeholder)}">`;
+  return `<div class="field"><label for="${esc(id)}">${esc(label)}</label>${control}${hint ? `<small style="color:var(--muted);line-height:1.4">${esc(hint)}</small>` : ""}</div>`;
 }
 
 function itemCard(index, title, inner) {
@@ -173,13 +179,13 @@ function renderOverview() {
     <article class="card stat-card span-4"><span>Оценки</span><b>${esc(content.hero.ratingsCount)}</b><span>на Яндекс Картах</span></article>
     <article class="card stat-card span-4"><span>Материалы</span><b>${content.gallery.length}</b><span>фотографий в галерее</span></article>
     <div class="overview-workspace" id="overviewWorkspace">
-      <article class="card preview-card overview-preview" id="overviewPreview"><img src="${esc(content.hero.imageUrl)}" alt=""><div class="eyebrow">Первый экран</div><h2>${esc(content.hero.titleBefore)} ${esc(content.hero.titleAccent)} ${esc(content.hero.titleAfter)}</h2><div class="preview-actions"><button class="btn btn-gold" type="button" data-open-preview>Открыть предпросмотр</button><button class="btn btn-ghost" type="button" data-jump-panel="general">Изменить главный экран</button></div></article>
+      <article class="card preview-card overview-preview" id="overviewPreview"><img src="${esc(displayMediaSource(content.hero.imageUrl, DEFAULT_CONTENT.hero.imageUrl))}" alt="" width="1200" height="900" loading="lazy" decoding="async"><div class="eyebrow">Первый экран</div><h2>${esc(content.hero.titleBefore)} ${esc(content.hero.titleAccent)} ${esc(content.hero.titleAfter)}</h2><div class="preview-actions"><button class="btn btn-gold" type="button" data-open-preview>Открыть предпросмотр</button><button class="btn btn-ghost" type="button" data-jump-panel="general">Изменить главный экран</button></div></article>
       <div class="quick-stack">
-        <button class="quick-action" type="button" data-jump-panel="general"><span><b>Главная</b><span>Заголовок, рейтинг и главное фото</span></span><i>→</i></button>
-        <button class="quick-action" type="button" data-jump-panel="gallery"><span><b>Галерея</b><span>Фотографии и подписи работ</span></span><i>→</i></button>
-        <button class="quick-action" type="button" data-jump-panel="contact"><span><b>Контакты</b><span>Телефон, адрес и ссылки записи</span></span><i>→</i></button>
-        <button class="quick-action" type="button" data-jump-panel="faq"><span><b>Вопросы</b><span>Ответы клиентам до визита</span></span><i>→</i></button>
-        <button class="quick-action" type="button" data-jump-panel="team"><span><b>Команда</b><span>Стандарты и преимущества студии</span></span><i>→</i></button>
+        <button class="quick-action" type="button" data-jump-panel="general"><span><b>Главная</b><span>Заголовок, рейтинг и главное фото</span></span><i aria-hidden="true">→</i></button>
+        <button class="quick-action" type="button" data-jump-panel="gallery"><span><b>Галерея</b><span>Фотографии и подписи работ</span></span><i aria-hidden="true">→</i></button>
+        <button class="quick-action" type="button" data-jump-panel="contact"><span><b>Контакты</b><span>Телефон, адрес и ссылки записи</span></span><i aria-hidden="true">→</i></button>
+        <button class="quick-action" type="button" data-jump-panel="faq"><span><b>Вопросы</b><span>Ответы клиентам до визита</span></span><i aria-hidden="true">→</i></button>
+        <button class="quick-action" type="button" data-jump-panel="team"><span><b>Команда</b><span>Стандарты и преимущества студии</span></span><i aria-hidden="true">→</i></button>
       </div>
     </div>
     <article class="card editorial-note span-12" id="tipCard"><div><div class="eyebrow">Редакторская подсказка</div><h2 id="tipTitle">Короткие заголовки</h2><p class="card-intro" id="tipText">Заголовки в две–три строки читаются лучше и сохраняют премиальный ритм страницы.</p></div><div class="note-controls"><button class="btn btn-ghost" type="button" id="tipPrev">Назад</button><button class="btn btn-ghost" type="button" id="tipNext">Далее</button></div></article>
@@ -240,7 +246,7 @@ function renderAccount() {
 }
 
 function fieldMarkup(id, label, type) {
-  return `<div class="field"><label for="${id}">${esc(label)}</label><input id="${id}" type="${type}" minlength="10" required autocomplete="new-password"></div>`;
+  return `<div class="field"><label for="${id}">${esc(label)}</label><input id="${id}" name="${id}" type="${type}" minlength="10" required autocomplete="new-password"></div>`;
 }
 
 function canvasBlob(canvas, type, quality) {
@@ -305,7 +311,8 @@ function setUploadStatus(path, message, state = "") {
 function setUploadActivity(delta) {
   activeUploads = Math.max(0, activeUploads + delta);
   saveButton.disabled = activeUploads > 0;
-  saveButton.textContent = activeUploads > 0 ? "Обработка фото..." : "Опубликовать";
+  resetButton.disabled = activeUploads > 0;
+  saveButton.textContent = activeUploads > 0 ? "Обработка фото…" : "Опубликовать";
 }
 
 async function handlePhotoSelection(input) {
@@ -316,11 +323,11 @@ async function handlePhotoSelection(input) {
   const picker = document.querySelector(`[data-picker-for="${CSS.escape(path)}"]`);
   picker?.classList.add("is-working");
   setUploadActivity(1);
-  setUploadStatus(path, "Оптимизируем фотографию...", "working");
+  setUploadStatus(path, "Оптимизируем фотографию…", "working");
 
   try {
     const { blob, width, height } = await compressImage(file);
-    setUploadStatus(path, "Загружаем защищённый черновик...", "working");
+    setUploadStatus(path, "Загружаем защищённый черновик…", "working");
     const unique = crypto.randomUUID?.().slice(0, 8) || Math.random().toString(36).slice(2, 10);
     const mediaId = `${mediaKey}-${Date.now()}-${unique}`;
     const bytes = new Uint8Array(await blob.arrayBuffer());
@@ -350,7 +357,7 @@ async function handlePhotoSelection(input) {
     updateSaveState();
     const sizeKb = Math.max(1, Math.round(blob.size / 1024));
     setUploadStatus(path, `Фото готово: ${width} × ${height}, ${sizeKb} КБ. Теперь нажмите «Опубликовать».`, "success");
-    if (window.gsap && preview) gsap.fromTo(preview, { scale: .92, opacity: .35 }, { scale: 1, opacity: 1, duration: .7, ease: "power3.out" });
+    if (window.gsap && preview && !reduceMotion.matches) gsap.fromTo(preview, { scale: .92, opacity: .35 }, { scale: 1, opacity: 1, duration: .7, ease: "power3.out" });
   } catch (error) {
     setUploadStatus(path, error.message || "Не удалось загрузить фото.", "error");
   } finally {
@@ -363,6 +370,13 @@ async function handlePhotoSelection(input) {
 function bindPhotoInputs() {
   document.querySelectorAll("[data-photo-path]").forEach((input) => {
     input.addEventListener("change", () => handlePhotoSelection(input));
+  });
+  document.querySelectorAll("[data-picker-for]").forEach((picker) => {
+    picker.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter" && event.key !== " ") return;
+      event.preventDefault();
+      picker.querySelector("input[type=file]")?.click();
+    });
   });
 }
 
@@ -403,7 +417,7 @@ function setupOverviewMotion() {
   overviewMotionContext?.revert();
   overviewMotionContext = null;
   const panel = document.getElementById("panel-overview");
-  if (!window.gsap || !panel.classList.contains("active")) return;
+  if (!window.gsap || !panel.classList.contains("active") || reduceMotion.matches) return;
   overviewMotionContext = gsap.context(() => {
     gsap.from(".overview-status, .publish-meta, .stat-card", {
       opacity: 0,
@@ -443,7 +457,7 @@ function setupGalleryMotion() {
   galleryMotionContext?.revert();
   galleryMotionContext = null;
   const panel = document.getElementById("panel-gallery");
-  if (!window.gsap || !window.ScrollTrigger || !panel.classList.contains("active") || window.innerWidth <= 620) return;
+  if (!window.gsap || !window.ScrollTrigger || !panel.classList.contains("active") || window.innerWidth <= 620 || reduceMotion.matches) return;
   gsap.registerPlugin(window.ScrollTrigger);
   galleryMotionContext = gsap.context(() => {
     gsap.utils.toArray(".gallery-admin-card").forEach((card, index) => {
@@ -469,7 +483,9 @@ function setPreviewMode(mode) {
   const isMobile = mode === "mobile";
   previewFrame.classList.toggle("mobile", isMobile);
   document.querySelectorAll("[data-preview-mode]").forEach((button) => {
-    button.classList.toggle("active", button.dataset.previewMode === mode);
+    const active = button.dataset.previewMode === mode;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", String(active));
   });
 }
 
@@ -480,13 +496,15 @@ function reloadPreview() {
 }
 
 function openPreview() {
+  previewReturnFocus = document.activeElement;
   setPreviewMode(window.innerWidth <= 620 ? "mobile" : "desktop");
   reloadPreview();
   previewOverlay.classList.remove("hidden");
   previewOverlay.setAttribute("aria-hidden", "false");
+  appView.inert = true;
   document.body.classList.add("preview-open");
   closePreviewButton.focus({ preventScroll: true });
-  if (window.gsap) {
+  if (window.gsap && !reduceMotion.matches) {
     gsap.fromTo(".preview-dialog", { opacity: 0, y: 22, scale: .985 }, { opacity: 1, y: 0, scale: 1, duration: .42, ease: "power3.out" });
   }
 }
@@ -494,21 +512,28 @@ function openPreview() {
 function closePreview() {
   previewOverlay.classList.add("hidden");
   previewOverlay.setAttribute("aria-hidden", "true");
+  appView.inert = false;
   document.body.classList.remove("preview-open");
-  previewButton.focus({ preventScroll: true });
+  (previewReturnFocus?.isConnected ? previewReturnFocus : previewButton).focus({ preventScroll: true });
+  previewReturnFocus = null;
 }
 
 function switchPanel(name) {
-  document.querySelectorAll(".tab").forEach((tab) => tab.classList.toggle("active", tab.dataset.panel === name));
+  document.querySelectorAll(".tab").forEach((tab) => {
+    const active = tab.dataset.panel === name;
+    tab.classList.toggle("active", active);
+    tab.setAttribute("aria-selected", String(active));
+    tab.tabIndex = active ? 0 : -1;
+  });
   document.querySelectorAll(".panel").forEach((panel) => panel.classList.toggle("active", panel.id === `panel-${name}`));
   const activeTab = document.querySelector(`.tab[data-panel="${name}"]`);
-  if (window.innerWidth <= 980) activeTab?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+  if (window.innerWidth <= 980) activeTab?.scrollIntoView({ behavior: reduceMotion.matches ? "auto" : "smooth", block: "nearest", inline: "center" });
   const [eyebrow, title, lead] = panelMeta[name];
   document.getElementById("panelEyebrow").textContent = eyebrow;
   document.getElementById("panelTitle").textContent = title;
   document.getElementById("panelLead").textContent = lead;
-  window.scrollTo({ top: 0, behavior: "smooth" });
-  if (window.gsap) gsap.from(`#panel-${name} > *`, { opacity: 0, y: 24, duration: .5, ease: "power2.out" });
+  window.scrollTo({ top: 0, behavior: reduceMotion.matches ? "auto" : "smooth" });
+  if (window.gsap && !reduceMotion.matches) gsap.from(`#panel-${name} > *`, { opacity: 0, y: 24, duration: .5, ease: "power2.out" });
   if (name === "overview") requestAnimationFrame(setupOverviewMotion);
   else {
     overviewMotionContext?.revert();
@@ -559,7 +584,8 @@ async function loadContent() {
 
 async function saveContent() {
   saveButton.disabled = true;
-  saveButton.textContent = "Публикация...";
+  resetButton.disabled = true;
+  saveButton.textContent = "Публикация…";
   try {
     const previousMediaIds = collectMediaIds(publishedContent);
     const nextMediaIds = collectMediaIds(content);
@@ -582,6 +608,7 @@ async function saveContent() {
     console.error(error);
   } finally {
     saveButton.disabled = false;
+    resetButton.disabled = false;
     saveButton.textContent = "Опубликовать";
   }
 }
@@ -614,20 +641,37 @@ loginForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   loginError.textContent = "";
   loginButton.disabled = true;
-  loginButton.textContent = "Проверка...";
+  loginButton.textContent = "Проверка…";
   try {
     await signInWithEmailAndPassword(auth, loginForm.email.value.trim(), loginForm.password.value);
   } catch (error) {
     loginError.textContent = authMessage(error.code);
+    loginForm.password.focus();
   } finally {
     loginButton.disabled = false;
     loginButton.textContent = "Войти в кабинет";
   }
 });
 
-document.getElementById("tabs").addEventListener("click", (event) => {
+const tabsRoot = document.getElementById("tabs");
+tabsRoot.querySelectorAll(".tab").forEach((tab) => { tab.tabIndex = tab.classList.contains("active") ? 0 : -1; });
+tabsRoot.addEventListener("click", (event) => {
   const tab = event.target.closest(".tab");
   if (tab) switchPanel(tab.dataset.panel);
+});
+tabsRoot.addEventListener("keydown", (event) => {
+  const current = event.target.closest(".tab");
+  if (!current || !["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"].includes(event.key)) return;
+  event.preventDefault();
+  const tabs = [...tabsRoot.querySelectorAll(".tab")];
+  const currentIndex = tabs.indexOf(current);
+  let nextIndex = currentIndex;
+  if (event.key === "Home") nextIndex = 0;
+  else if (event.key === "End") nextIndex = tabs.length - 1;
+  else if (event.key === "ArrowLeft" || event.key === "ArrowUp") nextIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+  else nextIndex = (currentIndex + 1) % tabs.length;
+  tabs[nextIndex].focus();
+  switchPanel(tabs[nextIndex].dataset.panel);
 });
 
 document.getElementById("panel-overview").addEventListener("click", (event) => {
@@ -647,18 +691,34 @@ document.querySelectorAll("[data-preview-mode]").forEach((button) => {
   button.addEventListener("click", () => setPreviewMode(button.dataset.previewMode));
 });
 document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape" && !previewOverlay.classList.contains("hidden")) closePreview();
+  if (previewOverlay.classList.contains("hidden")) return;
+  if (event.key === "Escape") return closePreview();
+  if (event.key !== "Tab") return;
+  const focusable = [...previewOverlay.querySelectorAll('button:not([disabled]),a[href],iframe,[tabindex]:not([tabindex="-1"])')].filter((element) => element.getClientRects().length);
+  if (!focusable.length) return;
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
 });
 
 saveButton.addEventListener("click", saveContent);
-resetButton.addEventListener("click", () => {
-  cleanupStagedMedia().finally(() => {
-    content = JSON.parse(JSON.stringify(publishedContent));
-    dirty = false;
-    renderAll();
-    updateSaveState();
-    showToast("Неопубликованные правки отменены.");
-  });
+resetButton.addEventListener("click", async () => {
+  if (!dirty) return showToast("Неопубликованных изменений нет.");
+  if (!window.confirm("Отменить все неопубликованные изменения?")) return;
+  resetButton.disabled = true;
+  await cleanupStagedMedia();
+  content = JSON.parse(JSON.stringify(publishedContent));
+  dirty = false;
+  renderAll();
+  updateSaveState();
+  resetButton.disabled = false;
+  showToast("Неопубликованные правки отменены.");
 });
 logoutButton.addEventListener("click", async () => {
   await cleanupStagedMedia();
@@ -677,11 +737,11 @@ onAuthStateChanged(auth, async (user) => {
     loginView.classList.add("hidden");
     appView.classList.remove("hidden");
     await loadContent();
-    if (window.gsap) gsap.from(".topbar, .sidebar, .content", { opacity: 0, y: 14, duration: .65, stagger: .08, ease: "power2.out" });
+    if (window.gsap && !reduceMotion.matches) gsap.from(".topbar, .sidebar, .content", { opacity: 0, y: 14, duration: .65, stagger: .08, ease: "power2.out" });
   } else {
     appView.classList.add("hidden");
     loginView.classList.remove("hidden");
     loginForm.reset();
-    if (window.gsap) gsap.from(".login-copy > *, .login-form > *", { opacity: 0, y: 22, duration: .7, stagger: .06, ease: "power3.out" });
+    if (window.gsap && !reduceMotion.matches) gsap.from(".login-copy > *, .login-form > *", { opacity: 0, y: 22, duration: .7, stagger: .06, ease: "power3.out" });
   }
 });
