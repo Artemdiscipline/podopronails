@@ -7,7 +7,7 @@
   <title>PODO PRO NAILS — управление сайтом</title>
   <link rel="icon" type="image/png" href="assets/logo-mark.png">
   <link rel="preconnect" href="https://api.fontshare.com">
-  <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400,500,600,700&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
   <style>
     :root{
       --ink:#15120f; --ink-2:#1e1a16; --panel:#24201b; --panel-2:#2b261f;
@@ -17,7 +17,7 @@
     }
     *{box-sizing:border-box}
     html{background:var(--ink);color-scheme:dark;max-width:100%;overflow-x:hidden}
-    body{margin:0;width:100%;max-width:100%;overflow-x:hidden;background:radial-gradient(1000px 700px at 85% -15%,rgba(201,162,39,.13),transparent 60%),var(--ink);color:var(--cream);font-family:"Cabinet Grotesk",Arial,sans-serif;min-height:100vh}
+    body{margin:0;width:100%;max-width:100%;overflow-x:hidden;background:radial-gradient(1000px 700px at 85% -15%,rgba(201,162,39,.13),transparent 60%),var(--ink);color:var(--cream);font-family:"Satoshi",Arial,sans-serif;min-height:100vh}
     button,input,textarea{font:inherit;max-width:100%}
     button,a{color:inherit}
     button{cursor:pointer}
@@ -28,6 +28,7 @@
     .btn-gold{background:linear-gradient(135deg,var(--gold-light),var(--gold));color:#17120a;box-shadow:0 12px 35px rgba(201,162,39,.18)}
     .btn-ghost{background:transparent;border:1px solid var(--line);color:var(--cream)}
     .btn-danger{background:rgba(215,108,97,.1);border:1px solid rgba(215,108,97,.32);color:#f2a29a}
+    .btn-preview{background:rgba(234,213,141,.08);border:1px solid rgba(234,213,141,.22);color:var(--gold-light)}
     .eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-light);font-weight:700}
 
     .login{width:100%;max-width:100%;min-height:100vh;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(380px,.9fr);overflow:hidden}
@@ -114,24 +115,53 @@
     .account-box{max-width:620px}
     .account-email{font-size:18px;color:var(--gold-light);margin:8px 0 28px}
     .mobile-label{display:none}
+    .overview-status{min-height:230px;display:flex;align-items:flex-end;justify-content:space-between;gap:28px;background:radial-gradient(520px 240px at 10% 0,rgba(201,162,39,.18),transparent 65%),linear-gradient(145deg,rgba(43,38,31,.97),rgba(30,26,22,.96))}
+    .overview-status h2{font-size:clamp(34px,4vw,58px);line-height:.94;max-width:11ch;margin:14px 0 18px;font-weight:500;letter-spacing:-.05em}
+    .overview-status p{max-width:48ch;margin:0;color:var(--muted);line-height:1.55}
+    .publish-meta{min-height:230px;display:flex;flex-direction:column;justify-content:space-between;background:linear-gradient(145deg,rgba(201,162,39,.2),rgba(43,38,31,.95))}
+    .publish-meta strong{display:block;color:var(--gold-light);font-size:clamp(26px,3vw,40px);line-height:1.02;letter-spacing:-.04em;font-weight:500}
+    .publish-meta small{color:var(--muted);line-height:1.45}
+    .overview-workspace{grid-column:span 12;display:grid;grid-template-columns:minmax(0,2fr) minmax(280px,1fr);gap:18px;align-items:start}
+    .overview-preview{min-height:540px}
+    .overview-preview .preview-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+    .quick-stack{display:flex;flex-direction:column;gap:12px}
+    .quick-action{width:100%;min-height:122px;border:1px solid var(--line);border-radius:var(--radius);padding:20px;background:linear-gradient(145deg,rgba(43,38,31,.86),rgba(30,26,22,.94));color:var(--cream);text-align:left;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:20px;transition:transform .35s ease,border-color .35s ease,background .35s ease}
+    .quick-action:hover{transform:translateX(-8px);border-color:rgba(234,213,141,.34);background:linear-gradient(145deg,rgba(57,49,37,.95),rgba(30,26,22,.98))}
+    .quick-action b{display:block;color:var(--cream);font-size:20px;margin-bottom:8px}.quick-action span{display:block;color:var(--muted);font-size:13px;line-height:1.4}.quick-action i{font-style:normal;color:var(--gold-light);font-size:24px}
+    .editorial-note{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:32px;min-height:190px}
+    .editorial-note h2{font-size:clamp(26px,3vw,42px);max-width:18ch;margin-top:16px}.editorial-note p{max-width:60ch;margin-bottom:0}
+    .note-controls{display:flex;gap:8px}
+    body.preview-open{overflow:hidden}
+    .preview-overlay{position:fixed;inset:0;z-index:120;padding:18px;background:rgba(10,8,6,.82);backdrop-filter:blur(18px);display:grid;place-items:center}
+    .preview-dialog{width:min(1480px,100%);height:min(920px,calc(100dvh - 36px));border:1px solid rgba(245,238,223,.14);border-radius:26px;background:#17130f;box-shadow:0 40px 120px rgba(0,0,0,.52);overflow:hidden;display:grid;grid-template-rows:auto minmax(0,1fr)}
+    .preview-head{min-width:0;padding:14px 16px 14px 22px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:18px;background:rgba(30,26,22,.96)}
+    .preview-title{min-width:0}.preview-title b{display:block;font-size:16px}.preview-title small{display:block;color:var(--muted);margin-top:3px}
+    .preview-tools{display:flex;align-items:center;gap:9px}
+    .device-switch{display:flex;padding:4px;border:1px solid var(--line);border-radius:999px;background:rgba(0,0,0,.18)}
+    .device-button{min-height:38px;border:0;border-radius:999px;padding:8px 14px;background:transparent;color:var(--muted);font-weight:700}
+    .device-button.active{background:var(--cream);color:var(--ink)}
+    .preview-stage{min-width:0;min-height:0;padding:18px;overflow:auto;display:flex;justify-content:center;background:radial-gradient(700px 500px at 50% 0,rgba(201,162,39,.08),transparent 70%),#0f0c0a}
+    .site-frame{width:100%;height:100%;min-height:660px;border:0;border-radius:16px;background:var(--cream);box-shadow:0 18px 70px rgba(0,0,0,.38);transition:width .45s cubic-bezier(.2,.8,.2,1),border-radius .45s ease}
+    .site-frame.mobile{width:390px;max-width:100%;border-radius:28px}
 
     @media(max-width:980px){
       .login{grid-template-columns:minmax(0,1fr)}.login-art{min-height:auto}.login-form-side{min-height:auto;padding-block:clamp(52px,8vh,88px)}.login h1{font-size:clamp(3.2rem,12vw,5.5rem)}
       .shell{grid-template-columns:minmax(0,1fr)}.sidebar{position:sticky;top:78px;height:auto;max-width:100vw;z-index:35;background:rgba(21,18,15,.96);border-right:0;border-bottom:1px solid var(--line);padding:10px 14px;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;scrollbar-width:none}.sidebar::-webkit-scrollbar{display:none}.tabs{flex-direction:row;width:max-content;gap:6px}.tab{min-height:44px;white-space:nowrap;scroll-snap-align:center}.side-label,.side-foot{display:none}
-      .savebar{left:0}.span-4,.span-6,.span-8{grid-column:span 12}.page-head{grid-template-columns:1fr}.page-head h1{max-width:14ch}
+      .savebar{left:0}.span-4,.span-6,.span-8{grid-column:span 12}.page-head{grid-template-columns:1fr}.page-head h1{max-width:14ch}.overview-workspace{grid-template-columns:minmax(0,1fr)}.overview-preview{min-height:430px}.quick-stack{display:grid;grid-template-columns:1fr 1fr}.quick-action:hover{transform:none}
     }
     @media(max-width:620px){
-      .topbar{height:68px;padding:0 max(14px,env(safe-area-inset-right)) 0 max(14px,env(safe-area-inset-left))}.brand{gap:9px}.brand small,.connection,.top-actions a{display:none}.brand img{width:38px;height:38px}.top-actions{gap:6px}.top-actions #logoutButton{display:inline-flex;min-height:44px;padding:10px 14px}
+      .topbar{height:68px;padding:0 max(14px,env(safe-area-inset-right)) 0 max(14px,env(safe-area-inset-left))}.brand{gap:9px}.brand small,.connection,.top-actions a{display:none}.brand img{width:38px;height:38px}.top-actions{gap:6px}.top-actions #logoutButton,.top-actions #previewButton{display:inline-flex;min-height:44px;padding:10px 13px}
       .shell{min-height:calc(100vh - 68px)}.sidebar{top:68px;padding:8px max(12px,env(safe-area-inset-right)) 9px max(12px,env(safe-area-inset-left));scroll-snap-type:x proximity;mask-image:linear-gradient(90deg,transparent 0,#000 14px,#000 calc(100% - 34px),transparent 100%)}.tab{padding:10px 15px}.tab .n{display:none}
       .content{padding:24px 16px calc(112px + env(safe-area-inset-bottom));margin-bottom:0}.page-head{gap:14px;margin-bottom:26px}.page-head h1{max-width:100%;font-size:clamp(36px,10.8vw,46px);line-height:.96;overflow-wrap:anywhere}.page-head p{font-size:15px;line-height:1.55}
       .grid{gap:12px}.card{padding:18px;border-radius:18px}.card h2{font-size:22px}.card-intro{margin-bottom:20px}.pair{grid-template-columns:minmax(0,1fr)}.stat-card{min-height:132px}.stat-card b{font-size:46px}.preview-card{min-height:270px}.preview-card h2{font-size:34px}.gallery-thumb{height:220px}.gallery-fields{padding:18px}
       .field{gap:7px;margin-bottom:16px}.field input,.field textarea{min-height:50px;padding:13px 14px;font-size:16px}.field textarea{min-height:112px}.btn{min-height:44px}
       .savebar{padding:10px max(12px,env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));gap:8px}.save-state{display:none}.save-actions{width:100%;gap:8px}.save-actions .btn{flex:1;min-width:0;padding:11px 8px}.desktop-label{display:none}.mobile-label{display:inline}
       .toast{left:12px;right:12px;top:82px;max-width:none;text-align:center;transform:translateY(-24px);pointer-events:none}.toast.show{transform:none}
+      .overview-status{min-height:280px;align-items:flex-start;flex-direction:column}.overview-status h2{font-size:40px}.publish-meta{min-height:190px}.quick-stack{grid-template-columns:minmax(0,1fr)}.quick-action{min-height:104px}.editorial-note{grid-template-columns:minmax(0,1fr);gap:22px}.overview-preview{min-height:380px}.preview-head{padding:12px;align-items:flex-start;flex-direction:column}.preview-tools{width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}.device-switch{grid-column:1/-1;width:100%}.device-button{flex:1}.preview-title small{display:none}.preview-overlay{padding:0}.preview-dialog{width:100%;height:100dvh;border:0;border-radius:0}.preview-stage{padding:10px}.site-frame{min-height:720px;border-radius:12px}.site-frame.mobile{border-radius:22px}.preview-tools>a{display:none}.preview-tools #refreshPreviewButton{width:100%}
       .login-art{padding:22px;min-height:auto}.login-brand{gap:11px}.login-brand img{width:50px;height:50px}.login-copy{margin:46px 0 32px}.login h1{max-width:100%;font-size:clamp(46px,13vw,58px);line-height:.9;margin:18px 0 24px}.login-copy p{max-width:100%;font-size:16px;line-height:1.52;overflow-wrap:anywhere}.ticker{padding:12px 0}.ticker-row{gap:26px}.ticker-row span:after{margin-left:26px}.login-form-side{align-items:flex-start;padding:44px 22px calc(56px + env(safe-area-inset-bottom))}.login-form{width:100%}.login-form h2{font-size:36px}.login-form>p{margin-bottom:28px}.login-form .btn{min-height:52px}
     }
     @media(max-width:360px){
-      .brand span{font-size:14px}.top-actions #logoutButton{padding-inline:12px}.content{padding-inline:12px}.page-head h1{font-size:36px}.save-actions .btn{font-size:14px}.login h1{font-size:44px}.login-art,.login-form-side{padding-left:18px;padding-right:18px}
+      .brand span{display:none}.top-actions #logoutButton,.top-actions #previewButton{padding-inline:11px}.content{padding-inline:12px}.page-head h1{font-size:36px}.save-actions .btn{font-size:14px}.login h1{font-size:44px}.login-art,.login-form-side{padding-left:18px;padding-right:18px}.device-button{padding-inline:11px}.preview-tools{gap:6px}
     }
     @media(hover:none){.btn:hover{transform:none}}
     @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
@@ -154,8 +184,8 @@
       <form class="login-form" id="loginForm">
         <div class="eyebrow" style="color:#8a6a1f">Администрирование</div>
         <h2>Вход</h2>
-        <p>Используйте данные владельца сайта. Незарегистрированные пользователи не могут сохранять изменения.</p>
-        <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="username" required></div>
+        <p>Войдите под своим рабочим email. Доступ есть только у владельца и заказчика сайта.</p>
+        <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="username" placeholder="name@example.com" required></div>
         <div class="field"><label for="password">Пароль</label><input id="password" name="password" type="password" autocomplete="current-password" required minlength="8"></div>
         <button class="btn btn-gold" type="submit" id="loginButton">Войти в кабинет</button>
         <div class="login-error" id="loginError" role="alert"></div>
@@ -168,6 +198,7 @@
       <div class="brand"><img src="assets/logo.jpg" alt="PODO PRO NAILS"><span>Content Studio<small>PODO PRO NAILS</small></span></div>
       <div class="top-actions">
         <span class="connection" id="connectionState">Синхронизация</span>
+        <button class="btn btn-preview" type="button" id="previewButton"><span class="desktop-label">Предпросмотр</span><span class="mobile-label">Сайт</span></button>
         <a class="btn btn-ghost" href="index.html" target="_blank" rel="noopener">Открыть сайт</a>
         <button class="btn btn-ghost" type="button" id="logoutButton">Выйти</button>
       </div>
@@ -213,9 +244,27 @@
       <div class="save-actions"><button class="btn btn-ghost" id="resetButton" type="button" aria-label="Отменить правки"><span class="desktop-label">Отменить правки</span><span class="mobile-label">Отменить</span></button><button class="btn btn-gold" id="saveButton" type="button">Опубликовать</button></div>
     </div>
   </div>
+  <div class="preview-overlay hidden" id="previewOverlay" aria-hidden="true">
+    <section class="preview-dialog" role="dialog" aria-modal="true" aria-labelledby="previewDialogTitle">
+      <header class="preview-head">
+        <div class="preview-title"><b id="previewDialogTitle">Предпросмотр сайта</b><small>Показывает опубликованную версию</small></div>
+        <div class="preview-tools">
+          <div class="device-switch" aria-label="Размер предпросмотра">
+            <button class="device-button active" type="button" data-preview-mode="desktop">Компьютер</button>
+            <button class="device-button" type="button" data-preview-mode="mobile">Телефон</button>
+          </div>
+          <button class="btn btn-ghost" type="button" id="refreshPreviewButton">Обновить</button>
+          <a class="btn btn-ghost" href="index.html" target="_blank" rel="noopener">Новая вкладка</a>
+          <button class="btn btn-gold" type="button" id="closePreviewButton">Закрыть</button>
+        </div>
+      </header>
+      <div class="preview-stage"><iframe class="site-frame" id="sitePreviewFrame" src="index.html" title="Предпросмотр сайта PODO PRO NAILS"></iframe></div>
+    </section>
+  </div>
   <div class="toast" id="toast" role="status"></div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script type="module" src="admin.js"></script>
 </body>
 </html>

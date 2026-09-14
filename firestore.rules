@@ -5,7 +5,10 @@ service cloud.firestore {
     match /site/content {
       allow read: if true;
       allow write: if request.auth != null
-                   && request.auth.token.email == 'karazanow@gmail.com';
+                   && request.auth.token.email in [
+                     'karazanow@gmail.com',
+                     'soloninae@mail.ru'
+                   ];
     }
 
     match /{document=**} {

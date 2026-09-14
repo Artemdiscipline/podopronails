@@ -20,12 +20,19 @@ const logoutButton = document.getElementById("logoutButton");
 const saveState = document.getElementById("saveState");
 const connectionState = document.getElementById("connectionState");
 const toast = document.getElementById("toast");
+const previewButton = document.getElementById("previewButton");
+const previewOverlay = document.getElementById("previewOverlay");
+const previewFrame = document.getElementById("sitePreviewFrame");
+const closePreviewButton = document.getElementById("closePreviewButton");
+const refreshPreviewButton = document.getElementById("refreshPreviewButton");
 
 let content = cloneDefaults();
 let publishedContent = cloneDefaults();
 let currentUser = null;
 let dirty = false;
 let toastTimer = null;
+let publishedAt = null;
+let overviewMotionContext = null;
 
 const panelMeta = {
   overview: ["Сводка", "Управление сайтом", "Весь важный контент собран в одном месте. Откройте раздел, внесите изменения и опубликуйте."],
@@ -80,6 +87,16 @@ function itemCard(index, title, inner) {
   return `<article class="card item-card span-6"><span class="item-index">${index + 1}</span><h3>${esc(title)}</h3>${inner}</article>`;
 }
 
+function formatPublicationDate(value) {
+  if (!(value instanceof Date) || Number.isNaN(value.getTime())) return "Ещё не публиковалось";
+  return new Intl.DateTimeFormat("ru-RU", {
+    day: "numeric",
+    month: "long",
+    hour: "2-digit",
+    minute: "2-digit"
+  }).format(value).replace(" в ", ", ");
+}
+
 function renderAll() {
   renderOverview();
   renderGeneral();
@@ -98,13 +115,25 @@ function renderAll() {
 function renderOverview() {
   const panel = document.getElementById("panel-overview");
   panel.innerHTML = `<div class="grid">
+    <article class="card overview-status span-8"><div><div class="eyebrow">Рабочее пространство</div><h2>Сайт под контролем</h2><p>Редактируйте нужный раздел, проверяйте результат в предпросмотре и публикуйте одной кнопкой.</p></div><button class="btn btn-gold" type="button" data-open-preview>Посмотреть сайт</button></article>
+    <article class="card publish-meta span-4"><div><div class="eyebrow">Последняя публикация</div><strong id="lastPublished">${esc(formatPublicationDate(publishedAt))}</strong></div><small>Аккаунт: ${esc(currentUser?.email || "—")}</small></article>
     <article class="card stat-card span-4"><span>Рейтинг</span><b>${esc(content.hero.rating)}</b><span>по данным сайта</span></article>
     <article class="card stat-card span-4"><span>Оценки</span><b>${esc(content.hero.ratingsCount)}</b><span>на Яндекс Картах</span></article>
     <article class="card stat-card span-4"><span>Материалы</span><b>${content.gallery.length}</b><span>фотографий в галерее</span></article>
-    <article class="card preview-card span-8"><img src="${esc(content.hero.imageUrl)}" alt=""><div class="eyebrow">Первый экран</div><h2>${esc(content.hero.titleBefore)} ${esc(content.hero.titleAccent)} ${esc(content.hero.titleAfter)}</h2></article>
-    <article class="card span-4" id="tipCard"><div class="eyebrow">Редакторская подсказка</div><h2 style="margin-top:18px" id="tipTitle">Короткие заголовки</h2><p class="card-intro" id="tipText">Заголовки в две–три строки читаются лучше и сохраняют премиальный ритм страницы.</p><div style="display:flex;gap:8px"><button class="btn btn-ghost" type="button" id="tipPrev">Назад</button><button class="btn btn-ghost" type="button" id="tipNext">Далее</button></div></article>
+    <div class="overview-workspace" id="overviewWorkspace">
+      <article class="card preview-card overview-preview" id="overviewPreview"><img src="${esc(content.hero.imageUrl)}" alt=""><div class="eyebrow">Первый экран</div><h2>${esc(content.hero.titleBefore)} ${esc(content.hero.titleAccent)} ${esc(content.hero.titleAfter)}</h2><div class="preview-actions"><button class="btn btn-gold" type="button" data-open-preview>Открыть предпросмотр</button><button class="btn btn-ghost" type="button" data-jump-panel="general">Изменить главный экран</button></div></article>
+      <div class="quick-stack">
+        <button class="quick-action" type="button" data-jump-panel="general"><span><b>Главная</b><span>Заголовок, рейтинг и главное фото</span></span><i>→</i></button>
+        <button class="quick-action" type="button" data-jump-panel="gallery"><span><b>Галерея</b><span>Фотографии и подписи работ</span></span><i>→</i></button>
+        <button class="quick-action" type="button" data-jump-panel="contact"><span><b>Контакты</b><span>Телефон, адрес и ссылки записи</span></span><i>→</i></button>
+        <button class="quick-action" type="button" data-jump-panel="faq"><span><b>Вопросы</b><span>Ответы клиентам до визита</span></span><i>→</i></button>
+        <button class="quick-action" type="button" data-jump-panel="team"><span><b>Команда</b><span>Стандарты и преимущества студии</span></span><i>→</i></button>
+      </div>
+    </div>
+    <article class="card editorial-note span-12" id="tipCard"><div><div class="eyebrow">Редакторская подсказка</div><h2 id="tipTitle">Короткие заголовки</h2><p class="card-intro" id="tipText">Заголовки в две–три строки читаются лучше и сохраняют премиальный ритм страницы.</p></div><div class="note-controls"><button class="btn btn-ghost" type="button" id="tipPrev">Назад</button><button class="btn btn-ghost" type="button" id="tipNext">Далее</button></div></article>
   </div>`;
   setupTips();
+  requestAnimationFrame(setupOverviewMotion);
 }
 
 function renderGeneral() {
@@ -189,6 +218,79 @@ function setupTips() {
   document.getElementById("tipNext")?.addEventListener("click", () => { index = (index + 1) % tips.length; show(); });
 }
 
+function setupOverviewMotion() {
+  overviewMotionContext?.revert();
+  overviewMotionContext = null;
+  const panel = document.getElementById("panel-overview");
+  if (!window.gsap || !panel.classList.contains("active")) return;
+  overviewMotionContext = gsap.context(() => {
+    gsap.from(".overview-status, .publish-meta, .stat-card", {
+      opacity: 0,
+      y: 26,
+      duration: .65,
+      stagger: .07,
+      ease: "power3.out"
+    });
+    if (window.ScrollTrigger && window.innerWidth > 980) {
+      gsap.registerPlugin(window.ScrollTrigger);
+      ScrollTrigger.create({
+        trigger: "#overviewWorkspace",
+        start: "top 108px",
+        end: "bottom bottom-=110",
+        pin: "#overviewPreview",
+        pinSpacing: false
+      });
+      gsap.utils.toArray(".quick-action").forEach((card, index) => {
+        gsap.from(card, {
+          opacity: .35,
+          y: 42 + index * 6,
+          scale: .96,
+          ease: "none",
+          scrollTrigger: {
+            trigger: card,
+            start: "top 92%",
+            end: "top 58%",
+            scrub: true
+          }
+        });
+      });
+    }
+  }, panel);
+}
+
+function setPreviewMode(mode) {
+  const isMobile = mode === "mobile";
+  previewFrame.classList.toggle("mobile", isMobile);
+  document.querySelectorAll("[data-preview-mode]").forEach((button) => {
+    button.classList.toggle("active", button.dataset.previewMode === mode);
+  });
+}
+
+function reloadPreview() {
+  const url = new URL("index.html", window.location.href);
+  url.searchParams.set("preview", Date.now());
+  previewFrame.src = url.href;
+}
+
+function openPreview() {
+  setPreviewMode(window.innerWidth <= 620 ? "mobile" : "desktop");
+  reloadPreview();
+  previewOverlay.classList.remove("hidden");
+  previewOverlay.setAttribute("aria-hidden", "false");
+  document.body.classList.add("preview-open");
+  closePreviewButton.focus({ preventScroll: true });
+  if (window.gsap) {
+    gsap.fromTo(".preview-dialog", { opacity: 0, y: 22, scale: .985 }, { opacity: 1, y: 0, scale: 1, duration: .42, ease: "power3.out" });
+  }
+}
+
+function closePreview() {
+  previewOverlay.classList.add("hidden");
+  previewOverlay.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("preview-open");
+  previewButton.focus({ preventScroll: true });
+}
+
 function switchPanel(name) {
   document.querySelectorAll(".tab").forEach((tab) => tab.classList.toggle("active", tab.dataset.panel === name));
   document.querySelectorAll(".panel").forEach((panel) => panel.classList.toggle("active", panel.id === `panel-${name}`));
@@ -200,6 +302,11 @@ function switchPanel(name) {
   document.getElementById("panelLead").textContent = lead;
   window.scrollTo({ top: 0, behavior: "smooth" });
   if (window.gsap) gsap.from(`#panel-${name} > *`, { opacity: 0, y: 24, duration: .5, ease: "power2.out" });
+  if (name === "overview") requestAnimationFrame(setupOverviewMotion);
+  else {
+    overviewMotionContext?.revert();
+    overviewMotionContext = null;
+  }
 }
 
 function updateSaveState() {
@@ -218,7 +325,9 @@ async function loadContent() {
   connectionState.textContent = "Загрузка данных";
   try {
     const snapshot = await getDoc(contentRef);
-    content = snapshot.exists() ? deepMerge(cloneDefaults(), snapshot.data()) : cloneDefaults();
+    const snapshotData = snapshot.exists() ? snapshot.data() : null;
+    publishedAt = snapshotData?.updatedAt?.toDate?.() || null;
+    content = snapshotData ? deepMerge(cloneDefaults(), snapshotData) : cloneDefaults();
     publishedContent = JSON.parse(JSON.stringify(content));
     dirty = false;
     renderAll();
@@ -241,8 +350,11 @@ async function saveContent() {
   try {
     await setDoc(contentRef, { ...content, updatedAt: serverTimestamp() });
     publishedContent = JSON.parse(JSON.stringify(content));
+    publishedAt = new Date();
     dirty = false;
     updateSaveState();
+    const publishedLabel = document.getElementById("lastPublished");
+    if (publishedLabel) publishedLabel.textContent = formatPublicationDate(publishedAt);
     connectionState.textContent = "Данные синхронизированы";
     connectionState.classList.add("online");
     showToast("Изменения опубликованы на сайте.");
@@ -299,6 +411,26 @@ document.getElementById("tabs").addEventListener("click", (event) => {
   if (tab) switchPanel(tab.dataset.panel);
 });
 
+document.getElementById("panel-overview").addEventListener("click", (event) => {
+  const previewTrigger = event.target.closest("[data-open-preview]");
+  if (previewTrigger) return openPreview();
+  const jump = event.target.closest("[data-jump-panel]");
+  if (jump) switchPanel(jump.dataset.jumpPanel);
+});
+
+previewButton.addEventListener("click", openPreview);
+closePreviewButton.addEventListener("click", closePreview);
+refreshPreviewButton.addEventListener("click", reloadPreview);
+previewOverlay.addEventListener("click", (event) => {
+  if (event.target === previewOverlay) closePreview();
+});
+document.querySelectorAll("[data-preview-mode]").forEach((button) => {
+  button.addEventListener("click", () => setPreviewMode(button.dataset.previewMode));
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && !previewOverlay.classList.contains("hidden")) closePreview();
+});
+
 saveButton.addEventListener("click", saveContent);
 resetButton.addEventListener("click", () => {
   content = JSON.parse(JSON.stringify(publishedContent));
@@ -326,7 +458,6 @@ onAuthStateChanged(auth, async (user) => {
     appView.classList.add("hidden");
     loginView.classList.remove("hidden");
     loginForm.reset();
-    document.getElementById("email").value = "karazanow@gmail.com";
     if (window.gsap) gsap.from(".login-copy > *, .login-form > *", { opacity: 0, y: 22, duration: .7, stagger: .06, ease: "power3.out" });
   }
 });
