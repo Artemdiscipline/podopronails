@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, updatePassword } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, deleteDoc, serverTimestamp, Bytes } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 import { firebaseConfig } from "./firebase-config.js";
 import { DEFAULT_CONTENT, cloneDefaults } from "./cms-defaults.js";
 
@@ -33,6 +33,13 @@ let dirty = false;
 let toastTimer = null;
 let publishedAt = null;
 let overviewMotionContext = null;
+let galleryMotionContext = null;
+let activeUploads = 0;
+
+const MEDIA_PREFIX = "firestore-media://";
+const MAX_MEDIA_BYTES = 780000;
+const mediaPreviewUrls = new Map();
+const stagedMediaByPath = new Map();
 
 const panelMeta = {
   overview: ["Сводка", "Управление сайтом", "Весь важный контент собран в одном месте. Откройте раздел, внесите изменения и опубликуйте."],
@@ -61,6 +68,50 @@ function setPath(object, path, value) {
   const last = keys.pop();
   const target = keys.reduce((cursor, key) => cursor[key], object);
   target[last] = value;
+}
+
+function mediaIdFromSource(source = "") {
+  return String(source).startsWith(MEDIA_PREFIX) ? String(source).slice(MEDIA_PREFIX.length) : null;
+}
+
+function collectMediaIds(sourceContent) {
+  if (!sourceContent) return new Set();
+  return new Set([
+    mediaIdFromSource(sourceContent.hero?.imageUrl),
+    ...(sourceContent.gallery || []).map((item) => mediaIdFromSource(item?.src))
+  ].filter(Boolean));
+}
+
+function displayMediaSource(source, fallback = "") {
+  const mediaId = mediaIdFromSource(source);
+  return mediaId ? mediaPreviewUrls.get(mediaId) || fallback : source || fallback;
+}
+
+async function preloadMediaPreviews() {
+  const sources = [content.hero.imageUrl, ...content.gallery.map((item) => item.src)];
+  const mediaIds = [...new Set(sources.map(mediaIdFromSource).filter(Boolean))];
+  await Promise.all(mediaIds.map(async (mediaId) => {
+    if (mediaPreviewUrls.has(mediaId)) return;
+    try {
+      const snapshot = await getDoc(doc(db, "media", mediaId));
+      const data = snapshot.data();
+      if (!snapshot.exists() || !data?.bytes?.toUint8Array) return;
+      const blob = new Blob([data.bytes.toUint8Array()], { type: data.contentType || "image/webp" });
+      mediaPreviewUrls.set(mediaId, URL.createObjectURL(blob));
+    } catch (error) {
+      console.warn("Не удалось загрузить превью изображения", mediaId, error.code || error.message);
+    }
+  }));
+}
+
+function photoPicker({ path, source, fallback, mediaKey, className = "" }) {
+  const preview = displayMediaSource(source, fallback);
+  return `<label class="photo-picker ${esc(className)}" data-picker-for="${esc(path)}">
+    <img src="${esc(preview)}" alt="" data-preview-for="${esc(path)}">
+    <input type="file" accept="image/*" hidden data-photo-path="${esc(path)}" data-media-key="${esc(mediaKey)}">
+    <span class="photo-prompt"><b>Заменить фото</b><span>Нажмите и выберите из галереи</span></span>
+  </label>
+  <div class="upload-status" data-upload-status="${esc(path)}" aria-live="polite">JPG, PNG, WEBP или фото с телефона — до 20 МБ.</div>`;
 }
 
 function deepMerge(base, incoming) {
@@ -110,6 +161,7 @@ function renderAll() {
   renderContact();
   renderAccount();
   bindEditorInputs();
+  bindPhotoInputs();
 }
 
 function renderOverview() {
@@ -141,7 +193,7 @@ function renderGeneral() {
     <article class="card span-6"><h2>Метаданные</h2><p class="card-intro">Название страницы и описание для поисковых систем.</p>${field("general.siteTitle", "Заголовок вкладки")}${field("general.siteDescription", "Описание сайта", { type: "textarea", rows: 4 })}${field("general.studioName", "Название студии")}${field("general.ownerName", "Подпись владельца")}</article>
     <article class="card span-6"><h2>Hero</h2><p class="card-intro">Главное обещание сайта. Акцентная часть выделяется золотым.</p>${field("hero.eyebrow", "Надзаголовок")}${field("hero.titleBefore", "Заголовок: начало")}${field("hero.titleAccent", "Заголовок: золотой акцент")}${field("hero.titleAfter", "Заголовок: окончание")}${field("hero.lead", "Описание", { type: "textarea", rows: 5 })}</article>
     <article class="card span-4">${field("hero.rating", "Рейтинг")}</article><article class="card span-4">${field("hero.ratingsCount", "Количество оценок")}</article><article class="card span-4">${field("hero.mastersCount", "Количество мастеров")}</article>
-    <article class="card span-12"><h2>Изображение первого экрана</h2><p class="card-intro">Можно указать путь из папки assets или прямую HTTPS-ссылку.</p><div class="pair">${field("hero.imageUrl", "Адрес изображения")}${field("hero.imageAlt", "Описание изображения")}</div></article>
+    <article class="card span-12"><div class="hero-photo-grid"><div>${photoPicker({ path: "hero.imageUrl", source: content.hero.imageUrl, fallback: DEFAULT_CONTENT.hero.imageUrl, mediaKey: "hero", className: "hero-photo-picker" })}</div><div class="hero-photo-copy"><div class="eyebrow">Главное изображение</div><h2>Выберите фото с телефона</h2><p class="upload-note">Кадр автоматически уменьшится и станет легче. После загрузки проверьте его в предпросмотре и нажмите «Опубликовать».</p>${field("hero.imageAlt", "Описание изображения для поиска")}<div class="upload-specs"><div><b>Лучший кадр</b><span>Горизонтальный или квадратный, без водяных знаков.</span></div><div><b>Автообработка</b><span>До 1600 px и меньше 780 КБ.</span></div></div><details class="manual-source"><summary>Указать ссылку вручную</summary>${field("hero.imageUrl", "Путь или HTTPS-ссылка")}</details></div></div></article>
   </div>`;
 }
 
@@ -165,7 +217,7 @@ function renderTraining() {
 }
 
 function renderGallery() {
-  const cards = content.gallery.map((item, index) => `<article class="card gallery-admin-card span-4"><div class="gallery-thumb"><img src="${esc(item.src)}" alt="" data-preview-for="gallery.${index}.src"></div><div class="gallery-fields"><span class="item-index">${index + 1}</span><h3>${esc(item.category)}</h3>${field(`gallery.${index}.src`, "Путь или URL изображения")}${field(`gallery.${index}.caption`, "Короткая подпись")}${field(`gallery.${index}.alt`, "Описание для поиска", { type: "textarea", rows: 3 })}</div></article>`).join("");
+  const cards = content.gallery.map((item, index) => `<article class="card gallery-admin-card span-4">${photoPicker({ path: `gallery.${index}.src`, source: item.src, fallback: DEFAULT_CONTENT.gallery[index]?.src || "", mediaKey: `gallery-${index}`, className: "gallery-thumb" })}<div class="gallery-fields"><span class="item-index">${index + 1}</span><h3>${esc(item.category)}</h3>${field(`gallery.${index}.caption`, "Короткая подпись")}${field(`gallery.${index}.alt`, "Описание для поиска", { type: "textarea", rows: 3 })}<details class="manual-source"><summary>Указать ссылку вручную</summary>${field(`gallery.${index}.src`, "Путь или HTTPS-ссылка")}</details></div></article>`).join("");
   document.getElementById("panel-gallery").innerHTML = `<div class="grid">${cards}</div>`;
 }
 
@@ -189,6 +241,135 @@ function renderAccount() {
 
 function fieldMarkup(id, label, type) {
   return `<div class="field"><label for="${id}">${esc(label)}</label><input id="${id}" type="${type}" minlength="10" required autocomplete="new-password"></div>`;
+}
+
+function canvasBlob(canvas, type, quality) {
+  return new Promise((resolve) => canvas.toBlob(resolve, type, quality));
+}
+
+async function compressImage(file) {
+  if (!file.type.startsWith("image/")) throw new Error("Выбранный файл не является изображением.");
+  if (file.size > 20 * 1024 * 1024) throw new Error("Фото больше 20 МБ. Выберите файл поменьше.");
+
+  let source;
+  let objectUrl = "";
+  try {
+    if (window.createImageBitmap) {
+      source = await createImageBitmap(file, { imageOrientation: "from-image" });
+    } else {
+      objectUrl = URL.createObjectURL(file);
+      source = new Image();
+      source.src = objectUrl;
+      await source.decode();
+    }
+
+    const sourceWidth = source.width || source.naturalWidth;
+    const sourceHeight = source.height || source.naturalHeight;
+    if (!sourceWidth || !sourceHeight) throw new Error("Не удалось определить размер фотографии.");
+
+    let scale = Math.min(1, 1600 / Math.max(sourceWidth, sourceHeight));
+    for (let attempt = 0; attempt < 6; attempt += 1) {
+      const width = Math.max(1, Math.round(sourceWidth * scale));
+      const height = Math.max(1, Math.round(sourceHeight * scale));
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const context = canvas.getContext("2d", { alpha: false });
+      context.fillStyle = "#f5eedf";
+      context.fillRect(0, 0, width, height);
+      context.drawImage(source, 0, 0, width, height);
+
+      const quality = Math.max(.56, .86 - attempt * .06);
+      let blob = await canvasBlob(canvas, "image/webp", quality);
+      if (!blob || blob.type !== "image/webp") blob = await canvasBlob(canvas, "image/jpeg", quality);
+      if (blob && blob.size <= MAX_MEDIA_BYTES) return { blob, width, height };
+      scale *= .82;
+    }
+    throw new Error("Не удалось сжать фото. Попробуйте другой кадр.");
+  } catch (error) {
+    if (error.message?.startsWith("Не удалось") || error.message?.includes("20 МБ")) throw error;
+    throw new Error("Формат не поддерживается браузером. Сохраните фото как JPG и попробуйте снова.");
+  } finally {
+    if (source?.close) source.close();
+    if (objectUrl) URL.revokeObjectURL(objectUrl);
+  }
+}
+
+function setUploadStatus(path, message, state = "") {
+  const status = document.querySelector(`[data-upload-status="${CSS.escape(path)}"]`);
+  if (!status) return;
+  status.textContent = message;
+  status.className = `upload-status${state ? ` ${state}` : ""}`;
+}
+
+function setUploadActivity(delta) {
+  activeUploads = Math.max(0, activeUploads + delta);
+  saveButton.disabled = activeUploads > 0;
+  saveButton.textContent = activeUploads > 0 ? "Обработка фото..." : "Опубликовать";
+}
+
+async function handlePhotoSelection(input) {
+  const file = input.files?.[0];
+  if (!file) return;
+  const path = input.dataset.photoPath;
+  const mediaKey = input.dataset.mediaKey;
+  const picker = document.querySelector(`[data-picker-for="${CSS.escape(path)}"]`);
+  picker?.classList.add("is-working");
+  setUploadActivity(1);
+  setUploadStatus(path, "Оптимизируем фотографию...", "working");
+
+  try {
+    const { blob, width, height } = await compressImage(file);
+    setUploadStatus(path, "Загружаем защищённый черновик...", "working");
+    const unique = crypto.randomUUID?.().slice(0, 8) || Math.random().toString(36).slice(2, 10);
+    const mediaId = `${mediaKey}-${Date.now()}-${unique}`;
+    const bytes = new Uint8Array(await blob.arrayBuffer());
+    await setDoc(doc(db, "media", mediaId), {
+      bytes: Bytes.fromUint8Array(bytes),
+      contentType: blob.type,
+      byteSize: blob.size,
+      width,
+      height,
+      originalName: file.name.slice(0, 140),
+      updatedAt: serverTimestamp(),
+      updatedBy: currentUser?.email || "unknown"
+    });
+
+    const previousStagedId = stagedMediaByPath.get(path);
+    if (previousStagedId) deleteDoc(doc(db, "media", previousStagedId)).catch(() => {});
+    stagedMediaByPath.set(path, mediaId);
+    const marker = `${MEDIA_PREFIX}${mediaId}`;
+    setPath(content, path, marker);
+    const previewUrl = URL.createObjectURL(blob);
+    mediaPreviewUrls.set(mediaId, previewUrl);
+    const preview = document.querySelector(`[data-preview-for="${CSS.escape(path)}"]`);
+    if (preview) preview.src = previewUrl;
+    const manualInput = document.querySelector(`[data-path="${CSS.escape(path)}"]`);
+    if (manualInput) manualInput.value = marker;
+    dirty = true;
+    updateSaveState();
+    const sizeKb = Math.max(1, Math.round(blob.size / 1024));
+    setUploadStatus(path, `Фото готово: ${width} × ${height}, ${sizeKb} КБ. Теперь нажмите «Опубликовать».`, "success");
+    if (window.gsap && preview) gsap.fromTo(preview, { scale: .92, opacity: .35 }, { scale: 1, opacity: 1, duration: .7, ease: "power3.out" });
+  } catch (error) {
+    setUploadStatus(path, error.message || "Не удалось загрузить фото.", "error");
+  } finally {
+    input.value = "";
+    picker?.classList.remove("is-working");
+    setUploadActivity(-1);
+  }
+}
+
+function bindPhotoInputs() {
+  document.querySelectorAll("[data-photo-path]").forEach((input) => {
+    input.addEventListener("change", () => handlePhotoSelection(input));
+  });
+}
+
+async function cleanupStagedMedia() {
+  const mediaIds = [...stagedMediaByPath.values()];
+  stagedMediaByPath.clear();
+  await Promise.allSettled(mediaIds.map((mediaId) => deleteDoc(doc(db, "media", mediaId))));
 }
 
 function bindEditorInputs() {
@@ -258,6 +439,32 @@ function setupOverviewMotion() {
   }, panel);
 }
 
+function setupGalleryMotion() {
+  galleryMotionContext?.revert();
+  galleryMotionContext = null;
+  const panel = document.getElementById("panel-gallery");
+  if (!window.gsap || !window.ScrollTrigger || !panel.classList.contains("active") || window.innerWidth <= 620) return;
+  gsap.registerPlugin(window.ScrollTrigger);
+  galleryMotionContext = gsap.context(() => {
+    gsap.utils.toArray(".gallery-admin-card").forEach((card, index) => {
+      const image = card.querySelector("img");
+      gsap.fromTo(card, { y: 32 + (index % 3) * 12 }, {
+        y: 0,
+        ease: "none",
+        scrollTrigger: { trigger: card, start: "top 94%", end: "top 62%", scrub: true }
+      });
+      if (image) {
+        gsap.fromTo(image, { scale: .88, opacity: .45 }, {
+          scale: 1,
+          opacity: 1,
+          ease: "none",
+          scrollTrigger: { trigger: card, start: "top 94%", end: "top 58%", scrub: true }
+        });
+      }
+    });
+  }, panel);
+}
+
 function setPreviewMode(mode) {
   const isMobile = mode === "mobile";
   previewFrame.classList.toggle("mobile", isMobile);
@@ -307,6 +514,11 @@ function switchPanel(name) {
     overviewMotionContext?.revert();
     overviewMotionContext = null;
   }
+  if (name === "gallery") requestAnimationFrame(setupGalleryMotion);
+  else {
+    galleryMotionContext?.revert();
+    galleryMotionContext = null;
+  }
 }
 
 function updateSaveState() {
@@ -328,6 +540,7 @@ async function loadContent() {
     const snapshotData = snapshot.exists() ? snapshot.data() : null;
     publishedAt = snapshotData?.updatedAt?.toDate?.() || null;
     content = snapshotData ? deepMerge(cloneDefaults(), snapshotData) : cloneDefaults();
+    await preloadMediaPreviews();
     publishedContent = JSON.parse(JSON.stringify(content));
     dirty = false;
     renderAll();
@@ -348,9 +561,15 @@ async function saveContent() {
   saveButton.disabled = true;
   saveButton.textContent = "Публикация...";
   try {
+    const previousMediaIds = collectMediaIds(publishedContent);
+    const nextMediaIds = collectMediaIds(content);
+    const stagedMediaIds = new Set(stagedMediaByPath.values());
     await setDoc(contentRef, { ...content, updatedAt: serverTimestamp() });
     publishedContent = JSON.parse(JSON.stringify(content));
     publishedAt = new Date();
+    stagedMediaByPath.clear();
+    const unusedMediaIds = new Set([...previousMediaIds, ...stagedMediaIds].filter((mediaId) => !nextMediaIds.has(mediaId)));
+    await Promise.allSettled([...unusedMediaIds].map((mediaId) => deleteDoc(doc(db, "media", mediaId))));
     dirty = false;
     updateSaveState();
     const publishedLabel = document.getElementById("lastPublished");
@@ -433,13 +652,18 @@ document.addEventListener("keydown", (event) => {
 
 saveButton.addEventListener("click", saveContent);
 resetButton.addEventListener("click", () => {
-  content = JSON.parse(JSON.stringify(publishedContent));
-  dirty = false;
-  renderAll();
-  updateSaveState();
-  showToast("Неопубликованные правки отменены.");
+  cleanupStagedMedia().finally(() => {
+    content = JSON.parse(JSON.stringify(publishedContent));
+    dirty = false;
+    renderAll();
+    updateSaveState();
+    showToast("Неопубликованные правки отменены.");
+  });
 });
-logoutButton.addEventListener("click", () => signOut(auth));
+logoutButton.addEventListener("click", async () => {
+  await cleanupStagedMedia();
+  await signOut(auth);
+});
 
 window.addEventListener("beforeunload", (event) => {
   if (!dirty) return;

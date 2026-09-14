@@ -2,13 +2,26 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
+    function isAdmin() {
+      return request.auth != null
+             && request.auth.token.email in [
+               'karazanow@gmail.com',
+               'soloninae@mail.ru'
+             ];
+    }
+
     match /site/content {
       allow read: if true;
-      allow write: if request.auth != null
-                   && request.auth.token.email in [
-                     'karazanow@gmail.com',
-                     'soloninae@mail.ru'
-                   ];
+      allow write: if isAdmin();
+    }
+
+    match /media/{mediaId} {
+      allow read: if true;
+      allow create, update: if isAdmin()
+                            && request.resource.data.contentType.matches('image/(jpeg|png|webp)')
+                            && request.resource.data.byteSize <= 780000
+                            && request.resource.data.bytes.size() <= 780000;
+      allow delete: if isAdmin();
     }
 
     match /{document=**} {

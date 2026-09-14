@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 import { firebaseConfig } from "./firebase-config.js";
 
 const escapeHtml = (value = "") => String(value)
@@ -19,7 +19,29 @@ const hrefAll = (selector, value) => {
   document.querySelectorAll(selector).forEach((node) => node.setAttribute("href", value));
 };
 
-function applyContent(data) {
+const MEDIA_PREFIX = "firestore-media://";
+const mediaUrls = new Map();
+let cmsDb = null;
+
+async function resolveMediaSource(source = "") {
+  if (!String(source).startsWith(MEDIA_PREFIX) || !cmsDb) return source;
+  const mediaId = String(source).slice(MEDIA_PREFIX.length);
+  if (mediaUrls.has(mediaId)) return mediaUrls.get(mediaId);
+  try {
+    const snapshot = await getDoc(doc(cmsDb, "media", mediaId));
+    const data = snapshot.data();
+    if (!snapshot.exists() || !data?.bytes?.toUint8Array) return "";
+    const blob = new Blob([data.bytes.toUint8Array()], { type: data.contentType || "image/webp" });
+    const objectUrl = URL.createObjectURL(blob);
+    mediaUrls.set(mediaId, objectUrl);
+    return objectUrl;
+  } catch (error) {
+    console.warn("CMS image is unavailable; previous image remains active.", error.code || error.message);
+    return "";
+  }
+}
+
+async function applyContent(data) {
   if (!data || typeof data !== "object") return;
 
   const { general = {}, hero = {}, podology = {}, process = {}, team = {}, training = {}, gallery = [], reviews = {}, faq = [], contact = {} } = data;
@@ -45,7 +67,8 @@ function applyContent(data) {
     }
   });
   const heroImage = document.querySelector(".hero-media img");
-  if (heroImage && hero.imageUrl) heroImage.src = hero.imageUrl;
+  const resolvedHeroImage = await resolveMediaSource(hero.imageUrl);
+  if (heroImage && resolvedHeroImage) heroImage.src = resolvedHeroImage;
   if (heroImage && hero.imageAlt) heroImage.alt = hero.imageAlt;
 
   text("#podologiya .section-head h2", podology.heading);
@@ -88,12 +111,13 @@ function applyContent(data) {
     if (trainingValues[index]) row.innerHTML = `<b>${escapeHtml(label)}</b>${escapeHtml(trainingValues[index])}`;
   });
 
+  const resolvedGalleryImages = await Promise.all(gallery.map((item) => resolveMediaSource(item?.src)));
   document.querySelectorAll("#gallery .gallery-item").forEach((card, index) => {
     const item = gallery[index];
     if (!item) return;
     const image = card.querySelector("img");
     const caption = card.querySelector(".cap");
-    if (image && item.src) image.src = item.src;
+    if (image && resolvedGalleryImages[index]) image.src = resolvedGalleryImages[index];
     if (image && item.alt) image.alt = item.alt;
     if (caption && item.caption) caption.textContent = item.caption;
   });
@@ -148,9 +172,9 @@ function setContactRow(row, label, value) {
 
 try {
   const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  onSnapshot(doc(db, "site", "content"), (snapshot) => {
-    if (snapshot.exists()) applyContent(snapshot.data());
+  cmsDb = getFirestore(app);
+  onSnapshot(doc(cmsDb, "site", "content"), async (snapshot) => {
+    if (snapshot.exists()) await applyContent(snapshot.data());
   }, (error) => {
     console.warn("CMS is unavailable; static content remains active.", error.code || error.message);
   });
