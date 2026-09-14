@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#15120f">
+  <meta name="theme-color" content="#f3ebdc">
   <meta name="robots" content="noindex,nofollow">
   <title>PODO PRO NAILS — управление сайтом</title>
   <link rel="icon" type="image/png" href="assets/logo-mark.png">
@@ -17,8 +17,8 @@
       --radius:22px; --shadow:0 30px 80px rgba(0,0,0,.28);
     }
     *{box-sizing:border-box}
-    html{background:var(--ink);color-scheme:dark;max-width:100%;overflow-x:hidden}
-    body{margin:0;width:100%;max-width:100%;overflow-x:hidden;background:radial-gradient(1000px 700px at 85% -15%,rgba(201,162,39,.13),transparent 60%),var(--ink);color:var(--cream);font-family:"Satoshi",Arial,sans-serif;min-height:100vh}
+    html{background:#f3ebdc;color-scheme:light;max-width:100%;overflow-x:hidden}
+    body{margin:0;width:100%;max-width:100%;overflow-x:hidden;background:radial-gradient(1000px 700px at 85% -15%,rgba(201,162,39,.15),transparent 60%),#f3ebdc;color:#2a241c;font-family:"Satoshi",Arial,sans-serif;min-height:100vh}
     button,input,textarea{font:inherit;max-width:100%}
     button,a{color:inherit}
     button{cursor:pointer}
@@ -156,6 +156,40 @@
     .preview-stage{min-width:0;min-height:0;padding:18px;overflow:auto;display:flex;justify-content:center;background:radial-gradient(700px 500px at 50% 0,rgba(201,162,39,.08),transparent 70%),#0f0c0a}
     .site-frame{width:100%;height:100%;min-height:660px;border:0;border-radius:16px;background:var(--cream);box-shadow:0 18px 70px rgba(0,0,0,.38);transition:width .45s cubic-bezier(.2,.8,.2,1),border-radius .45s ease}
     .site-frame.mobile{width:390px;max-width:100%;border-radius:28px}
+
+    .login-art{background:radial-gradient(700px 500px at 88% 10%,rgba(201,162,39,.18),transparent 68%),linear-gradient(145deg,#f8f1e5,#eee3d0)}
+    .login-copy p,.ticker-row{color:#746b5e}.ticker{border-color:rgba(66,53,36,.16)}
+    .login-form-side{background:rgba(252,248,239,.94);border-left:1px solid rgba(66,53,36,.12)}
+    .app{--ink:#f5eedf;--ink-2:#eee4d2;--panel:#fbf6ec;--panel-2:#f2e8d7;--cream:#2a241c;--muted:#746b5e;--line:rgba(66,53,36,.14);background:radial-gradient(900px 600px at 84% -12%,rgba(201,162,39,.14),transparent 62%),#f3ebdc;color:#2a241c}
+    .app .topbar{background:rgba(248,242,231,.93);border-color:var(--line);box-shadow:0 10px 34px rgba(74,55,29,.06)}
+    .app .sidebar{background:rgba(243,235,220,.93);border-color:var(--line)}
+    .app .side-label{color:#897d6b}.app .side-foot{color:var(--muted)}
+    .app .tab:hover{background:rgba(87,66,35,.06);color:var(--cream)}
+    .app .tab.active{background:linear-gradient(100deg,rgba(201,162,39,.2),rgba(201,162,39,.045));color:#7a5b12;box-shadow:inset 2px 0 #b88f16}
+    .app .tab .n{color:#998d7a}
+    .app .eyebrow,.app .stat-card b,.app .item-index,.app .manual-source[open] summary,.app .upload-specs b,.app .account-email,.app .publish-meta strong,.app .save-state.dirty,.app .upload-status.working{color:#806013}
+    .app .card{background:linear-gradient(145deg,rgba(255,252,245,.94),rgba(242,232,215,.96));border-color:var(--line);box-shadow:0 16px 50px rgba(74,55,29,.075)}
+    .app .card .field input,.app .card .field textarea{background:rgba(255,252,246,.88);border-color:rgba(66,53,36,.16);color:#2a241c}
+    .app .overview-status{background:radial-gradient(520px 240px at 10% 0,rgba(201,162,39,.2),transparent 65%),linear-gradient(145deg,#fffaf0,#eee3d0)}
+    .app .publish-meta{background:linear-gradient(145deg,rgba(224,194,99,.3),rgba(249,243,231,.98))}
+    .app .quick-action{background:linear-gradient(145deg,rgba(255,252,245,.93),rgba(239,229,212,.96));color:#2a241c;border-color:var(--line);box-shadow:0 12px 34px rgba(74,55,29,.05)}
+    .app .quick-action:hover{background:linear-gradient(145deg,#fffdf8,#eadcc4);border-color:rgba(142,104,26,.3)}
+    .app .quick-action b{color:#2a241c}.app .quick-action i{color:#806013}
+    .app .preview-card,.app .photo-picker{--cream:#f5eedf;--muted:#cfc4b3;--line:rgba(245,238,223,.18);color:#f5eedf}
+    .app .preview-card .eyebrow{color:#ead58d}.app .preview-card .btn-ghost{color:#f5eedf;border-color:rgba(245,238,223,.24)}
+    .app .photo-prompt b{color:#f5eedf}.app .photo-prompt span{color:#cfc4b3}
+    .app .upload-status{background:rgba(87,66,35,.045)}
+    .app .savebar{background:rgba(248,242,231,.94);border-color:var(--line);box-shadow:0 -12px 35px rgba(74,55,29,.07)}
+    .app .btn-ghost{color:#2a241c;border-color:rgba(66,53,36,.18)}
+    .app .btn-preview{background:rgba(201,162,39,.11);border-color:rgba(128,96,19,.24);color:#6f5210}
+    .app .toast{background:#2a241c;color:#f5eedf}.app .toast.error{background:#f6d7d3;color:#721d18}
+    .app .preview-overlay{background:rgba(238,228,210,.9)}
+    .app .preview-dialog{background:#f3ebdc;border-color:rgba(66,53,36,.15);box-shadow:0 40px 120px rgba(74,55,29,.22)}
+    .app .preview-head{background:rgba(250,245,235,.98);border-color:var(--line)}
+    .app .preview-stage{background:radial-gradient(700px 500px at 50% 0,rgba(201,162,39,.12),transparent 70%),#e6dac5}
+    .app .device-switch{background:rgba(87,66,35,.06)}
+    .app .device-button.active{background:#2a241c;color:#f5eedf}
+    .app button:focus-visible,.app a:focus-visible,.app input:focus-visible,.app textarea:focus-visible,.app summary:focus-visible,.app .photo-picker:focus-visible{outline-color:#806013}
 
     h1,h2,h3{text-wrap:balance}
     .field input,.field textarea,.manual-source summary,.photo-picker{scroll-margin-top:150px;scroll-margin-bottom:110px}
