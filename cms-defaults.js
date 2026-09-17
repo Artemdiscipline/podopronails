@@ -1,5 +1,5 @@
 export const DEFAULT_CONTENT = {
-  version: 1,
+  version: 2,
   general: {
     siteTitle: "PODO PRO NAILS — Elizaveta Solonina · студия подологии и nail-эстетики",
     siteDescription: "Студия подологии и nail-эстетики PODO PRO NAILS в Москве: диагностика стопы, подологический уход, маникюр, педикюр, брови и ресницы.",
@@ -58,22 +58,56 @@ export const DEFAULT_CONTENT = {
     schedule: "По запросу в Telegram"
   },
   gallery: [
-    { category: "Маникюр", src: "assets/gallery/manikyur-french-siren.webp", alt: "Френч с сиреневым краем — работа студии", caption: "Френч" },
-    { category: "Маникюр", src: "assets/gallery/manikyur-dizayn-leopard.webp", alt: "Дизайн с леопардовым принтом и матовым покрытием — работа студии", caption: "Дизайн" },
-    { category: "Маникюр", src: "assets/gallery/manikyur-dizayn-rozovyy.webp", alt: "Розовый дизайн с глиттером и стемпингом — работа студии", caption: "Дизайн с глиттером" },
-    { category: "Маникюр", src: "assets/gallery/manikyur-uhod.webp", alt: "Натуральные ногти после ухода без покрытия — работа студии", caption: "Натуральный уход" },
-    { category: "Педикюр", src: "assets/gallery/pedikyur-pokrytie.jpg", alt: "Педикюр с цветным покрытием — работа студии", caption: "Покрытие" },
-    { category: "Педикюр", src: "assets/gallery/pedikyur-dizayn.webp", alt: "Педикюр с дизайном — работа студии", caption: "Дизайн" },
-    { category: "Педикюр", src: "assets/gallery/pedikyur-uhod-stopy.webp", alt: "Обработка огрубевшей кожи стопы — работа студии", caption: "Уход за стопой" },
-    { category: "Педикюр", src: "assets/gallery/pedikyur-naturalnyy.webp", alt: "Педикюр без покрытия — работа студии", caption: "Без покрытия" },
-    { category: "Подология", src: "assets/gallery/podologiya-apparat.webp", alt: "Аппаратная обработка стопы — работа студии", caption: "Аппаратная обработка" },
-    { category: "Подология", src: "assets/gallery/podologiya-korrekciya.webp", alt: "Аппаратная работа с ногтем на стопе — работа студии", caption: "Коррекция ногтя" },
-    { category: "Подология", src: "assets/gallery/podologiya-plastina.webp", alt: "Работа с ногтевой пластиной большого пальца — работа студии", caption: "Работа с пластиной" },
-    { category: "Подология", src: "assets/gallery/podologiya-izmeneniya.webp", alt: "Обработка стопы с изменёнными ногтевыми пластинами — работа студии", caption: "Изменения ногтей" },
-    { category: "Брови и ресницы", src: "assets/gallery/brovi-permanent.webp", alt: "Перманентный макияж бровей и межресничного пространства — работа студии", caption: "Брови и межресничный" },
-    { category: "Брови и ресницы", src: "assets/gallery/resnicy-krupno.webp", alt: "Ресницы крупным планом после процедуры — работа студии", caption: "Ресницы" },
-    { category: "Брови и ресницы", src: "assets/gallery/resnicy-master.webp", alt: "Мастер работает с ресницами клиентки — работа студии", caption: "В работе" },
-    { category: "Брови и ресницы", src: "assets/gallery/resnicy-process.webp", alt: "Ресницы на валиках во время процедуры — работа студии", caption: "Процедура" }
+    { category: "Мужской маникюр", type: "image", src: "assets/portfolio/men-manicure-natural.webp", alt: "Мужской маникюр без покрытия — натуральная ногтевая пластина", caption: "Естественная форма" },
+    { category: "Мужской маникюр", type: "image", src: "assets/portfolio/men-manicure-care.webp", alt: "Мужской аппаратный маникюр без покрытия", caption: "Маникюр без покрытия" },
+    { category: "Мужской маникюр", type: "image", src: "assets/portfolio/men-manicure-finish.webp", alt: "Аккуратный результат мужского маникюра", caption: "Аккуратный результат" },
+
+    { category: "Мужской педикюр", type: "image", src: "assets/portfolio/men-pedicure-process.webp", alt: "Аппаратная обработка стопы во время мужского педикюра", caption: "Аппаратная обработка" },
+    { category: "Мужской педикюр", type: "image", src: "assets/portfolio/men-pedicure-heel.webp", alt: "Пятка после профессиональной обработки", caption: "Работа с пяткой" },
+    { category: "Мужской педикюр", type: "image", src: "assets/portfolio/men-pedicure-sole.webp", alt: "Стопа после мужского подологического педикюра", caption: "Уход за стопой" },
+    { category: "Мужской педикюр", type: "image", src: "assets/portfolio/men-pedicure-nails.webp", alt: "Обработка ногтей во время мужского педикюра", caption: "Обработка ногтей" },
+    { category: "Мужской педикюр", type: "image", src: "assets/portfolio/men-pedicure-result.webp", alt: "Результат мужского педикюра без покрытия", caption: "Результат без покрытия" },
+
+    { category: "Коррекционные системы", type: "image", src: "assets/portfolio/correction-process.webp", alt: "Подолог устанавливает коррекционную систему на ноготь", caption: "Установка системы" },
+    { category: "Коррекционные системы", type: "image", src: "assets/portfolio/correction-result.webp", alt: "Ногтевая пластина после установки титановой нити", caption: "Результат коррекции" },
+    { category: "Коррекционные системы", type: "image", src: "assets/portfolio/correction-before-after.webp", alt: "Коррекция вросшего ногтя до и после", caption: "До и после" },
+    { category: "Коррекционные системы", type: "image", src: "assets/portfolio/correction-titanium.webp", alt: "Титановая нить на ногтевой пластине", caption: "Титановая нить" },
+    { category: "Коррекционные системы", type: "video", src: "assets/portfolio/correction-system.mp4", poster: "assets/portfolio/correction-system-poster.webp", alt: "Видео коррекции ногтя титановой нитью", caption: "Коррекция в работе" },
+
+    { category: "Выезд подолога", type: "image", src: "assets/portfolio/home-before.webp", alt: "Стопа до подологического ухода на дому", caption: "Состояние до ухода" },
+    { category: "Выезд подолога", type: "image", src: "assets/portfolio/home-after.webp", alt: "Стопа после подологического ухода на дому", caption: "Результат после ухода" },
+    { category: "Выезд подолога", type: "video", src: "assets/portfolio/home-care.mp4", poster: "assets/portfolio/home-care-poster.webp", alt: "Видео работы подолога на выезде", caption: "Работа на выезде" },
+    { category: "Выезд подолога", type: "video", src: "assets/portfolio/home-result.mp4", poster: "assets/portfolio/home-result-poster.webp", alt: "Видео результата обработки стопы на дому", caption: "Результат обработки" },
+    { category: "Выезд подолога", type: "video", src: "assets/portfolio/home-case.mp4", poster: "assets/portfolio/home-case-poster.webp", alt: "Клинический случай на выезде подолога", caption: "Клинический случай" },
+
+    { category: "Подология", type: "image", src: "assets/portfolio/podology-before.webp", alt: "Стопа до подологической процедуры", caption: "До процедуры" },
+    { category: "Подология", type: "image", src: "assets/portfolio/podology-after.webp", alt: "Стопа после подологической процедуры", caption: "После процедуры" },
+    { category: "Подология", type: "image", src: "assets/portfolio/podology-care.webp", alt: "Подологический уход за ногтями стопы", caption: "Подологический уход" },
+    { category: "Подология", type: "image", src: "assets/portfolio/podology-nail.webp", alt: "Работа с изменённой ногтевой пластиной", caption: "Работа с пластиной" },
+    { category: "Подология", type: "video", src: "assets/portfolio/podology-case.mp4", poster: "assets/portfolio/podology-case-poster.webp", alt: "Видео клинического случая в подологии", caption: "Клинический случай в динамике" },
+
+    { category: "Маникюр", type: "image", src: "assets/portfolio/manicure-french.webp", alt: "Белый френч — работа мастера студии", caption: "Белый френч" },
+    { category: "Маникюр", type: "image", src: "assets/portfolio/manicure-french-close.webp", alt: "Френч крупным планом", caption: "Френч крупным планом" },
+    { category: "Маникюр", type: "image", src: "assets/portfolio/manicure-silver.webp", alt: "Маникюр с серебристым покрытием", caption: "Покрытие с шиммером" },
+    { category: "Маникюр", type: "image", src: "assets/portfolio/manicure-nude.webp", alt: "Нюдовое моделирование ногтей", caption: "Нюдовое моделирование" },
+    { category: "Маникюр", type: "image", src: "assets/portfolio/manicure-red.webp", alt: "Светлый маникюр с красным контуром", caption: "Цветной контур" },
+
+    { category: "Педикюр", type: "image", src: "assets/portfolio/pedicure-blue.webp", alt: "Педикюр с голубым покрытием", caption: "Голубое покрытие" },
+    { category: "Педикюр", type: "image", src: "assets/portfolio/pedicure-pastel.webp", alt: "Педикюр со светлым покрытием", caption: "Светлый педикюр" },
+    { category: "Педикюр", type: "image", src: "assets/portfolio/pedicure-red.webp", alt: "Педикюр с красным покрытием", caption: "Красное покрытие" },
+    { category: "Педикюр", type: "video", src: "assets/portfolio/pedicure-process-one.mp4", poster: "assets/portfolio/pedicure-process-one-poster.webp", alt: "Видео процесса аппаратного педикюра", caption: "Аппаратный педикюр" },
+    { category: "Педикюр", type: "video", src: "assets/portfolio/pedicure-process-two.mp4", poster: "assets/portfolio/pedicure-process-two-poster.webp", alt: "Видео работы мастера педикюра", caption: "Работа мастера" },
+
+    { category: "Регалии", type: "image", src: "assets/portfolio/regalia-champion.webp", alt: "Мастер студии с кубками и наградами чемпионатов", caption: "Призёр чемпионатов" },
+    { category: "Регалии", type: "image", src: "assets/portfolio/regalia-diploma.webp", alt: "Диплом международного чемпионата мастеров", caption: "Диплом" },
+    { category: "Регалии", type: "image", src: "assets/portfolio/regalia-award.webp", alt: "Мастер студии с наградой", caption: "Награда студии" },
+    { category: "Регалии", type: "video", src: "assets/portfolio/regalia-awards.mp4", poster: "assets/portfolio/regalia-awards-poster.webp", alt: "Видео кубков и наград студии", caption: "Кубки и дипломы" },
+    { category: "Регалии", type: "video", src: "assets/portfolio/regalia-championship.mp4", poster: "assets/portfolio/regalia-championship-poster.webp", alt: "Видео с чемпионата мастеров", caption: "Чемпионат мастеров" },
+
+    { category: "Брови и ресницы", type: "image", src: "assets/gallery/brovi-permanent.webp", alt: "Перманентный макияж бровей и межресничного пространства — работа студии", caption: "Брови и межресничный" },
+    { category: "Брови и ресницы", type: "image", src: "assets/gallery/resnicy-krupno.webp", alt: "Ресницы крупным планом после процедуры — работа студии", caption: "Ресницы" },
+    { category: "Брови и ресницы", type: "image", src: "assets/gallery/resnicy-master.webp", alt: "Мастер работает с ресницами клиентки — работа студии", caption: "В работе" },
+    { category: "Брови и ресницы", type: "image", src: "assets/gallery/resnicy-process.webp", alt: "Ресницы на валиках во время процедуры — работа студии", caption: "Процедура" }
   ],
   reviews: {
     rating: "5,0",

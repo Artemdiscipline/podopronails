@@ -1,6 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
 import { getFirestore, doc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 import { firebaseConfig } from "./firebase-config.js";
+import { DEFAULT_CONTENT } from "./cms-defaults.js";
 
 const escapeHtml = (value = "") => String(value)
   .replaceAll("&", "&amp;")
@@ -111,16 +112,10 @@ async function applyContent(data) {
     if (trainingValues[index]) row.innerHTML = `<b>${escapeHtml(label)}</b>${escapeHtml(trainingValues[index])}`;
   });
 
-  const resolvedGalleryImages = await Promise.all(gallery.map((item) => resolveMediaSource(item?.src)));
-  document.querySelectorAll("#gallery .gallery-item").forEach((card, index) => {
-    const item = gallery[index];
-    if (!item) return;
-    const image = card.querySelector("img");
-    const caption = card.querySelector(".cap");
-    if (image && resolvedGalleryImages[index]) image.src = resolvedGalleryImages[index];
-    if (image && item.alt) image.alt = item.alt;
-    if (caption && item.caption) caption.textContent = item.caption;
-  });
+  const activeGallery = Number(data.version || 0) >= DEFAULT_CONTENT.version && gallery.length
+    ? gallery
+    : DEFAULT_CONTENT.gallery;
+  await renderGallery(activeGallery);
 
   const reviewNumbers = document.querySelectorAll("#reviews .reviews-cta b");
   [reviews.rating, reviews.ratingsCount, reviews.reviewsCount].forEach((value, index) => {
@@ -168,6 +163,74 @@ function setContactRow(row, label, value) {
   if (!row || !value) return;
   const box = row.querySelector("div");
   if (box) box.innerHTML = `<b>${escapeHtml(label)}</b>${escapeHtml(value)}`;
+}
+
+async function renderGallery(items) {
+  const filtersRoot = document.getElementById("galleryFilters");
+  const panelsRoot = document.getElementById("galleryCategories");
+  if (!filtersRoot || !panelsRoot || !Array.isArray(items) || !items.length) return;
+
+  const resolvedSources = await Promise.all(items.map((item) => item?.type === "video" ? item.src : resolveMediaSource(item?.src)));
+  const resolvedPosters = await Promise.all(items.map((item) => item?.poster ? resolveMediaSource(item.poster) : ""));
+  const categories = [];
+  items.forEach((item, index) => {
+    const categoryName = item?.category || "Работы студии";
+    let category = categories.find((entry) => entry.name === categoryName);
+    if (!category) {
+      category = { name: categoryName, items: [] };
+      categories.push(category);
+    }
+    category.items.push({ ...item, resolvedSrc: resolvedSources[index] || item.src, resolvedPoster: resolvedPosters[index] || item.poster || "" });
+  });
+
+  filtersRoot.innerHTML = categories.map((category, index) => `
+    <button class="gallery-filter${index === 0 ? " active" : ""}" type="button" role="tab" id="gallery-tab-${index}" aria-controls="gallery-panel-${index}" aria-selected="${index === 0}" data-gallery-tab="${index}">
+      <span>${escapeHtml(category.name)}</span><small>${category.items.length}</small>
+    </button>`).join("");
+
+  panelsRoot.innerHTML = categories.map((category, categoryIndex) => `
+    <section class="gal-cat${categoryIndex === 0 ? " active" : ""}" id="gallery-panel-${categoryIndex}" role="tabpanel" aria-labelledby="gallery-tab-${categoryIndex}" ${categoryIndex === 0 ? "" : "hidden"}>
+      <div class="gal-cat-head"><h3>${escapeHtml(category.name)}</h3><span>${category.items.length} ${category.items.length === 3 || category.items.length === 4 ? "работы" : "работ"}</span></div>
+      <div class="gal-grid count-${category.items.length}">
+        ${category.items.map((item) => galleryCardMarkup(item)).join("")}
+      </div>
+    </section>`).join("");
+
+  filtersRoot.querySelectorAll("[data-gallery-tab]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const nextIndex = button.dataset.galleryTab;
+      filtersRoot.querySelectorAll("[data-gallery-tab]").forEach((tab) => {
+        const selected = tab === button;
+        tab.classList.toggle("active", selected);
+        tab.setAttribute("aria-selected", String(selected));
+      });
+      panelsRoot.querySelectorAll(".gal-cat").forEach((panel, index) => {
+        const selected = String(index) === nextIndex;
+        panel.hidden = !selected;
+        panel.classList.toggle("active", selected);
+      });
+      const nextPanel = document.getElementById(`gallery-panel-${nextIndex}`);
+      if (nextPanel && window.gsap && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        window.gsap.fromTo(nextPanel.querySelectorAll(".gallery-item"), { opacity: 0, y: 22, scale: .97 }, { opacity: 1, y: 0, scale: 1, duration: .55, stagger: .055, ease: "power3.out", clearProps: "opacity,transform" });
+      }
+    });
+  });
+
+  window.dispatchEvent(new CustomEvent("gallery:rendered"));
+}
+
+function galleryCardMarkup(item) {
+  const type = item.type === "video" ? "video" : "image";
+  const src = escapeHtml(item.resolvedSrc || "");
+  const poster = escapeHtml(item.resolvedPoster || "");
+  const alt = escapeHtml(item.alt || item.caption || "Работа студии PODO PRO NAILS");
+  const caption = escapeHtml(item.caption || "Работа студии");
+  const preview = type === "video" ? poster : src;
+  return `<article class="gallery-item${type === "video" ? " gallery-video" : ""}" role="button" tabindex="0" aria-label="Открыть ${type === "video" ? "видео" : "фото"}: ${caption}" data-gallery-item data-media-type="${type}" data-src="${src}" data-poster="${poster}" data-alt="${alt}">
+    <img loading="lazy" decoding="async" src="${preview}" alt="${alt}">
+    ${type === "video" ? '<span class="video-play" aria-hidden="true"><span></span></span>' : ""}
+    <div class="cap">${caption}${type === "video" ? '<small>Видео</small>' : ""}</div>
+  </article>`;
 }
 
 try {

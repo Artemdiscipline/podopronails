@@ -50,7 +50,7 @@ const panelMeta = {
   process: ["Сценарий визита", "Этапы приёма", "Объясните клиенту путь от осмотра до рекомендаций."],
   team: ["Стандарты", "Команда студии", "Преимущества и общие правила работы мастеров."],
   training: ["Для мастеров", "Обучение", "Направления, описание и контакт для записи на обучение."],
-  gallery: ["Портфолио", "Галерея работ", "Ссылки на изображения, подписи и альтернативный текст для поиска."],
+  gallery: ["Портфолио", "Галерея работ", "Фотографии и видео по направлениям, подписи и описания для поиска."],
   reviews: ["Доверие", "Рейтинг и отзывы", "Публичные цифры и ссылка на независимые отзывы."],
   faq: ["Подсказки клиенту", "Частые вопросы", "Пять ответов, которые снимают тревогу до записи."],
   contact: ["Связь", "Контакты", "Адрес, часы работы и все ссылки для записи."],
@@ -177,7 +177,7 @@ function renderOverview() {
     <article class="card publish-meta span-4"><div><div class="eyebrow">Последняя публикация</div><strong id="lastPublished">${esc(formatPublicationDate(publishedAt))}</strong></div><small>Аккаунт: ${esc(currentUser?.email || "—")}</small></article>
     <article class="card stat-card span-4"><span>Рейтинг</span><b>${esc(content.hero.rating)}</b><span>по данным сайта</span></article>
     <article class="card stat-card span-4"><span>Оценки</span><b>${esc(content.hero.ratingsCount)}</b><span>на Яндекс Картах</span></article>
-    <article class="card stat-card span-4"><span>Материалы</span><b>${content.gallery.length}</b><span>фотографий в галерее</span></article>
+    <article class="card stat-card span-4"><span>Материалы</span><b>${content.gallery.length}</b><span>фотографий и видео в галерее</span></article>
     <div class="overview-workspace" id="overviewWorkspace">
       <article class="card preview-card overview-preview" id="overviewPreview"><img src="${esc(displayMediaSource(content.hero.imageUrl, DEFAULT_CONTENT.hero.imageUrl))}" alt="" width="1200" height="900" loading="lazy" decoding="async"><div class="eyebrow">Первый экран</div><h2>${esc(content.hero.titleBefore)} ${esc(content.hero.titleAccent)} ${esc(content.hero.titleAfter)}</h2><div class="preview-actions"><button class="btn btn-gold" type="button" data-open-preview>Открыть предпросмотр</button><button class="btn btn-ghost" type="button" data-jump-panel="general">Изменить главный экран</button></div></article>
       <div class="quick-stack">
@@ -223,7 +223,25 @@ function renderTraining() {
 }
 
 function renderGallery() {
-  const cards = content.gallery.map((item, index) => `<article class="card gallery-admin-card span-4">${photoPicker({ path: `gallery.${index}.src`, source: item.src, fallback: DEFAULT_CONTENT.gallery[index]?.src || "", mediaKey: `gallery-${index}`, className: "gallery-thumb" })}<div class="gallery-fields"><span class="item-index">${index + 1}</span><h3>${esc(item.category)}</h3>${field(`gallery.${index}.caption`, "Короткая подпись")}${field(`gallery.${index}.alt`, "Описание для поиска", { type: "textarea", rows: 3 })}<details class="manual-source"><summary>Указать ссылку вручную</summary>${field(`gallery.${index}.src`, "Путь или HTTPS-ссылка")}</details></div></article>`).join("");
+  const groups = [];
+  content.gallery.forEach((item, index) => {
+    let group = groups.find((entry) => entry.category === item.category);
+    if (!group) {
+      group = { category: item.category, items: [] };
+      groups.push(group);
+    }
+    group.items.push({ item, index });
+  });
+  const cards = groups.map((group) => {
+    const groupCards = group.items.map(({ item, index }) => {
+      const media = item.type === "video"
+        ? `<div class="gallery-thumb gallery-video-thumb"><img src="${esc(item.poster || "")}" alt="" width="1200" height="800" loading="lazy" decoding="async"><span class="media-type">Видео</span></div>`
+        : photoPicker({ path: `gallery.${index}.src`, source: item.src, fallback: DEFAULT_CONTENT.gallery[index]?.src || "", mediaKey: `gallery-${index}`, className: "gallery-thumb" });
+      const sourceLabel = item.type === "video" ? "Путь к видео" : "Путь или HTTPS-ссылка";
+      return `<article class="card gallery-admin-card span-4">${media}<div class="gallery-fields"><span class="item-index">${index + 1}</span><h3>${esc(item.caption || item.category)}</h3>${field(`gallery.${index}.caption`, "Короткая подпись")}${field(`gallery.${index}.alt`, "Описание для поиска", { type: "textarea", rows: 3 })}<details class="manual-source"><summary>${item.type === "video" ? "Настройки видео" : "Указать ссылку вручную"}</summary>${field(`gallery.${index}.src`, sourceLabel)}${item.type === "video" ? field(`gallery.${index}.poster`, "Обложка видео") : ""}</details></div></article>`;
+    }).join("");
+    return `<div class="gallery-group-head span-12"><div><span>Раздел</span><h2>${esc(group.category)}</h2></div><b>${group.items.length} материалов</b></div>${groupCards}`;
+  }).join("");
   document.getElementById("panel-gallery").innerHTML = `<div class="grid">${cards}</div>`;
 }
 
@@ -564,14 +582,21 @@ async function loadContent() {
     const snapshot = await getDoc(contentRef);
     const snapshotData = snapshot.exists() ? snapshot.data() : null;
     publishedAt = snapshotData?.updatedAt?.toDate?.() || null;
-    content = snapshotData ? deepMerge(cloneDefaults(), snapshotData) : cloneDefaults();
+    const storedContent = snapshotData ? deepMerge(cloneDefaults(), snapshotData) : cloneDefaults();
+    publishedContent = JSON.parse(JSON.stringify(storedContent));
+    const requiresGalleryUpgrade = Boolean(snapshotData) && Number(snapshotData.version || 0) < DEFAULT_CONTENT.version;
+    content = JSON.parse(JSON.stringify(storedContent));
+    if (requiresGalleryUpgrade) {
+      content.version = DEFAULT_CONTENT.version;
+      content.gallery = JSON.parse(JSON.stringify(DEFAULT_CONTENT.gallery));
+    }
     await preloadMediaPreviews();
-    publishedContent = JSON.parse(JSON.stringify(content));
-    dirty = false;
+    dirty = requiresGalleryUpgrade;
     renderAll();
     updateSaveState();
-    connectionState.textContent = snapshot.exists() ? "Данные синхронизированы" : "Готово к первой публикации";
+    connectionState.textContent = requiresGalleryUpgrade ? "Новые материалы готовы к публикации" : snapshot.exists() ? "Данные синхронизированы" : "Готово к первой публикации";
     connectionState.classList.add("online");
+    if (requiresGalleryUpgrade) showToast("Новые фотографии и видео готовы. Нажмите «Опубликовать».");
   } catch (error) {
     content = cloneDefaults();
     publishedContent = cloneDefaults();
