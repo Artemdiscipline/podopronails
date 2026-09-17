@@ -80,6 +80,8 @@ function collectMediaIds(sourceContent) {
   if (!sourceContent) return new Set();
   return new Set([
     mediaIdFromSource(sourceContent.hero?.imageUrl),
+    mediaIdFromSource(sourceContent.hero?.secondaryImageUrl),
+    mediaIdFromSource(sourceContent.hero?.trustImageUrl),
     ...(sourceContent.gallery || []).map((item) => mediaIdFromSource(item?.src))
   ].filter(Boolean));
 }
@@ -90,7 +92,7 @@ function displayMediaSource(source, fallback = "") {
 }
 
 async function preloadMediaPreviews() {
-  const sources = [content.hero.imageUrl, ...content.gallery.map((item) => item.src)];
+  const sources = [content.hero.imageUrl, content.hero.secondaryImageUrl, content.hero.trustImageUrl, ...content.gallery.map((item) => item.src)];
   const mediaIds = [...new Set(sources.map(mediaIdFromSource).filter(Boolean))];
   await Promise.all(mediaIds.map(async (mediaId) => {
     if (mediaPreviewUrls.has(mediaId)) return;
@@ -109,8 +111,9 @@ async function preloadMediaPreviews() {
 function photoPicker({ path, source, fallback, mediaKey, className = "" }) {
   const preview = displayMediaSource(source, fallback);
   const safeId = path.replace(/[^a-zA-Z0-9_-]/g, "-");
+  const loading = className.includes("hero") ? "eager" : "lazy";
   return `<label class="photo-picker ${esc(className)}" for="photo-${esc(safeId)}" role="button" tabindex="0" aria-label="Заменить фотографию" aria-describedby="status-${esc(safeId)}" data-picker-for="${esc(path)}">
-    <img src="${esc(preview)}" alt="" width="1200" height="800" loading="lazy" decoding="async" data-preview-for="${esc(path)}">
+    <img src="${esc(preview)}" alt="" width="1200" height="800" loading="${loading}" decoding="async" data-preview-for="${esc(path)}">
     <input id="photo-${esc(safeId)}" name="photo-${esc(safeId)}" type="file" accept="image/jpeg,image/png,image/webp,image/*" hidden data-photo-path="${esc(path)}" data-media-key="${esc(mediaKey)}">
     <span class="photo-prompt"><b>Заменить фото</b><span>Нажмите и выберите из галереи</span></span>
   </label>
@@ -181,7 +184,7 @@ function renderOverview() {
     <div class="overview-workspace" id="overviewWorkspace">
       <article class="card preview-card overview-preview" id="overviewPreview"><img src="${esc(displayMediaSource(content.hero.imageUrl, DEFAULT_CONTENT.hero.imageUrl))}" alt="" width="1200" height="900" loading="lazy" decoding="async"><div class="eyebrow">Первый экран</div><h2>${esc(content.hero.titleBefore)} ${esc(content.hero.titleAccent)} ${esc(content.hero.titleAfter)}</h2><div class="preview-actions"><button class="btn btn-gold" type="button" data-open-preview>Открыть предпросмотр</button><button class="btn btn-ghost" type="button" data-jump-panel="general">Изменить главный экран</button></div></article>
       <div class="quick-stack">
-        <button class="quick-action" type="button" data-jump-panel="general"><span><b>Главная</b><span>Заголовок, рейтинг и главное фото</span></span><i aria-hidden="true">→</i></button>
+        <button class="quick-action" type="button" data-jump-panel="general"><span><b>Главная</b><span>Заголовок, рейтинг и три фотографии</span></span><i aria-hidden="true">→</i></button>
         <button class="quick-action" type="button" data-jump-panel="gallery"><span><b>Галерея</b><span>Фотографии и подписи работ</span></span><i aria-hidden="true">→</i></button>
         <button class="quick-action" type="button" data-jump-panel="contact"><span><b>Контакты</b><span>Телефон, адрес и ссылки записи</span></span><i aria-hidden="true">→</i></button>
         <button class="quick-action" type="button" data-jump-panel="faq"><span><b>Вопросы</b><span>Ответы клиентам до визита</span></span><i aria-hidden="true">→</i></button>
@@ -199,7 +202,7 @@ function renderGeneral() {
     <article class="card span-6"><h2>Метаданные</h2><p class="card-intro">Название страницы и описание для поисковых систем.</p>${field("general.siteTitle", "Заголовок вкладки")}${field("general.siteDescription", "Описание сайта", { type: "textarea", rows: 4 })}${field("general.studioName", "Название студии")}${field("general.ownerName", "Подпись владельца")}</article>
     <article class="card span-6"><h2>Hero</h2><p class="card-intro">Главное обещание сайта. Акцентная часть выделяется золотым.</p>${field("hero.eyebrow", "Надзаголовок")}${field("hero.titleBefore", "Заголовок: начало")}${field("hero.titleAccent", "Заголовок: золотой акцент")}${field("hero.titleAfter", "Заголовок: окончание")}${field("hero.lead", "Описание", { type: "textarea", rows: 5 })}</article>
     <article class="card span-4">${field("hero.rating", "Рейтинг")}</article><article class="card span-4">${field("hero.ratingsCount", "Количество оценок")}</article><article class="card span-4">${field("hero.mastersCount", "Количество мастеров")}</article>
-    <article class="card span-12"><div class="hero-photo-grid"><div>${photoPicker({ path: "hero.imageUrl", source: content.hero.imageUrl, fallback: DEFAULT_CONTENT.hero.imageUrl, mediaKey: "hero", className: "hero-photo-picker" })}</div><div class="hero-photo-copy"><div class="eyebrow">Главное изображение</div><h2>Выберите фото с телефона</h2><p class="upload-note">Кадр автоматически уменьшится и станет легче. После загрузки проверьте его в предпросмотре и нажмите «Опубликовать».</p>${field("hero.imageAlt", "Описание изображения для поиска")}<div class="upload-specs"><div><b>Лучший кадр</b><span>Горизонтальный или квадратный, без водяных знаков.</span></div><div><b>Автообработка</b><span>До 1600 px и меньше 780 КБ.</span></div></div><details class="manual-source"><summary>Указать ссылку вручную</summary>${field("hero.imageUrl", "Путь или HTTPS-ссылка")}</details></div></div></article>
+    <article class="card span-12"><div class="hero-photo-copy"><div class="eyebrow">Фотографии первого экрана</div><h2>Три кадра можно менять отдельно</h2><p class="upload-note">Нажмите на нужную фотографию и выберите замену с телефона. Кадр автоматически уменьшится; после проверки нажмите «Опубликовать».</p></div><div class="hero-triptych-editor"><div class="hero-shot-editor"><div class="eyebrow">Маникюр</div>${photoPicker({ path: "hero.imageUrl", source: content.hero.imageUrl, fallback: DEFAULT_CONTENT.hero.imageUrl, mediaKey: "hero-primary", className: "hero-photo-picker" })}${field("hero.imageAlt", "Описание изображения")}</div><div class="hero-shot-editor"><div class="eyebrow">Педикюр</div>${photoPicker({ path: "hero.secondaryImageUrl", source: content.hero.secondaryImageUrl, fallback: DEFAULT_CONTENT.hero.secondaryImageUrl, mediaKey: "hero-secondary", className: "hero-photo-picker" })}${field("hero.secondaryImageAlt", "Описание изображения")}</div><div class="hero-shot-editor"><div class="eyebrow">Мастер или награды</div>${photoPicker({ path: "hero.trustImageUrl", source: content.hero.trustImageUrl, fallback: DEFAULT_CONTENT.hero.trustImageUrl, mediaKey: "hero-trust", className: "hero-photo-picker" })}${field("hero.trustImageAlt", "Описание изображения")}</div></div></article>
   </div>`;
 }
 
@@ -584,19 +587,25 @@ async function loadContent() {
     publishedAt = snapshotData?.updatedAt?.toDate?.() || null;
     const storedContent = snapshotData ? deepMerge(cloneDefaults(), snapshotData) : cloneDefaults();
     publishedContent = JSON.parse(JSON.stringify(storedContent));
-    const requiresGalleryUpgrade = Boolean(snapshotData) && Number(snapshotData.version || 0) < DEFAULT_CONTENT.version;
+    const requiresContentUpgrade = Boolean(snapshotData) && Number(snapshotData.version || 0) < DEFAULT_CONTENT.version;
     content = JSON.parse(JSON.stringify(storedContent));
-    if (requiresGalleryUpgrade) {
+    if (requiresContentUpgrade) {
       content.version = DEFAULT_CONTENT.version;
       content.gallery = JSON.parse(JSON.stringify(DEFAULT_CONTENT.gallery));
+      content.hero.imageUrl = DEFAULT_CONTENT.hero.imageUrl;
+      content.hero.imageAlt = DEFAULT_CONTENT.hero.imageAlt;
+      content.hero.secondaryImageUrl = DEFAULT_CONTENT.hero.secondaryImageUrl;
+      content.hero.secondaryImageAlt = DEFAULT_CONTENT.hero.secondaryImageAlt;
+      content.hero.trustImageUrl = DEFAULT_CONTENT.hero.trustImageUrl;
+      content.hero.trustImageAlt = DEFAULT_CONTENT.hero.trustImageAlt;
     }
     await preloadMediaPreviews();
-    dirty = requiresGalleryUpgrade;
+    dirty = requiresContentUpgrade;
     renderAll();
     updateSaveState();
-    connectionState.textContent = requiresGalleryUpgrade ? "Новые материалы готовы к публикации" : snapshot.exists() ? "Данные синхронизированы" : "Готово к первой публикации";
+    connectionState.textContent = requiresContentUpgrade ? "Новые фотографии готовы к публикации" : snapshot.exists() ? "Данные синхронизированы" : "Готово к первой публикации";
     connectionState.classList.add("online");
-    if (requiresGalleryUpgrade) showToast("Новые фотографии и видео готовы. Нажмите «Опубликовать».");
+    if (requiresContentUpgrade) showToast("Новые фотографии готовы. Нажмите «Опубликовать».");
   } catch (error) {
     content = cloneDefaults();
     publishedContent = cloneDefaults();

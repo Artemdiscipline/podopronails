@@ -46,6 +46,7 @@ async function applyContent(data) {
   if (!data || typeof data !== "object") return;
 
   const { general = {}, hero = {}, podology = {}, process = {}, team = {}, training = {}, gallery = [], reviews = {}, faq = [], contact = {} } = data;
+  const activeHero = Number(data.version || 0) >= DEFAULT_CONTENT.version ? hero : DEFAULT_CONTENT.hero;
 
   if (general.siteTitle) document.title = general.siteTitle;
   const description = document.querySelector('meta[name="description"]');
@@ -53,24 +54,32 @@ async function applyContent(data) {
   document.querySelectorAll(".logo-text .l1").forEach((el) => { if (general.studioName) el.textContent = general.studioName; });
   document.querySelectorAll(".logo-text .l2").forEach((el) => { if (general.ownerName) el.textContent = general.ownerName; });
 
-  text(".hero-copy .eyebrow", hero.eyebrow);
+  text(".hero-copy .eyebrow", activeHero.eyebrow);
   const title = document.querySelector("[data-hero-title]");
-  if (title && (hero.titleBefore || hero.titleAccent || hero.titleAfter)) {
-    title.innerHTML = `${escapeHtml(hero.titleBefore)} <span class="gold-run">${escapeHtml(hero.titleAccent)}</span> ${escapeHtml(hero.titleAfter)}`;
+  if (title && (activeHero.titleBefore || activeHero.titleAccent || activeHero.titleAfter)) {
+    title.innerHTML = `${escapeHtml(activeHero.titleBefore)} <span class="gold-run">${escapeHtml(activeHero.titleAccent)}</span> ${escapeHtml(activeHero.titleAfter)}`;
   }
-  text(".hero-copy .lead", hero.lead);
+  text(".hero-copy .lead", activeHero.lead);
   const heroStats = document.querySelectorAll(".hero-stats .stat b");
-  [hero.rating, hero.ratingsCount, hero.mastersCount].forEach((value, index) => {
+  [activeHero.rating, activeHero.ratingsCount, activeHero.mastersCount].forEach((value, index) => {
     if (heroStats[index] && value !== undefined) {
       const normalized = String(value).replace(",", ".");
       heroStats[index].textContent = value;
       heroStats[index].dataset.count = normalized;
     }
   });
-  const heroImage = document.querySelector(".hero-media img");
-  const resolvedHeroImage = await resolveMediaSource(hero.imageUrl);
+  const heroImage = document.querySelector(".hero-media-primary img");
+  const resolvedHeroImage = await resolveMediaSource(activeHero.imageUrl);
   if (heroImage && resolvedHeroImage) heroImage.src = resolvedHeroImage;
-  if (heroImage && hero.imageAlt) heroImage.alt = hero.imageAlt;
+  if (heroImage && activeHero.imageAlt) heroImage.alt = activeHero.imageAlt;
+  const secondaryHeroImage = document.querySelector(".hero-media-secondary img");
+  const resolvedSecondaryHeroImage = await resolveMediaSource(activeHero.secondaryImageUrl);
+  if (secondaryHeroImage && resolvedSecondaryHeroImage) secondaryHeroImage.src = resolvedSecondaryHeroImage;
+  if (secondaryHeroImage && activeHero.secondaryImageAlt) secondaryHeroImage.alt = activeHero.secondaryImageAlt;
+  const trustHeroImage = document.querySelector(".hero-media-trust img");
+  const resolvedTrustHeroImage = await resolveMediaSource(activeHero.trustImageUrl);
+  if (trustHeroImage && resolvedTrustHeroImage) trustHeroImage.src = resolvedTrustHeroImage;
+  if (trustHeroImage && activeHero.trustImageAlt) trustHeroImage.alt = activeHero.trustImageAlt;
 
   text("#podologiya .section-head h2", podology.heading);
   text("#podologiya .section-head .support", podology.support);

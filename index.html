@@ -31,7 +31,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="preload" as="image" type="image/webp" fetchpriority="high" href="assets/gallery/manikyur-french-siren.webp">
+<link rel="preload" as="image" type="image/webp" fetchpriority="high" href="assets/portfolio/manicure-red.webp">
 
 <link rel="icon" type="image/png" href="assets/logo-mark.png">
 
@@ -287,22 +287,18 @@
                radial-gradient(70% 55% at 8% 8%, rgba(201,162,39,0.13), transparent 60%),
                var(--ivory);
     color:var(--text);
-    padding-top:clamp(150px,18vw,200px);
-    /* the media used to close this block off; now that it sits in the grid,
-       the section needs its own bottom padding */
-    padding-bottom:clamp(56px,7vw,96px);
+    padding-top:clamp(138px,15vw,176px);
+    padding-bottom:clamp(58px,8vw,104px);
+    overflow:hidden;
   }
-  /* text left, photo right — the copy used to stop at 20ch and leave the
-     right half of the section empty */
-  .hero-grid{
-    display:grid; grid-template-columns:1.1fr 0.9fr;
-    gap:clamp(32px,5vw,72px); align-items:center;
-  }
+  .hero-grid{display:block;}
+  .hero-copy{max-width:1120px; margin:0 auto; text-align:center;}
   .hero h1{
-    font-size:clamp(2.3rem,4.4vw,4.1rem);
-    line-height:1.1;
-    max-width:15ch;
-    margin-top:24px;
+    font-size:clamp(2.55rem,5.5vw,5.35rem);
+    line-height:1.02;
+    max-width:1120px;
+    margin:24px auto 0;
+    letter-spacing:-0.035em;
   }
   .hero h1 .gold-run,
   .hero h1 .gold-run .word-mask > span{
@@ -312,28 +308,30 @@
   }
   .word-mask{display:inline-block; overflow:hidden; vertical-align:top;}
   .word-mask > span{display:inline-block;}
-  .hero p.lead{margin-top:24px; max-width:46ch; font-size:1.05rem; line-height:1.7; color:var(--text-soft);}
-  .hero-ctas{margin-top:36px; display:flex; flex-wrap:wrap; gap:16px;}
+  .hero p.lead{margin:26px auto 0; max-width:72ch; font-size:1.05rem; line-height:1.7; color:var(--text-soft);}
+  .hero-ctas{margin-top:34px; display:flex; justify-content:center; flex-wrap:wrap; gap:16px;}
   .hero-stats{
-    margin-top:44px; display:flex; gap:clamp(18px,2.8vw,44px); flex-wrap:wrap;
-    padding-top:28px; border-top:1px solid var(--line);
+    margin:34px auto 0; display:flex; justify-content:center; gap:0; flex-wrap:wrap;
+    width:max-content; max-width:100%; padding:14px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line);
   }
+  .hero-stats .stat{padding:0 clamp(18px,3vw,38px); border-right:1px solid var(--line); text-align:left;}
+  .hero-stats .stat:last-child{border-right:none;}
   .stat b{font-family:'Marcellus',serif; font-size:2rem; color:var(--gold-deep); display:block; line-height:1;}
   .stat span{display:block; margin-top:8px; font-size:0.8rem; color:var(--text-soft); max-width:17ch; line-height:1.4;}
 
+  .hero-media-grid{
+    display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); grid-auto-flow:dense;
+    gap:12px; margin-top:clamp(44px,6vw,72px); height:clamp(390px,46vw,590px);
+  }
   .hero-media{
-    /* кадр 830x990 = 0.838. Контейнер должен быть ШИРЕ этого отношения,
-       иначе cover режет бока и object-position по вертикали не работает.
-       Кадр 1280x923 = 1.387, ШИРЕ контейнера, поэтому cover режет
-       бока. В правом верхнем углу кадра тёмный фон (x>885, y<270) — обрезать
-       его сверху нельзя: более широкий контейнер показал бы БОЛЬШЕ ширины,
-       то есть больше тёмного. Поэтому режем справа: 0.95 -> видно x 0..876 */
-    position:relative; width:100%; aspect-ratio:0.95;
+    position:relative; width:100%; height:100%; min-width:0;
     border-radius:var(--radius-l); overflow:hidden;
     box-shadow:0 40px 70px -46px rgba(36,31,25,0.5);
   }
-  .hero-media img{width:100%;height:100%;object-fit:cover; object-position:left center; filter:saturate(0.94) contrast(1.02);}
-  /* the old ::after faded the band into the page; a card needs an edge, not a fade */
+  .hero-media img{width:100%;height:100%;object-fit:cover; object-position:center; filter:saturate(0.92) contrast(1.02); transition:transform 1s var(--ease),filter .6s ease;}
+  .hero-media:hover img{transform:scale(1.045); filter:saturate(1) contrast(1.02);}
+  .hero-media figcaption{position:absolute;z-index:2;left:18px;right:18px;bottom:16px;color:#fffdf7;font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;text-shadow:0 2px 14px rgba(0,0,0,.45);}
+  .hero-media::before{content:'';position:absolute;z-index:1;inset:48% 0 0;background:linear-gradient(180deg,transparent,rgba(21,18,15,.56));pointer-events:none;}
   .hero-media::after{content:'';position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 0 1px rgba(138,106,31,0.22);pointer-events:none;}
 
   /* ---------- MARQUEE ---------- */
@@ -345,6 +343,7 @@
     color:var(--gold-text); opacity:0.95; padding:0 26px; white-space:nowrap;
     display:flex; align-items:center; gap:26px;
   }
+  .marquee-row img{width:52px;height:30px;border-radius:999px;object-fit:cover;filter:saturate(.82);box-shadow:inset 0 0 0 1px rgba(138,106,31,.18);}
   .marquee-row span::after{content:'◆'; font-size:0.5em; color:var(--gold); opacity:0.7;}
 
   /* ---------- TRUST BAND ---------- */
@@ -410,8 +409,17 @@
   .cta-card .btn{margin-top:30px;}
 
   /* ---------- TEAM (no names: the line-up changes) ---------- */
-  .team-lead{max-width:56ch; font-size:1.05rem; line-height:1.75; color:var(--text-soft);}
-  .team-grid{margin-top:clamp(34px,5vw,52px); display:grid; grid-template-columns:repeat(2,1fr); gap:16px;}
+  .team-layout{display:grid;grid-template-columns:minmax(290px,.8fr) minmax(0,1.2fr);gap:clamp(42px,7vw,92px);align-items:start;}
+  .team-proof{display:grid;grid-template-rows:repeat(3,190px);grid-auto-flow:dense;gap:10px;align-self:start;}
+  .team-photo{position:relative;overflow:hidden;border-radius:var(--radius-m);background:var(--card);box-shadow:0 28px 54px -42px rgba(36,31,25,.55);}
+  .team-photo img{width:100%;height:100%;object-fit:cover;object-position:center 36%;filter:saturate(.88);transition:transform .8s var(--ease),filter .5s ease;}
+  .team-photo:hover img{transform:scale(1.045);filter:saturate(1);}
+  .team-photo figcaption{position:absolute;left:14px;right:14px;bottom:12px;color:#fffdf7;font-size:.68rem;letter-spacing:.11em;text-transform:uppercase;text-shadow:0 2px 14px rgba(0,0,0,.5);z-index:2;}
+  .team-photo::after{content:'';position:absolute;inset:45% 0 0;background:linear-gradient(180deg,transparent,rgba(21,18,15,.58));}
+  .team-content .section-head{grid-template-columns:1fr;margin-bottom:28px;gap:14px;}
+  .team-content .section-head .support{justify-self:start;}
+  .team-lead{max-width:62ch; font-size:1.05rem; line-height:1.75; color:var(--text-soft);}
+  .team-grid{margin-top:clamp(30px,4vw,44px); display:grid; grid-template-columns:repeat(2,1fr); gap:14px;}
   .team-card{
     padding:30px 28px; border-radius:var(--radius-m);
     background:var(--panel); border:1px solid var(--line-soft);
@@ -471,10 +479,11 @@
   .gal-cat-head{display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; margin-bottom:18px; padding-bottom:12px; border-bottom:1px solid var(--line);}
   .gal-cat-head h3{font-size:clamp(1.4rem,2.6vw,2.15rem);}
   .gal-cat-head span{font-size:0.74rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--gold-text);}
-  .gal-grid{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); grid-auto-flow:dense; grid-auto-rows:clamp(190px,18vw,276px); gap:12px;}
+  .gal-grid{display:grid;grid-auto-flow:dense;gap:12px;}
   .gal-grid.count-3{grid-template-columns:repeat(3,minmax(0,1fr));}
-  .gal-grid.count-5 .gallery-item:first-child{grid-column:span 2; grid-row:span 2;}
-  .gallery-item{position:relative; min-width:0; min-height:0; border-radius:var(--radius-m); overflow:hidden; cursor:pointer; background:var(--card); isolation:isolate;}
+  .gal-grid.count-4{grid-template-columns:repeat(4,minmax(0,1fr));}
+  .gal-grid.count-5{grid-template-columns:repeat(5,minmax(0,1fr));}
+  .gallery-item{position:relative; min-width:0; min-height:0; aspect-ratio:4/5; border-radius:var(--radius-m); overflow:hidden; cursor:pointer; background:var(--card); isolation:isolate;scroll-snap-align:start;}
   .gallery-item img{width:100%; height:100%; object-fit:cover; filter:saturate(0.92); transition:transform .8s var(--ease);}
   .gallery-item:hover img{transform:scale(1.06);}
   .gallery-item:focus-visible{outline:3px solid var(--gold); outline-offset:4px;}
@@ -633,12 +642,11 @@
     .nav-cta{padding:11px 16px; font-size:0.78rem;}
     .logo-text .l2{display:none;}
     .logo-text .l1{font-size:0.9rem; white-space:nowrap;}
-    .hero-grid{grid-template-columns:1fr; gap:clamp(30px,5vw,44px);}
-    .hero-media{aspect-ratio:0.95; max-height:66vh;}
+    .hero-media-grid{height:clamp(330px,58vw,500px);}
     .philo{grid-template-columns:1fr;}
     .edu{grid-template-columns:1fr;}
-    .gal-grid,.gal-grid.count-3{grid-template-columns:repeat(2,minmax(0,1fr)); grid-auto-rows:clamp(210px,34vw,300px);}
-    .gal-grid.count-3 .gallery-item:first-child,.gal-grid.count-5 .gallery-item:first-child{grid-column:span 2; grid-row:span 1;}
+    .gal-grid,.gal-grid.count-3,.gal-grid.count-4,.gal-grid.count-5{display:grid;grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:minmax(220px,42vw);overflow-x:auto;overscroll-behavior-inline:contain;scroll-snap-type:x mandatory;padding-bottom:10px;scrollbar-width:none;}
+    .gal-grid::-webkit-scrollbar{display:none;}
     .section-head{grid-template-columns:1fr;}
     .section-head .support{justify-self:start;}
     .bento{grid-template-columns:repeat(2,1fr); grid-auto-rows:170px;}
@@ -650,6 +658,8 @@
     .action{grid-template-columns:1fr;}
     .steps{grid-template-columns:repeat(2,1fr);}
     .footer-top{grid-template-columns:1fr; gap:30px;}
+    .team-layout{grid-template-columns:1fr;}
+    .team-proof{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:none;height:clamp(270px,48vw,420px);}
     body{padding-bottom:76px;}
     .sticky-cta{display:flex;}
   }
@@ -660,24 +670,41 @@
     .logo-text .l1{font-size:0.82rem;}
     .nav-cta{display:none;}
     .menu-cta{display:inline-flex; margin-bottom:8px;}
-    .hero-stats{gap:22px;}
+    .hero{padding-top:118px;}
+    .hero-grid{display:flex;flex-direction:column;text-align:center;}
+    .hero-copy{display:contents;}
+    .hero-copy .eyebrow{order:1;}
+    .hero-copy h1{order:2;}
+    .hero-media-grid{order:3;}
+    .hero-copy .lead{order:4;}
+    .hero-ctas{order:5;}
+    .hero-stats{order:6;}
+    .hero h1{font-size:clamp(2.25rem,12vw,3.35rem);line-height:1.04;}
+    .hero-stats{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));}
+    .hero-stats .stat{padding:0 9px;text-align:center;}
     .stat b{font-size:1.6rem;}
+    .stat span{font-size:.68rem;margin-top:6px;}
+    .hero-media-grid{height:auto;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:30px;}
+    .hero p.lead{margin-top:26px;font-size:.94rem;line-height:1.62;}
+    .hero-media{height:auto;aspect-ratio:3/4;border-radius:15px;}
+    .hero-media figcaption{display:none;}
     .bento{grid-template-columns:1fr; grid-auto-rows:auto;}
     .bento-card.big, .bento-card.wide{grid-column:span 1;}
     .bento-card.big{aspect-ratio:4/5; grid-row:auto;}
     .gallery-filters{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin:26px 0 24px;}
     .gallery-filter{width:100%; min-height:50px; padding:9px 10px; border-radius:14px; font-size:.7rem;}
     .gallery-filter span{min-width:0; overflow-wrap:normal; word-break:normal; hyphens:auto;}
-    .gal-grid,.gal-grid.count-3{grid-template-columns:repeat(2,minmax(0,1fr)); grid-auto-rows:190px; gap:8px;}
-    .gal-grid.count-3 .gallery-item:first-child,.gal-grid.count-5 .gallery-item:first-child{grid-column:span 2; min-height:240px;}
+    .gal-grid,.gal-grid.count-3,.gal-grid.count-4,.gal-grid.count-5{grid-auto-columns:min(76vw,290px);gap:8px;}
     .gallery-item .cap{left:10px; right:10px; bottom:10px; font-size:.7rem;}
     .video-play{width:48px; height:48px;}
     .team-grid{grid-template-columns:1fr;}
+    .team-proof{height:auto;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;}
+    .team-photo{aspect-ratio:3/4;border-radius:15px;}
+    .team-photo figcaption{display:none;}
     .steps{grid-template-columns:1fr;}
     .lightbox .lb-nav{width:40px; height:40px; margin-top:-20px; font-size:1.25rem;}
     .trust-grid{grid-template-columns:1fr;}
     .trust-item:nth-child(2){border-right:none;}
-    .hero-media{aspect-ratio:0.95; max-height:none;}
   }
   @media (max-width:360px){
     .gallery-filter:nth-child(3),.gallery-filter:last-child{grid-column:1/-1;}
@@ -733,7 +760,7 @@
   <section class="hero">
     <div class="wrap hero-grid">
       <div class="hero-copy">
-        <div class="eyebrow">Студия подологии · Яблочкова, 2/1</div>
+        <div class="eyebrow">5.0 на Яндекс Картах · Яблочкова, 2/1</div>
         <h1 data-hero-title>Ногти, стопы и <span class="gold-run">результат, который виден</span> с первого визита</h1>
         <p class="lead">PODO PRO NAILS Елизаветы Солониной — команда конкурсных мастеров маникюра, педикюра и подологии. Диагностика стопы, решение проблем ногтей и аккуратная эстетика в одном кабинете на Яблочкова, 2/1.</p>
         <div class="hero-ctas">
@@ -746,8 +773,19 @@
           <div class="stat"><b data-count="3">3</b><span>конкурсных мастера в одном кабинете</span></div>
         </div>
       </div>
-      <div class="hero-media reveal">
-        <img src="assets/gallery/manikyur-french-siren.webp" alt="Френч с сиреневым краем — работа студии PODO PRO NAILS" width="1280" height="923" loading="eager" fetchpriority="high" decoding="async">
+      <div class="hero-media-grid" aria-label="Работы и достижения студии">
+        <figure class="hero-media hero-media-primary">
+          <img src="assets/portfolio/manicure-red.webp" alt="Нюдовый маникюр с красным контуром — работа студии PODO PRO NAILS" width="838" height="1280" loading="eager" fetchpriority="high" decoding="async">
+          <figcaption>Маникюр</figcaption>
+        </figure>
+        <figure class="hero-media hero-media-secondary">
+          <img src="assets/portfolio/pedicure-blue.webp" alt="Голубой педикюр — работа студии PODO PRO NAILS" width="720" height="1280" loading="eager" decoding="async">
+          <figcaption>Педикюр</figcaption>
+        </figure>
+        <figure class="hero-media hero-media-trust">
+          <img src="assets/portfolio/regalia-champion.webp" alt="Елизавета Солонина с наградами профессионального чемпионата" width="960" height="1280" loading="eager" decoding="async">
+          <figcaption>Конкурсный мастер</figcaption>
+        </figure>
       </div>
     </div>
   </section>
@@ -756,7 +794,7 @@
   <div class="marquee-band">
     <div class="marquee-line">
       <div class="marquee-row" id="marqueeRow">
-        <span>Подология</span><span>Медицинский педикюр</span><span>Вросший ноготь</span><span>Грибок ногтей</span><span>Натоптыши и трещины</span><span>Маникюр</span><span>Наращивание ногтей</span><span>Перманентный макияж</span><span>Ламинирование ресниц</span><span>Брови</span>
+        <span><img src="assets/portfolio/podology-nail.webp" alt="" width="960" height="1280" loading="lazy">Подология</span><span>Медицинский педикюр</span><span>Вросший ноготь</span><span>Грибок ногтей</span><span>Натоптыши и трещины</span><span><img src="assets/portfolio/manicure-french.webp" alt="" width="736" height="981" loading="lazy">Маникюр</span><span>Наращивание ногтей</span><span><img src="assets/portfolio/pedicure-pastel.webp" alt="" width="736" height="803" loading="lazy">Педикюр</span><span>Ламинирование ресниц</span><span>Брови</span>
       </div>
     </div>
   </div>
@@ -771,7 +809,7 @@
       </div>
       <div class="bento reveal">
         <div class="bento-card big">
-          <img src="assets/gallery/podologiya-apparat.webp" alt="Аппаратная обработка стопы — работа студии" width="775" height="715" loading="lazy" decoding="async">
+          <img src="assets/portfolio/podology-care.webp" alt="Подологический уход за ногтем — работа студии" width="960" height="1280" loading="lazy" decoding="async">
           <div class="content"><h3>Комплексный подологический уход</h3><p>Диагностика, аппаратная обработка и профилактика — базовый протокол для здоровья стопы на каждый визит.</p></div>
         </div>
         <div class="bento-card"><span class="num">01</span><h3>Вросший ноготь</h3><p>Коррекция без боли и рецидивов, при необходимости — корригирующая система.</p></div>
@@ -797,12 +835,12 @@
   <section id="philosophy">
     <div class="wrap philo">
       <div class="philo-media reveal">
-        <img src="assets/philo-nails.webp" alt="Нюдовое покрытие с перламутром — работа студии PODO PRO NAILS" width="960" height="1280" loading="lazy" decoding="async">
+        <img src="assets/portfolio/manicure-nude.webp" alt="Нюдовый маникюр миндальной формы — работа студии PODO PRO NAILS" width="720" height="1280" loading="lazy" decoding="async">
         <div class="frame"></div>
       </div>
       <div class="philo-copy">
         <div class="eyebrow" style="margin-bottom:22px;">Философия студии</div>
-        <p class="split-line" data-split>Сначала мы смотрим, что происходит со <span class="pill-img" style="background-image:url('assets/gallery/pedikyur-uhod-stopy.webp')"></span> стопой и ногтем, и только потом переходим к покрытию — это и есть подологический подход PODO PRO NAILS.</p>
+        <p class="split-line" data-split>Сначала мы смотрим, что происходит со <span class="pill-img" style="background-image:url('assets/portfolio/pedicure-pastel.webp')"></span> стопой и ногтем, и только потом переходим к покрытию — это и есть подологический подход PODO PRO NAILS.</p>
         <ul class="philo-list">
           <li><b>01</b><div>Осмотр стопы и ногтевой пластины перед процедурой — так мы находим то, что скрывает обычный педикюр.</div></li>
           <li><b>02</b><div>Аппаратная коррекция вросших ногтей, грибковых изменений, натоптышей и трещин — без боли и травматичных инструментов.</div></li>
@@ -861,32 +899,39 @@
 
   <!-- TEAM (на месте удалённой секции с именами мастеров) -->
   <section id="team" class="band">
-    <div class="wrap">
-      <div class="section-head">
-        <h2 class="reveal">Команда студии</h2>
-        <p class="support reveal">Что в студии неизменно — независимо от того, кто из мастеров вас принимает.</p>
+    <div class="wrap team-layout">
+      <div class="team-proof reveal" aria-label="Профессиональные награды студии">
+        <figure class="team-photo"><img src="assets/portfolio/regalia-champion.webp" alt="Елизавета Солонина с дипломами и кубками" width="960" height="1280" loading="lazy" decoding="async"><figcaption>Призовые места</figcaption></figure>
+        <figure class="team-photo"><img src="assets/portfolio/regalia-award.webp" alt="Елизавета Солонина с профессиональными наградами" width="960" height="1280" loading="lazy" decoding="async"><figcaption>Международные чемпионаты</figcaption></figure>
+        <figure class="team-photo"><img src="assets/portfolio/regalia-diploma.webp" alt="Диплом и кубок Елизаветы Солониной" width="598" height="1280" loading="lazy" decoding="async"><figcaption>Подтверждённая квалификация</figcaption></figure>
       </div>
-      <p class="team-lead reveal">Приём ведут конкурсные мастера — призёры российских и международных чемпионатов по маникюру, педикюру и подологии. В одном кабинете собраны три направления: подологический маникюр и педикюр, ногтевой сервис, ресницы и брови.</p>
-      <div class="team-grid reveal">
-        <div class="team-card">
-          <span class="ic">01</span>
-          <h3>Конкурсные мастера</h3>
-          <p>Призёры международных и российских чемпионатов по маникюру, педикюру и подологии.</p>
+      <div class="team-content">
+        <div class="section-head">
+          <h2 class="reveal">Команда студии</h2>
+          <p class="support reveal">Что в студии неизменно — независимо от того, кто из мастеров вас принимает.</p>
         </div>
-        <div class="team-card">
-          <span class="ic">02</span>
-          <h3>Стерильность при вас</h3>
-          <p>Инструмент стерилизуется после каждого клиента — крафт-пакет вскрывают у вас на глазах.</p>
-        </div>
-        <div class="team-card">
-          <span class="ic">03</span>
-          <h3>Диагностика до процедуры</h3>
-          <p>Осмотр стопы и ногтевой пластины перед любой процедурой — так находится то, что скрывает обычный педикюр.</p>
-        </div>
-        <div class="team-card">
-          <span class="ic">04</span>
-          <h3>Три направления сразу</h3>
-          <p>Подология, ногтевой сервис, ресницы и брови — не придётся ездить по разным салонам.</p>
+        <p class="team-lead reveal">Приём ведут конкурсные мастера — призёры российских и международных чемпионатов по маникюру, педикюру и подологии. В одном кабинете собраны три направления: подологический маникюр и педикюр, ногтевой сервис, ресницы и брови.</p>
+        <div class="team-grid reveal">
+          <div class="team-card">
+            <span class="ic">01</span>
+            <h3>Конкурсные мастера</h3>
+            <p>Призёры международных и российских чемпионатов по маникюру, педикюру и подологии.</p>
+          </div>
+          <div class="team-card">
+            <span class="ic">02</span>
+            <h3>Стерильность при вас</h3>
+            <p>Инструмент стерилизуется после каждого клиента — крафт-пакет вскрывают у вас на глазах.</p>
+          </div>
+          <div class="team-card">
+            <span class="ic">03</span>
+            <h3>Диагностика до процедуры</h3>
+            <p>Осмотр стопы и ногтевой пластины перед любой процедурой — так находится то, что скрывает обычный педикюр.</p>
+          </div>
+          <div class="team-card">
+            <span class="ic">04</span>
+            <h3>Три направления сразу</h3>
+            <p>Подология, ногтевой сервис, ресницы и брови — не придётся ездить по разным салонам.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -1363,7 +1408,7 @@ if (heroWords.length){
 heroTl.from('.hero-copy .lead', {opacity:0, y:24, duration:.9}, '-=0.7')
   .from('.hero-ctas .btn', {opacity:0, y:18, stagger:0.12, duration:.7}, '-=0.6')
   .from('.hero-stats .stat', {opacity:0, y:16, stagger:0.1, duration:.6}, '-=0.5')
-  .from('.hero-media', {scale:1.06, duration:1.4, ease:'power2.out'}, '-=1.2');
+  .from('.hero-media', {opacity:0, y:38, scale:.96, duration:1.05, stagger:.11, ease:'power3.out'}, '-=.8');
 
 /* Animated counters */
 gsap.utils.toArray('[data-count]').forEach(el => {
@@ -1427,6 +1472,22 @@ if (document.querySelector('.team-grid')){
     scrollTrigger:{ trigger:'.team-grid', start:'top 85%' }
   });
 }
+
+/* Awards stay in view while the team principles unfold. */
+const teamMotion = gsap.matchMedia();
+teamMotion.add('(min-width: 981px)', () => {
+  const proof = document.querySelector('.team-proof');
+  const layout = document.querySelector('.team-layout');
+  if (!proof || !layout) return;
+  ScrollTrigger.create({
+    trigger: layout,
+    start: 'top 120px',
+    end: 'bottom bottom-=110',
+    pin: proof,
+    pinSpacing: false,
+    invalidateOnRefresh: true
+  });
+});
 
 /* FAQ rows */
 gsap.fromTo('.faq-item', {opacity:0, y:24}, {

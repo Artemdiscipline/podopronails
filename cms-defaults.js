@@ -1,5 +1,5 @@
 export const DEFAULT_CONTENT = {
-  version: 2,
+  version: 3,
   general: {
     siteTitle: "PODO PRO NAILS — Elizaveta Solonina · студия подологии и nail-эстетики",
     siteDescription: "Студия подологии и nail-эстетики PODO PRO NAILS в Москве: диагностика стопы, подологический уход, маникюр, педикюр, брови и ресницы.",
@@ -7,7 +7,7 @@ export const DEFAULT_CONTENT = {
     ownerName: "Elizaveta Solonina"
   },
   hero: {
-    eyebrow: "Студия подологии · Яблочкова, 2/1",
+    eyebrow: "5.0 на Яндекс Картах · Яблочкова, 2/1",
     titleBefore: "Ногти, стопы и",
     titleAccent: "результат, который виден",
     titleAfter: "с первого визита",
@@ -15,8 +15,12 @@ export const DEFAULT_CONTENT = {
     rating: "5.0",
     ratingsCount: "142",
     mastersCount: "3",
-    imageUrl: "assets/gallery/manikyur-french-siren.webp",
-    imageAlt: "Френч с сиреневым краем — работа студии PODO PRO NAILS"
+    imageUrl: "assets/portfolio/manicure-red.webp",
+    imageAlt: "Нюдовый маникюр с красным контуром — работа студии PODO PRO NAILS",
+    secondaryImageUrl: "assets/portfolio/pedicure-blue.webp",
+    secondaryImageAlt: "Голубой педикюр — работа студии PODO PRO NAILS",
+    trustImageUrl: "assets/portfolio/regalia-champion.webp",
+    trustImageAlt: "Елизавета Солонина с наградами профессионального чемпионата"
   },
   podology: {
     heading: "С какими проблемами мы работаем каждый день",
