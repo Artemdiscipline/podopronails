@@ -2,7 +2,7 @@ export const DEFAULT_CONTENT = {
   version: 3,
   general: {
     siteTitle: "PODO PRO NAILS — Elizaveta Solonina · студия подологии и nail-эстетики",
-    siteDescription: "Студия подологии и nail-эстетики PODO PRO NAILS в Москве: диагностика стопы, подологический уход, маникюр, педикюр, брови и ресницы.",
+    siteDescription: "PODO PRO NAILS — студия подологии и nail-эстетики в Москве, м. Дмитровская: вросший ноготь, грибок, маникюр, педикюр, брови и ресницы. Обучение мастеров.",
     studioName: "Podo Pro Nails",
     ownerName: "Elizaveta Solonina"
   },
