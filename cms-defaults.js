@@ -90,7 +90,7 @@ export const DEFAULT_CONTENT = {
     { category: "Подология", type: "image", src: "assets/portfolio/podology-nail.webp", alt: "Работа с изменённой ногтевой пластиной", caption: "Работа с пластиной" },
     { category: "Подология", type: "video", src: "assets/portfolio/podology-case.mp4", poster: "assets/portfolio/podology-case-poster.webp", alt: "Видео клинического случая в подологии", caption: "Клинический случай в динамике" },
 
-    { category: "Маникюр", type: "image", src: "assets/portfolio/manicure-french.webp", alt: "Белый френч — работа мастера студии", caption: "Белый френч" },
+    { category: "Маникюр", type: "image", src: "assets/portfolio/manicure-french.webp", alt: "Наращивание ногтей с белым френчем — работа мастера студии", caption: "Наращивание ногтей" },
     { category: "Маникюр", type: "image", src: "assets/portfolio/manicure-french-close.webp", alt: "Френч крупным планом", caption: "Френч крупным планом" },
     { category: "Маникюр", type: "image", src: "assets/portfolio/manicure-silver.webp", alt: "Маникюр с серебристым покрытием", caption: "Покрытие с шиммером" },
     { category: "Маникюр", type: "image", src: "assets/portfolio/manicure-nude.webp", alt: "Нюдовое моделирование ногтей", caption: "Нюдовое моделирование" },
