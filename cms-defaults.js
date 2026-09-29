@@ -135,6 +135,7 @@ export const DEFAULT_CONTENT = {
     phoneE164: "+79037662968",
     telegramUrl: "https://t.me/PM_Lizaveta",
     whatsappUrl: "https://wa.me/79037662968",
+    maxUrl: "",
     yandexUrl: "https://yandex.ru/maps/org/podopronails/100922864802?si=uzvpehy3acwge12jrgp4hg1fxw",
     reviewsUrl: "https://yandex.ru/maps/org/podopronails/100922864802/reviews/",
     mapQuery: "Москва, улица Яблочкова, 2/1"

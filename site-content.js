@@ -160,6 +160,28 @@ async function applyContent(data) {
   hrefAll('a[href^="tel:"]', contact.phoneE164 ? `tel:${contact.phoneE164}` : "");
   hrefAll('a[href*="t.me/"]', contact.telegramUrl);
   hrefAll('a[href*="wa.me/"]', contact.whatsappUrl);
+
+  // The MAX button copies the number (handler in index.html) until a profile link is set.
+  document.querySelectorAll("[data-max-copy]").forEach((button) => {
+    if (!contact.maxUrl) {
+      if (contact.phoneE164) button.dataset.maxCopy = contact.phoneE164;
+      if (contact.phoneDisplay) button.dataset.maxPhone = contact.phoneDisplay;
+      return;
+    }
+    const link = document.createElement("a");
+    link.className = button.className;
+    link.href = contact.maxUrl;
+    link.target = "_blank";
+    link.rel = "noopener";
+    link.dataset.maxLink = "";
+    link.innerHTML = button.innerHTML;
+    button.replaceWith(link);
+  });
+  if (contact.maxUrl) {
+    document.querySelectorAll("[data-max-text]").forEach((node) => { node.outerHTML = maxLinkMarkup(contact.maxUrl); });
+    hrefAll("[data-max-link]", contact.maxUrl);
+  }
+
   const map = document.querySelector(".map-wrap iframe");
   if (map && contact.mapQuery) map.src = `https://yandex.ru/map-widget/v1/?text=${encodeURIComponent(contact.mapQuery)}&z=16`;
 
@@ -172,12 +194,17 @@ function textIn(root, selector, value) {
   if (node && value !== undefined && value !== null) node.textContent = value;
 }
 
-// MAX has no profile link for the studio, so it is shown as a caption with the phone number.
+// MAX has no chat link by phone number: until the admin sets the studio's profile link,
+// it is shown as a caption with the number.
+function maxLinkMarkup(url) {
+  return `<a href="${escapeHtml(url)}" target="_blank" rel="noopener" data-max-link>MAX</a>`;
+}
+
 function messengerLinks(contact, maxLabel) {
   const links = [
     contact.telegramUrl ? `<a href="${escapeHtml(contact.telegramUrl)}" target="_blank" rel="noopener">Telegram</a>` : "",
     contact.whatsappUrl ? `<a href="${escapeHtml(contact.whatsappUrl)}" target="_blank" rel="noopener">WhatsApp</a>` : "",
-    `<span class="no-link">${escapeHtml(maxLabel)}</span>`
+    contact.maxUrl ? maxLinkMarkup(contact.maxUrl) : `<span class="no-link">${escapeHtml(maxLabel)}</span>`
   ].join("");
   return `<div class="action-links">${links}</div>`;
 }
