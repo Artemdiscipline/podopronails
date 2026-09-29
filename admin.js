@@ -222,7 +222,7 @@ function renderTeam() {
 }
 
 function renderTraining() {
-  document.getElementById("panel-training").innerHTML = `<div class="grid"><article class="card span-8"><h2>Описание направления</h2>${field("training.heading", "Заголовок")}${field("training.paragraphOne", "Первый абзац", { type: "textarea", rows: 5 })}${field("training.paragraphTwo", "Второй абзац", { type: "textarea", rows: 5 })}</article><article class="card span-4"><h2>Короткие данные</h2>${field("training.direction", "Направления")}${field("training.teacher", "Кто ведёт")}${field("training.schedule", "Программа и даты")}</article></div>`;
+  document.getElementById("panel-training").innerHTML = `<div class="grid"><article class="card span-8"><h2>Описание направления</h2>${field("training.heading", "Заголовок")}${field("training.paragraphOne", "Первый абзац", { type: "textarea", rows: 5 })}${field("training.paragraphTwo", "Второй абзац", { type: "textarea", rows: 5 })}</article><article class="card span-4"><h2>Короткие данные</h2>${field("training.direction", "Направления")}${field("training.teacher", "Кто ведёт")}${field("training.schedule", "Программа и даты", { hint: "Ссылки на Telegram, WhatsApp и MAX добавляются под текстом сами — из раздела «Контакты»." })}</article></div>`;
 }
 
 function renderGallery() {

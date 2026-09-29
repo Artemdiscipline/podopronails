@@ -118,7 +118,11 @@ async function applyContent(data) {
   const trainingValues = [training.direction, training.teacher, training.schedule];
   trainingRows.forEach((row, index) => {
     const label = row.querySelector("b")?.textContent || "";
-    if (trainingValues[index]) row.innerHTML = `<b>${escapeHtml(label)}</b>${escapeHtml(trainingValues[index])}`;
+    if (!trainingValues[index]) return;
+    const links = row.hasAttribute("data-messengers")
+      ? messengerLinks(contact, contact.phoneDisplay ? `MAX — по номеру ${contact.phoneDisplay}` : "MAX — по номеру телефона")
+      : "";
+    row.innerHTML = `<b>${escapeHtml(label)}</b>${escapeHtml(trainingValues[index])}${links}`;
   });
 
   const activeGallery = Number(data.version || 0) >= DEFAULT_CONTENT.version && gallery.length
@@ -147,7 +151,7 @@ async function applyContent(data) {
   if (contactRows[4] && contact.phoneDisplay) {
     const box = contactRows[4].querySelector("div");
     if (box) {
-      box.innerHTML = `<b>Телефон</b>${escapeHtml(contact.phoneDisplay)}<div class="action-links"><a href="${escapeHtml(contact.telegramUrl)}" target="_blank" rel="noopener">Telegram</a><a href="${escapeHtml(contact.whatsappUrl)}" target="_blank" rel="noopener">WhatsApp</a><span class="no-link">MAX — по номеру</span></div>`;
+      box.innerHTML = `<b>Телефон</b>${escapeHtml(contact.phoneDisplay)}${messengerLinks(contact, "MAX — по номеру")}`;
     }
   }
 
@@ -166,6 +170,16 @@ async function applyContent(data) {
 function textIn(root, selector, value) {
   const node = root?.querySelector(selector);
   if (node && value !== undefined && value !== null) node.textContent = value;
+}
+
+// MAX has no profile link for the studio, so it is shown as a caption with the phone number.
+function messengerLinks(contact, maxLabel) {
+  const links = [
+    contact.telegramUrl ? `<a href="${escapeHtml(contact.telegramUrl)}" target="_blank" rel="noopener">Telegram</a>` : "",
+    contact.whatsappUrl ? `<a href="${escapeHtml(contact.whatsappUrl)}" target="_blank" rel="noopener">WhatsApp</a>` : "",
+    `<span class="no-link">${escapeHtml(maxLabel)}</span>`
+  ].join("");
+  return `<div class="action-links">${links}</div>`;
 }
 
 function setContactRow(row, label, value) {
